@@ -29,12 +29,12 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "pytest>=8,<9",
-  "pytest-cov>=5,<7",
+  "pytest>=8,<10",
+  "pytest-cov>=5,<8",
   "ruff>=0.6,<1"
 ]
 data = [
-  "pandas>=2.2,<3"
+  "pandas>=2.2,<4"
 ]
 
 [project.scripts]
