@@ -1,0 +1,30 @@
+{
+  "experiment_id": "phase1-robust-zscore-v1",
+  "status": "planned",
+  "dataset": {
+    "source": "Telemanom SMAP/MSL public benchmark",
+    "labels_path": "data/raw/telemanom/labeled_anomalies.csv",
+    "train_dir": "data/raw/telemanom/data/train",
+    "test_dir": "data/raw/telemanom/data/test"
+  },
+  "detector": {
+    "name": "robust-zscore",
+    "threshold": 3.5,
+    "fit_scope": "training telemetry only"
+  },
+  "metrics": [
+    "pointwise_precision",
+    "pointwise_recall",
+    "pointwise_f1",
+    "event_recall"
+  ],
+  "reporting": {
+    "per_channel": true,
+    "aggregate_by_spacecraft": true,
+    "aggregate_total": true
+  },
+  "integrity": {
+    "results_must_be_machine_generated": true,
+    "no_manual_score_editing": true
+  }
+}
