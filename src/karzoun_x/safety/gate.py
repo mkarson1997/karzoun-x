@@ -32,10 +32,18 @@ class SafetyGate:
         normalized = action.name.strip().lower()
 
         if normalized in self.explicitly_denied_actions:
-            return SafetyResult(GateDecision.DENY, "Action is explicitly denied by policy.")
+            return SafetyResult(
+                GateDecision.DENY,
+                "Action is explicitly denied by policy.",
+            )
 
-        if normalized in self.explicitly_safe_actions and action.severity <= self.max_authorized_severity:
-            return SafetyResult(GateDecision.ALLOW, "Low-risk diagnostic action allowed by policy.")
+        is_safe_action = normalized in self.explicitly_safe_actions
+        within_limit = action.severity <= self.max_authorized_severity
+        if is_safe_action and within_limit:
+            return SafetyResult(
+                GateDecision.ALLOW,
+                "Low-risk diagnostic action allowed by policy.",
+            )
 
         if action.severity > self.max_authorized_severity:
             return SafetyResult(
