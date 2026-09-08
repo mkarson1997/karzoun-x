@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use KARZOUN-X in your research, please cite this software."
+title: "KARZOUN-X: Resource-Aware, Safety-Gated Local AI for Autonomous Spacecraft Fault Diagnosis"
+type: software
+authors:
+  - family-names: Karzoun
+    given-names: Mahmoud
+    orcid: "https://orcid.org/0009-0006-2752-7744"
+repository-code: "https://github.com/mkarson1997/karzoun-x"
+license: Apache-2.0
+version: 0.1.0-dev
+keywords:
+  - spacecraft autonomy
+  - local LLM
+  - retrieval-augmented generation
+  - fault diagnosis
+  - telemetry
+  - safety gate
+  - deep-space systems
+abstract: >-
+  KARZOUN-X is an open research prototype investigating resource-aware local language-model reasoning,
+  retrieval augmentation, telemetry anomaly detection, deterministic safety constraints, and delayed
+  communication simulation for autonomous spacecraft fault diagnosis and decision support.
