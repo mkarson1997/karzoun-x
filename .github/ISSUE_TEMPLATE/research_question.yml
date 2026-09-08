@@ -1,0 +1,30 @@
+name: Research question
+description: Propose a falsifiable experiment or benchmark extension.
+title: "[Research] "
+labels: [research]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Research question
+    validations:
+      required: true
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Proposed method
+      description: Include dataset, baselines, metrics, and controls.
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: What result would falsify or weaken the hypothesis?
+    validations:
+      required: true
