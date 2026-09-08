@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import pathlib
 import shutil
 import subprocess
-from pathlib import Path
 
 
 UPSTREAM = "https://github.com/khundman/telemanom.git"
-DESTINATION = Path("data/raw/telemanom")
+DESTINATION = pathlib.Path("data/raw/telemanom")
 
 
 def main() -> int:
