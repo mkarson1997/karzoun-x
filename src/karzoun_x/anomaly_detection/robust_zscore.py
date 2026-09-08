@@ -19,7 +19,7 @@ class RobustZScoreDetector:
     _median: float | None = None
     _mad: float | None = None
 
-    def fit(self, values: list[float] | np.ndarray) -> "RobustZScoreDetector":
+    def fit(self, values: list[float] | np.ndarray) -> RobustZScoreDetector:
         arr = np.asarray(values, dtype=float)
         if arr.size < 3:
             raise ValueError("At least 3 values are required to fit the detector.")
