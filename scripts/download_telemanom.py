@@ -4,7 +4,6 @@ import pathlib
 import shutil
 import subprocess
 
-
 UPSTREAM = "https://github.com/khundman/telemanom.git"
 DESTINATION = pathlib.Path("data/raw/telemanom")
 
