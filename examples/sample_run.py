@@ -12,7 +12,10 @@ def main() -> None:
         [
             KnowledgeDocument(
                 "example",
-                "For an unexplained telemetry excursion, first collect corroborating telemetry and run read-only diagnostics.",
+                (
+                    "For an unexplained telemetry excursion, first collect corroborating "
+                    "telemetry and run read-only diagnostics."
+                ),
             )
         ]
     )
