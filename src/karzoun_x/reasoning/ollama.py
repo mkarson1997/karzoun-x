@@ -20,18 +20,22 @@ class OllamaReasoner:
             return False
 
     def diagnose(self, telemetry_context: str, evidence: list[str]) -> str:
-        evidence_block = "\n\n".join(f"- {item}" for item in evidence) or "- No evidence retrieved"
-        prompt = f"""You are a research diagnostic assistant operating on historical or simulated spacecraft telemetry.
-Do not claim flight authority. Use only the supplied telemetry context and evidence. If evidence is insufficient, say so explicitly.
-
-Telemetry context:
-{telemetry_context}
-
-Retrieved evidence:
-{evidence_block}
-
-Return a concise diagnosis with: suspected issue, supporting evidence, uncertainty, and a low-risk recommended next diagnostic step.
-"""
+        evidence_block = (
+            "\n\n".join(f"- {item}" for item in evidence)
+            or "- No evidence retrieved"
+        )
+        prompt = (
+            "You are a research diagnostic assistant operating on historical or "
+            "simulated spacecraft telemetry.\n"
+            "Do not claim flight authority. Use only the supplied telemetry context "
+            "and evidence. If evidence is insufficient, say so explicitly.\n\n"
+            "Telemetry context:\n"
+            f"{telemetry_context}\n\n"
+            "Retrieved evidence:\n"
+            f"{evidence_block}\n\n"
+            "Return a concise diagnosis with: suspected issue, supporting evidence, "
+            "uncertainty, and a low-risk recommended next diagnostic step.\n"
+        )
         response = httpx.post(
             f"{self.base_url}/api/generate",
             json={"model": self.model, "prompt": prompt, "stream": False},
