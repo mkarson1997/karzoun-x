@@ -20,11 +20,18 @@ def _demo() -> int:
         [
             KnowledgeDocument(
                 "thermal-001",
-                "A sudden thermal sensor excursion should first trigger verification using adjacent sensors and read-only subsystem diagnostics before any control action.",
+                (
+                    "A sudden thermal sensor excursion should first trigger verification "
+                    "using adjacent sensors and read-only subsystem diagnostics before "
+                    "any control action."
+                ),
             ),
             KnowledgeDocument(
                 "power-001",
-                "Power-bus anomalies require corroboration across voltage and current telemetry before isolation decisions are considered.",
+                (
+                    "Power-bus anomalies require corroboration across voltage and current "
+                    "telemetry before isolation decisions are considered."
+                ),
             ),
         ]
     )
