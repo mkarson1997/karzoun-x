@@ -34,7 +34,7 @@ dev = [
   "ruff>=0.6,<1"
 ]
 data = [
-  "pandas>=2.2,<3"
+  "pandas>=2.2,<4"
 ]
 
 [project.scripts]
