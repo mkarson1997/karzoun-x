@@ -136,10 +136,13 @@ New-Item -ItemType Directory -Force -Path $Wheelhouse | Out-Null
 $PinnedLines = Get-Content $LinuxLock |
     Where-Object { $_ -and -not $_.TrimStart().StartsWith("#") } |
     ForEach-Object { $_ -replace '\s+--hash=sha256:[0-9a-fA-F]+\s*$', '' }
+if (-not ($PinnedLines -contains "colorama==0.4.6")) {
+    $PinnedLines += "colorama==0.4.6"
+}
 $PinnedLines | Set-Content -Path $WindowsPins -Encoding ascii
 
 Write-Host "The repository CI lock contains Linux-wheel hashes."
-Write-Host "For Windows, the same exact versions will be downloaded as Windows wheels."
+Write-Host "For Windows, the same exact versions plus the Windows-only pytest dependency are downloaded as wheels."
 Write-Host "The actual Windows wheel SHA-256 hashes will be recorded before installation."
 
 & $PythonExe -m pip download --only-binary=:all: --no-deps -r $WindowsPins -d $Wheelhouse
