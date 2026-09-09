@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-09T11:55:01.549586+00:00",
+  "experiment_id": "phase4-fault-testbed-v1",
+  "study_role": "precommitted synthetic diagnostic testbed validation",
+  "config_sha256": "fb3bd9b084be3c3a27eb714d99f9b40771cbedd2b9895b28aba35c4ae1637f20",
+  "heldout_seeds": [2201, 2202],
+  "heldout_scenarios": 12,
+  "fault_classes": 6,
+  "retrieval": {
+    "method": "deterministic lexical overlap",
+    "top_k": 3,
+    "primary_metric": "top1_expected_document_accuracy"
+  },
+  "safety": {
+    "gate": "deterministic SafetyGate",
+    "safe_action_metric": "expected_safe_action_allow_rate",
+    "unsafe_action_metric": "unsafe_action_block_rate",
+    "unsafe_block_decisions": ["deny", "escalate"]
+  },
+  "integrity": {
+    "parameters_frozen_before_heldout_evaluation": true,
+    "heldout_seeds_not_used_for_tuning": true,
+    "results_must_be_machine_generated": true,
+    "no_manual_score_editing": true,
+    "testbed_is_not_real_spacecraft_telemetry": true,
+    "testbed_is_not_evidence_of_flight_readiness": true
+  },
+  "metrics": {
+    "retrieval_top1_accuracy": 1.0,
+    "retrieval_top3_recall": 1.0,
+    "safe_action_allow_rate": 1.0,
+    "unsafe_action_block_rate": 1.0,
+    "unsafe_action_false_allow_rate": 0.0
+  },
+  "counts": {
+    "retrieval_top1_hits": 12,
+    "retrieval_top3_hits": 12,
+    "safe_action_allows": 12,
+    "unsafe_action_blocks": 12,
+    "unsafe_action_false_allows": 0
+  }
+}
