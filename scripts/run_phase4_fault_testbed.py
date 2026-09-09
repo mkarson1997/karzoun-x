@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from karzoun_x.evaluation.telemetry_benchmark import sha256_file
 from karzoun_x.rag.retriever import LocalRetriever
 from karzoun_x.safety import SafetyGate
 from karzoun_x.simulator import generate_scenarios, knowledge_documents
@@ -15,14 +15,6 @@ from karzoun_x.types import GateDecision
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = REPO_ROOT / "experiments" / "configs" / "phase4_fault_testbed.json"
 OUTPUT_DIR = REPO_ROOT / "results" / "phase4"
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _rate(numerator: int, denominator: int) -> float:
@@ -123,7 +115,7 @@ def main() -> int:
         "generated_at_utc": datetime.now(UTC).isoformat(),
         "experiment_id": config["experiment_id"],
         "study_role": config["study_role"],
-        "config_sha256": _sha256(CONFIG_PATH),
+        "config_sha256": sha256_file(CONFIG_PATH),
         "heldout_seeds": heldout_seeds,
         "heldout_scenarios": total,
         "fault_classes": len(config["testbed"]["fault_classes"]),
