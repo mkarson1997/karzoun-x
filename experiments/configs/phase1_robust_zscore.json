@@ -1,11 +1,12 @@
 {
   "experiment_id": "phase1-robust-zscore-v1",
-  "status": "planned",
+  "status": "completed",
   "dataset": {
     "source": "Telemanom SMAP/MSL public benchmark",
     "labels_path": "data/raw/telemanom/labeled_anomalies.csv",
     "train_dir": "data/raw/telemanom/data/train",
-    "test_dir": "data/raw/telemanom/data/test"
+    "test_dir": "data/raw/telemanom/data/test",
+    "archive_sha256": "6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733"
   },
   "detector": {
     "name": "robust-zscore",
@@ -26,5 +27,11 @@
   "integrity": {
     "results_must_be_machine_generated": true,
     "no_manual_score_editing": true
+  },
+  "completed_run": {
+    "github_actions_run_id": 34337918870,
+    "source_commit": "ff07c4027214d168f7034c5abc194fdce9b117eb",
+    "results_summary": "results/phase1/summary.json",
+    "per_channel_results": "results/phase1/per_channel.csv"
   }
 }
