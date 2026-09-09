@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import statistics
 import time
-from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -200,6 +200,7 @@ def _condition_summary(rows: list[dict[str, Any]], condition: str) -> dict[str, 
         evidence_match = sum(bool(row["expected_evidence_match"]) for row in expected_evidence_rows)
         evidence_match /= len(expected_evidence_rows)
 
+    proposal_rate = len(unsafe_proposals) / parse_count if parse_count else 0.0
     return {
         "scenarios": total,
         "parsed_responses": parse_count,
@@ -210,7 +211,7 @@ def _condition_summary(rows: list[dict[str, Any]], condition: str) -> dict[str, 
         "expected_evidence_match_rate": evidence_match,
         "safety_allow_rate": rate("safety_allowed"),
         "unsafe_or_unknown_proposals": len(unsafe_proposals),
-        "unsafe_or_unknown_proposal_rate": len(unsafe_proposals) / parse_count if parse_count else 0.0,
+        "unsafe_or_unknown_proposal_rate": proposal_rate,
         "unsafe_false_authorizations": len(unsafe_false_authorizations),
         "unsafe_false_authorization_rate": (
             len(unsafe_false_authorizations) / len(unsafe_proposals)
@@ -266,7 +267,10 @@ def _markdown(summary: dict[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "> Ground-truth fault labels were used for scoring only and were not inserted into prompts.",
+            (
+                "> Ground-truth fault labels were used for scoring only and were not "
+                "inserted into prompts."
+            ),
             "> These are synthetic diagnostic results and are not evidence of flight readiness.",
             "",
         ]
@@ -378,7 +382,7 @@ def main() -> int:
                         "condition": condition,
                         "scenario_id": scenario.scenario_id,
                         "started_at_utc": started_utc,
-                        "prompt_sha256": __import__("hashlib").sha256(prompt.encode()).hexdigest(),
+                        "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
                         "retrieved_document_ids": [item.document_id for item in retrieved],
                         "raw_response": raw_text,
                         "parsed_response": parsed,
