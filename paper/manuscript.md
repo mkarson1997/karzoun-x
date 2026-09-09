@@ -3,11 +3,11 @@
 **Mahmoud Karzoun**  
 ORCID: 0009-0006-2752-7744
 
-> Status: working manuscript. Results sections are intentionally incomplete until reproducible experiments are run.
+> Status: working manuscript. The Phase 1 telemetry baseline has been executed; full KARZOUN-X reasoning, safety, communication-delay, and resource experiments remain in progress.
 
 ## Abstract
 
-Deep-space spacecraft increasingly require onboard autonomy because communication latency, bandwidth constraints, and intermittent connectivity can limit immediate ground intervention. This work proposes KARZOUN-X, a research architecture that combines telemetry anomaly detection, local retrieval-augmented generation, a resource-constrained local language model, and a deterministic safety gate for spacecraft fault diagnosis and decision support. The system is designed to separate probabilistic diagnostic reasoning from action authorization and to preserve evidence for auditability. We define an evaluation protocol using historical spacecraft telemetry and simulated communication constraints. Empirical results will be reported only after the benchmark configuration and experiment pipeline are frozen.
+Deep-space spacecraft increasingly require onboard autonomy because communication latency, bandwidth constraints, and intermittent connectivity can limit immediate ground intervention. This work proposes KARZOUN-X, a research architecture that combines telemetry anomaly detection, local retrieval-augmented generation, a resource-constrained local language model, and a deterministic safety gate for spacecraft fault diagnosis and decision support. The system is designed to separate probabilistic diagnostic reasoning from action authorization and to preserve evidence for auditability. We define an evaluation protocol using historical spacecraft telemetry and simulated communication constraints. A first frozen baseline experiment on the public SMAP/MSL benchmark establishes a transparent reference point; full-system conclusions are deferred until the remaining preregistered experiments are complete.
 
 ## 1. Introduction
 
@@ -61,18 +61,20 @@ Describe telemetry ingestion, anomaly detection, local retrieval, local reasonin
 
 ## 5. Dataset and Experimental Setup
 
-Initial target: public SMAP/MSL telemetry anomaly benchmark distributed with Telemanom.
+The initial benchmark uses the public SMAP/MSL telemetry anomaly dataset distributed from the Telemanom/NASA JPL anomaly-detection work. Phase 1 preserves the upstream benchmark records and fits the detector only on the training telemetry for each record. The first telemetry column is evaluated against the published anomaly intervals in the test split.
 
-TODO: freeze exact channels, anomaly-event definitions, preprocessing, splits, model versions, hardware, and seeds.
+For the Phase 1 run, the downloaded dataset archive had SHA-256 `6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733`, and the extracted label file had SHA-256 `057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539`. The upstream label metadata includes a repeated `P-2` benchmark record; the experiment preserves the source rows rather than silently rewriting them. Consequently, this manuscript uses the term *benchmark record* when reporting the Phase 1 row count.
+
+The frozen Phase 1 configuration is `experiments/configs/phase1_robust_zscore.json`, whose executed content had SHA-256 `af06f715a46a90e1efc5c0c037e805bdd28cbe36ac1f4e20565aab8bb197448a`.
 
 ## 6. Evaluation Methodology
 
 ### Detection metrics
-- precision
-- recall
-- F1
-- event-level detection score
-- false alarm rate
+- pointwise precision
+- pointwise recall
+- pointwise F1
+- event recall, where a labeled event is counted as detected if at least one point in its interval is flagged
+- false-positive and false-negative counts
 
 ### Reasoning metrics
 - diagnostic accuracy
@@ -94,7 +96,21 @@ TODO: freeze exact channels, anomaly-event definitions, preprocessing, splits, m
 
 ## 7. Results
 
-**Not yet reported.** This section will be generated from frozen experiment outputs. No placeholder numbers should be interpreted as findings.
+### 7.1 Phase 1 transparent anomaly-detection baseline
+
+The first completed experiment uses a median-absolute-deviation robust z-score detector with a fixed threshold of 3.5. The detector is intentionally simple and serves as a weak, interpretable reference rather than a proposed state-of-the-art method. The configuration was fixed before evaluation and the scores below were generated automatically.
+
+| Scope | Precision | Recall | F1 | Event recall | Benchmark records |
+|---|---:|---:|---:|---:|---:|
+| SMAP | 0.2972 | 0.5819 | 0.3934 | 0.7971 | 55 |
+| MSL | 0.1449 | 0.4825 | 0.2228 | 0.8889 | 27 |
+| Total | 0.2685 | 0.5700 | 0.3651 | 0.8286 | 82 |
+
+Across 105 labeled anomaly events, the baseline hit 87 events. At the point level it produced 36,938 true positives, 100,614 false positives, and 27,871 false negatives over 517,764 evaluated test points. The low precision and relatively high event recall show the expected trade-off of a naive static detector: it often intersects anomalous intervals, but it generates too many false alarms to serve as an operational detector.
+
+These findings establish the minimum reference that later temporal, retrieval-assisted, and safety-aware KARZOUN-X configurations must exceed. They are not evidence that the complete KARZOUN-X architecture is effective, because the LLM, RAG, safety-gate, communication-delay, and resource experiments have not yet been completed.
+
+Machine-readable aggregate and per-record results are stored in `results/phase1/` and are linked to GitHub Actions run `34337918870`.
 
 ## 8. Ablation Study
 
@@ -113,7 +129,7 @@ Analyze failure modes including hallucinated diagnoses, unsupported evidence, un
 
 ## 10. Limitations
 
-Expected limitations include historical/anonymized telemetry, incomplete operational context, simulator-to-flight gap, model dependence, and the difference between diagnostic decision support and certified autonomous control.
+The Phase 1 baseline is intentionally simplistic and does not model temporal context. Additional limitations include historical/anonymized telemetry, incomplete operational context, the duplicated upstream benchmark label record, simulator-to-flight gap, model dependence, and the difference between diagnostic decision support and certified autonomous control.
 
 ## 11. Future Work
 
@@ -121,13 +137,13 @@ Potential directions include richer temporal models, model-based system knowledg
 
 ## 12. Conclusion
 
-To be written after results are complete.
+To be written after the full experiment program is complete.
 
 ## Data and Code Availability
 
 Code: https://github.com/mkarson1997/karzoun-x
 
-Dataset provenance and acquisition instructions are documented in `data/README.md`.
+Dataset provenance and acquisition instructions are documented in `data/README.md`. Phase 1 result provenance is recorded in `experiments/RESULTS_INDEX.md`.
 
 ## Ethics and Disclaimer
 
