@@ -3,11 +3,11 @@
 **Mahmoud Karzoun**  
 ORCID: 0009-0006-2752-7744
 
-> Status: working manuscript. Phase 1 and Phase 2 telemetry experiments have been executed; full KARZOUN-X reasoning, safety, communication-delay, and resource experiments remain in progress.
+> Status: working manuscript. Phase 1, Phase 2, and Phase 3 telemetry experiments have been executed; full KARZOUN-X reasoning, safety, communication-delay, and resource experiments remain in progress.
 
 ## Abstract
 
-Deep-space spacecraft increasingly require onboard autonomy because communication latency, bandwidth constraints, and intermittent connectivity can limit immediate ground intervention. This work proposes KARZOUN-X, a research architecture that combines telemetry anomaly detection, local retrieval-augmented generation, a resource-constrained local language model, and a deterministic safety gate for spacecraft fault diagnosis and decision support. The system is designed to separate probabilistic diagnostic reasoning from action authorization and to preserve evidence for auditability. We define an evaluation protocol using historical spacecraft telemetry and simulated communication constraints. Two frozen experiments on the public SMAP/MSL benchmark establish transparent anomaly-detection reference points. The second experiment substantially reduced false positives and increased precision, but lost recall and event coverage, producing a slightly lower overall F1 score. This mixed result is retained rather than optimized away after inspection. Full-system conclusions are deferred until the remaining experiments are complete.
+Deep-space spacecraft increasingly require onboard autonomy because communication latency, bandwidth constraints, and intermittent connectivity can limit immediate ground intervention. This work proposes KARZOUN-X, a research architecture that combines telemetry anomaly detection, local retrieval-augmented generation, a resource-constrained local language model, and a deterministic safety gate for spacecraft fault diagnosis and decision support. The system is designed to separate probabilistic diagnostic reasoning from action authorization and to preserve evidence for auditability. We define an evaluation protocol using historical spacecraft telemetry and simulated communication constraints. Three machine-generated detector experiments on the public SMAP/MSL benchmark establish transparent anomaly-detection reference points. Phase 2 substantially reduced false positives but lost too much anomaly coverage. Phase 3 retained a training-only robust scoring rule with a stability fallback and achieved the best total F1 of the first three experiments while reducing false positives relative to Phase 1. Because Phase 3 was designed after prior benchmark results had been inspected, it is reported as exploratory rather than as an untouched confirmatory result. Full-system conclusions are deferred until the retrieval, language-model, safety-gate, communication-delay, and resource experiments are complete.
 
 ## 1. Introduction
 
@@ -61,13 +61,15 @@ Describe telemetry ingestion, anomaly detection, local retrieval, local reasonin
 
 ## 5. Dataset and Experimental Setup
 
-The initial benchmark uses the public SMAP/MSL telemetry anomaly dataset distributed from the Telemanom/NASA JPL anomaly-detection work. Both completed telemetry experiments preserve the upstream benchmark records and fit detector statistics only on the training telemetry for each record. The first telemetry column is evaluated against the published anomaly intervals in the test split.
+The initial benchmark uses the public SMAP/MSL telemetry anomaly dataset distributed from the Telemanom/NASA JPL anomaly-detection work. All three completed telemetry experiments preserve the upstream benchmark records and fit detector statistics only on the training telemetry for each record. The first telemetry column is evaluated against the published anomaly intervals in the test split.
 
 For the completed runs, the downloaded dataset archive had SHA-256 `6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733`, and the extracted label file had SHA-256 `057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539`. The upstream label metadata includes a repeated `P-2` benchmark record; the experiments preserve the source rows rather than silently rewriting them. Consequently, this manuscript uses the term *benchmark record* when reporting row counts.
 
 The frozen Phase 1 configuration is `experiments/configs/phase1_robust_zscore.json`, whose executed content had SHA-256 `af06f715a46a90e1efc5c0c037e805bdd28cbe36ac1f4e20565aab8bb197448a`.
 
-The frozen Phase 2 configuration is `experiments/configs/phase2_adaptive_temporal.json`, whose executed content had SHA-256 `fe761b5f3170249e798a31a2bf9dcef1f4331570937cb607feb4d52088f173b8`. Phase 2 retained a threshold of 3.5, used the training median as the center, selected the larger of MAD-derived and IQR-derived robust scale estimates, fell back to training standard deviation if both robust estimates collapsed, and required at least three consecutive flagged samples for an anomaly run to survive temporal filtering. These parameters were frozen before evaluation against test labels.
+The frozen Phase 2 configuration is `experiments/configs/phase2_adaptive_temporal.json`, whose executed content had SHA-256 `fe761b5f3170249e798a31a2bf9dcef1f4331570937cb607feb4d52088f173b8`. Phase 2 retained a threshold of 3.5, used the training median as the center, selected the larger of MAD-derived and IQR-derived robust scale estimates, fell back to training standard deviation if both robust estimates collapsed, and required at least three consecutive flagged samples for an anomaly run to survive temporal filtering. These parameters were frozen before the Phase 2 test-label evaluation.
+
+The frozen Phase 3 configuration is `experiments/configs/phase3_stability_aware.json`, whose executed content had SHA-256 `934b79837c0e30ab3328590f5c1e0af488d5ccaf56f075557548f9c055685fb1`. Phase 3 retained the Phase 1-compatible MAD scoring rule when training MAD was informative, used training standard deviation only when training MAD collapsed, preserved an epsilon floor for constant training channels, and applied no temporal persistence filter. Phase 3 parameters were frozen before its evaluation run, but its design was informed by the already-inspected Phase 1 and Phase 2 benchmark outcomes. It is therefore classified as exploratory iterative refinement rather than an independent confirmatory experiment.
 
 ## 6. Evaluation Methodology
 
@@ -130,9 +132,29 @@ Scale estimation also exposed a useful dataset characteristic. Across the 82 ben
 
 Machine-readable aggregate and per-record Phase 2 results are stored in `results/phase2/` and are linked to GitHub Actions run `34340023894`.
 
-### 7.3 Current interpretation
+### 7.3 Phase 3 stability-aware detector
 
-The completed telemetry experiments establish two auditable reference behaviors rather than a final detector. Phase 1 favors anomaly coverage at the cost of many false alarms. Phase 2 reduces false alarms and raises precision, but sacrifices too much recall. Neither experiment supports a claim that the complete KARZOUN-X architecture is effective, because the LLM, RAG, safety-gate, communication-delay, and resource experiments have not yet been completed.
+Phase 3 tested a narrower stability intervention. Instead of replacing the Phase 1 scale rule globally or applying a persistence filter, it preserved the Phase 1-compatible MAD rule when the training MAD was informative and switched to training standard deviation only when MAD collapsed. Constant training channels retained an epsilon floor. The experiment used the same threshold of 3.5 and no temporal filter.
+
+| Scope | Precision | Recall | F1 | Event recall | Benchmark records |
+|---|---:|---:|---:|---:|---:|
+| SMAP | 0.3667 | 0.5581 | 0.4426 | 0.6667 | 55 |
+| MSL | 0.1474 | 0.3793 | 0.2123 | 0.8611 | 27 |
+| Total | 0.3257 | 0.5366 | 0.4054 | 0.7333 | 82 |
+
+Across 517,764 test points, Phase 3 produced 34,779 true positives, 72,008 false positives, and 30,030 false negatives. It hit 77 of the 105 labeled anomaly events. Relative to Phase 1, precision increased by 0.0571, overall F1 increased by 0.0403, and false positives fell by 28,606, while recall decreased by 0.0333 and event recall decreased by 0.0952. Relative to Phase 2, precision was effectively unchanged (+0.0001), while recall increased by 0.1378, F1 increased by 0.0468, and event recall increased by 0.1810.
+
+Phase 3 therefore provides the strongest pointwise F1 of the first three detector experiments and a better balance between selectivity and coverage than the Phase 2 persistence approach. Its scale metadata shows 49 benchmark records using MAD, 17 using the standard-deviation fallback, and 16 using the epsilon floor.
+
+This result must not be interpreted as an independent confirmatory improvement. The Phase 3 design was developed after Phase 1 and Phase 2 test outcomes had been observed, so the same SMAP/MSL test benchmark is no longer an untouched evaluation set for design iteration. The result is retained as an auditable exploratory finding that motivates an independent diagnostic testbed and later external validation.
+
+Machine-readable aggregate and per-record Phase 3 results are stored in `results/phase3/` and are linked to GitHub Actions run `34347057969`.
+
+### 7.4 Current interpretation
+
+The first three telemetry experiments now establish three auditable detector behaviors. Phase 1 favors anomaly coverage at the cost of many false alarms. Phase 2 is substantially more selective but sacrifices too much recall. Phase 3 provides the best total F1 so far and reduces false positives relative to Phase 1 while preserving substantially more coverage than Phase 2, but it is exploratory because prior results informed its design.
+
+None of these experiments demonstrates that the complete KARZOUN-X architecture is effective. The central research contribution still requires controlled experiments for local retrieval, language-model diagnosis, deterministic safety authorization, communication-delay behavior, and resource constraints.
 
 ## 8. Ablation Study
 
@@ -151,13 +173,15 @@ Analyze failure modes including hallucinated diagnoses, unsupported evidence, un
 
 ## 10. Limitations
 
-The first two detectors remain intentionally simple and do not constitute state-of-the-art temporal modeling. Phase 2 demonstrates that a persistence rule can suppress false alarms while also suppressing genuine events. Additional limitations include historical/anonymized telemetry, incomplete operational context, the duplicated upstream benchmark label record, simulator-to-flight gap, model dependence, and the difference between diagnostic decision support and certified autonomous control.
+The first three detectors remain intentionally simple and do not constitute state-of-the-art temporal modeling. Phase 2 demonstrates that a persistence rule can suppress false alarms while also suppressing genuine events, and Phase 3 demonstrates an exploratory stability fallback rather than an independent benchmark result. Additional limitations include historical/anonymized telemetry, incomplete operational context, the duplicated upstream benchmark label record, simulator-to-flight gap, model dependence, and the difference between diagnostic decision support and certified autonomous control.
 
-Because the full SMAP/MSL test results have now been inspected for Phase 1 and Phase 2, subsequent parameter development on this same full test set must be treated as exploratory unless a clean development/holdout protocol or an independent benchmark is introduced.
+Because the full SMAP/MSL test results have now been inspected during iterative detector development, further tuning on this same benchmark must be treated as exploratory. A stronger claim will require a precommitted independent evaluation source, such as a separately generated held-out fault-injection testbed or another suitable external benchmark.
 
 ## 11. Future Work
 
-The next detector study should use a clean development/holdout protocol and investigate temporal methods that reduce isolated false alarms while preserving event coverage. Potential directions include rolling or change-point statistics, hysteresis, event merging, temporal models, model-based system knowledge, multi-agent fault isolation, formalized action policies, and hardware-in-the-loop testing. Later experiments will add retrieval-grounded local language-model reasoning, deterministic action gating, communication-delay simulation, and resource measurements.
+The next study stage will move beyond repeated detector tuning and establish a controlled synthetic spacecraft fault-injection testbed with known fault causes, evidence documents, allowed and unsafe actions, deterministic seeds, and a precommitted held-out evaluation partition. This testbed will support direct comparison of ungrounded local language-model reasoning, retrieval-augmented reasoning, and the full safety-gated KARZOUN-X decision pipeline.
+
+Later experiments will add communication-delay simulation, intermittent and unavailable ground links, resource measurements, model-size ablations, and independent validation of the telemetry detector. Potential detector directions include change-point statistics, hysteresis, event merging, learned temporal models, and model-based system knowledge, but these will not be presented as confirmatory improvements on the already-inspected SMAP/MSL test set without independent validation.
 
 ## 12. Conclusion
 
@@ -167,7 +191,7 @@ To be written after the full experiment program is complete.
 
 Code: https://github.com/mkarson1997/karzoun-x
 
-Dataset provenance and acquisition instructions are documented in `data/README.md`. Phase 1 and Phase 2 result provenance is recorded in `experiments/RESULTS_INDEX.md`.
+Dataset provenance and acquisition instructions are documented in `data/README.md`. Phase 1, Phase 2, and Phase 3 result provenance is recorded in `experiments/RESULTS_INDEX.md`.
 
 ## Ethics and Disclaimer
 
