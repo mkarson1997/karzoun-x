@@ -117,6 +117,7 @@ def main() -> int:
     retriever = LocalRetriever(knowledge_documents())
     gate = SafetyGate()
     detector_threshold = float(config["detector"]["threshold"])
+    retrieval_top_k = int(config["retrieval"]["top_k"])
     rows: list[dict[str, Any]] = []
 
     for scenario in scenarios:
@@ -129,7 +130,10 @@ def main() -> int:
         nominal_false_points = sum(result.is_anomaly for result in nominal_predictions)
         detector_triggered = any(result.is_anomaly for result in fault_predictions)
 
-        evidence = retriever.search(scenario.telemetry_context, top_k=int(config["retrieval"]["top_k"]))
+        evidence = retriever.search(
+            scenario.telemetry_context,
+            top_k=retrieval_top_k,
+        )
         retrieved_ids = [item.document_id for item in evidence]
         top1_correct = bool(retrieved_ids) and retrieved_ids[0] == scenario.expected_document_id
         top3_correct = scenario.expected_document_id in retrieved_ids
