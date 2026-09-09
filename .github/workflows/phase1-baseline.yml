@@ -36,21 +36,38 @@ jobs:
       - name: Install hash-verified experiment dependencies
         run: 'python -m pip install --require-hashes --only-binary=:all: --no-deps -r requirements-ci.lock'
 
-      - name: Download public SMAP/MSL benchmark
+      - name: Download and normalize public SMAP/MSL benchmark
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p data/raw/telemanom
+          root='data/raw/telemanom'
+          mkdir -p "$root"
           curl --fail --location --retry 3 --retry-delay 3 \
             'https://www.kaggle.com/api/v1/datasets/download/patrickfleith/nasa-anomaly-detection-dataset-smap-msl' \
-            --output data/raw/telemanom/dataset.zip
-          sha256sum data/raw/telemanom/dataset.zip | tee data/raw/telemanom/dataset.zip.sha256
-          unzip -q data/raw/telemanom/dataset.zip -d data/raw/telemanom
-          test -f data/raw/telemanom/labeled_anomalies.csv
-          test -d data/raw/telemanom/data/train
-          test -d data/raw/telemanom/data/test
-          echo "Extracted train files: $(find data/raw/telemanom/data/train -name '*.npy' | wc -l)"
-          echo "Extracted test files: $(find data/raw/telemanom/data/test -name '*.npy' | wc -l)"
+            --output "$root/dataset.zip"
+          sha256sum "$root/dataset.zip" | tee "$root/dataset.zip.sha256"
+          unzip -q "$root/dataset.zip" -d "$root/extracted"
+
+          labels="$(find "$root/extracted" -type f -name 'labeled_anomalies.csv' -print -quit)"
+          train="$(find "$root/extracted" -type d -path '*/train' -print -quit)"
+          testdir="$(find "$root/extracted" -type d -path '*/test' -print -quit)"
+
+          test -n "$labels"
+          test -n "$train"
+          test -n "$testdir"
+
+          mkdir -p "$root/data"
+          cp "$labels" "$root/labeled_anomalies.csv"
+          ln -s "$(realpath "$train")" "$root/data/train"
+          ln -s "$(realpath "$testdir")" "$root/data/test"
+
+          echo "Resolved labels: $labels"
+          echo "Resolved train:  $train"
+          echo "Resolved test:   $testdir"
+          echo "Extracted train files: $(find "$train" -name '*.npy' | wc -l)"
+          echo "Extracted test files: $(find "$testdir" -name '*.npy' | wc -l)"
+          test "$(find "$train" -name '*.npy' | wc -l)" -ge 82
+          test "$(find "$testdir" -name '*.npy' | wc -l)" -ge 82
 
       - name: Run fixed-threshold Phase 1 baseline
         run: |
