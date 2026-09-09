@@ -5,11 +5,14 @@ from .fault_testbed import (
     generate_scenarios,
     knowledge_documents,
 )
+from .robustness import RobustnessScenario, generate_robustness_scenarios
 
 __all__ = [
     "FaultDefinition",
     "FaultScenario",
+    "RobustnessScenario",
     "fault_definitions",
+    "generate_robustness_scenarios",
     "generate_scenarios",
     "knowledge_documents",
 ]
