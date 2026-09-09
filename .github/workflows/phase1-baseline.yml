@@ -23,10 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.11.16"
           pip-version: "26.2.1"
@@ -36,16 +36,18 @@ jobs:
       - name: Install hash-verified experiment dependencies
         run: 'python -m pip install --require-hashes --only-binary=:all: --no-deps -r requirements-ci.lock'
 
-      - name: Download and normalize public SMAP/MSL benchmark
+      - name: Download and normalize verified public SMAP/MSL benchmark
         shell: bash
         run: |
           set -euo pipefail
           root='data/raw/telemanom'
+          expected_sha256='6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733'
           mkdir -p "$root"
-          curl --fail --location --retry 3 --retry-delay 3 \
+          curl --fail --location --proto '=https' --tlsv1.2 --retry 3 --retry-delay 3 \
             'https://www.kaggle.com/api/v1/datasets/download/patrickfleith/nasa-anomaly-detection-dataset-smap-msl' \
             --output "$root/dataset.zip"
-          sha256sum "$root/dataset.zip" | tee "$root/dataset.zip.sha256"
+          printf '%s  %s\n' "$expected_sha256" "$root/dataset.zip" | sha256sum --check --strict
+          printf '%s  %s\n' "$expected_sha256" "$root/dataset.zip" > "$root/dataset.zip.sha256"
           unzip -q "$root/dataset.zip" -d "$root/extracted"
 
           labels="$(find "$root/extracted" -type f -name 'labeled_anomalies.csv' -print -quit)"
@@ -77,7 +79,7 @@ jobs:
           cat results/phase1/summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload machine-generated results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: karzoun-x-phase1-robust-zscore
           path: |
