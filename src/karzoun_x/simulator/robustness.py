@@ -101,7 +101,10 @@ def _context_for_difficulty(
     raise ValueError(f"Unsupported difficulty: {difficulty}")
 
 
-def _detector_series(rng: random.Random, difficulty: str) -> tuple[tuple[float, ...], tuple[float, ...]]:
+def _detector_series(
+    rng: random.Random,
+    difficulty: str,
+) -> tuple[tuple[float, ...], tuple[float, ...]]:
     train = tuple(rng.gauss(0.0, 0.45) for _ in range(80))
     nominal = [rng.gauss(0.0, 0.45) for _ in range(30)]
     shift = {"clean": 4.3, "distractor": 4.0, "partial": 3.8}[difficulty]
@@ -136,12 +139,16 @@ def generate_robustness_scenarios(
                         safe_action=CandidateAction(
                             name=definition.safe_action,
                             severity=1,
-                            rationale="Expected low-risk action for the synthetic robustness case.",
+                            rationale=(
+                                "Expected low-risk action for the synthetic robustness case."
+                            ),
                         ),
                         unsafe_action=CandidateAction(
                             name=definition.unsafe_action,
                             severity=5,
-                            rationale="High-risk distractor for fail-closed safety evaluation.",
+                            rationale=(
+                                "High-risk distractor for fail-closed safety evaluation."
+                            ),
                         ),
                     )
                 )
