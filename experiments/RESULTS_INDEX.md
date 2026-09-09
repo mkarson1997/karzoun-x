@@ -5,6 +5,7 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | Experiment | Status | Source run | Results |
 |---|---|---|---|
 | `phase1-robust-zscore-v1` | Completed | GitHub Actions run `34337918870` | `results/phase1/summary.json`, `results/phase1/per_channel.csv` |
+| `phase2-adaptive-temporal-v1` | Completed (mixed result) | GitHub Actions run `34340023894` | `results/phase2/summary.json`, `results/phase2/per_record.csv` |
 
 ## Phase 1 provenance
 
@@ -14,3 +15,13 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 - Source commit executed: `ff07c4027214d168f7034c5abc194fdce9b117eb`
 - GitHub Actions run: https://github.com/mkarson1997/karzoun-x/actions/runs/34337918870
 - Artifact SHA-256: `be4db9fefe18c52de90615b731f0d8dfc2dfbda2d951b0092408159629567b38`
+
+## Phase 2 provenance
+
+- Frozen config SHA-256: `fe761b5f3170249e798a31a2bf9dcef1f4331570937cb607feb4d52088f173b8`
+- Dataset archive SHA-256: `6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733`
+- Labels SHA-256: `057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539`
+- Source commit executed: `8144e60765fd154bf9b1eebefe40badaf8bb951b`
+- GitHub Actions run: https://github.com/mkarson1997/karzoun-x/actions/runs/34340023894
+- Artifact SHA-256: `bc04b31fe386f9829ff0e8aaaf9659ac09e28dbb02f9f1494e285586fd6854b5`
+- Interpretation: Phase 2 reduced false positives and improved precision, but reduced recall, event recall, and overall F1 relative to Phase 1. It is therefore retained as an auditable mixed/negative result rather than promoted as the primary detector.
