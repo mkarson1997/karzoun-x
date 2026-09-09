@@ -125,7 +125,10 @@ def _markdown(summary: dict[str, Any]) -> str:
             f"- False positives: {p2['false_positives']:+d}",
             "",
             "> Results are machine-generated from the frozen Phase 3 configuration.",
-            "> Phase 3 was designed after observing prior phases, so it is reported as exploratory.",
+            (
+                "> Phase 3 was designed after observing prior phases, "
+                "so it is reported as exploratory."
+            ),
             "",
         ]
     )
