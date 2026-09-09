@@ -1,0 +1,53 @@
+name: Phase 7A Expanded Robustness
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/phase7a-robustness.yml"
+      - "experiments/configs/phase7a_robustness.json"
+      - "scripts/run_phase7a_robustness.py"
+      - "src/karzoun_x/simulator/robustness.py"
+      - "src/karzoun_x/simulator/__init__.py"
+      - "src/karzoun_x/anomaly_detection/stability_aware.py"
+      - "src/karzoun_x/rag/retriever.py"
+      - "src/karzoun_x/safety/gate.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: src
+
+concurrency:
+  group: phase7a-expanded-robustness
+  cancel-in-progress: false
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11.16"
+      - name: Install runtime dependencies
+        run: python -m pip install numpy==2.3.3
+      - name: Run frozen Phase 7A experiment
+        run: python scripts/run_phase7a_robustness.py | tee results-phase7a.log
+      - name: Commit machine-generated results
+        run: |
+          git config user.name "Mahmoud Karzoun"
+          git config user.email "135722882+mkarson1997@users.noreply.github.com"
+          git add results/phase7a results-phase7a.log
+          if git diff --cached --quiet; then
+            echo "No Phase 7A result changes to commit."
+            exit 0
+          fi
+          git commit -m "results: record Phase 7A expanded robustness experiment"
+          git pull --rebase origin main
+          git push origin HEAD:main
