@@ -1,0 +1,87 @@
+name: Phase 2 Adaptive Temporal
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/phase2-adaptive-temporal.yml
+      - scripts/run_phase2_adaptive_temporal.py
+      - experiments/configs/phase2_adaptive_temporal.json
+      - results/phase1/summary.json
+      - src/karzoun_x/anomaly_detection/adaptive_temporal.py
+      - src/karzoun_x/anomaly_detection/__init__.py
+      - src/karzoun_x/datasets/**
+      - src/karzoun_x/evaluation/**
+  workflow_dispatch:
+
+env:
+  PYTHONPATH: src
+
+jobs:
+  phase2:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.11.16"
+          pip-version: "26.2.1"
+          cache: pip
+          cache-dependency-path: requirements-ci.lock
+
+      - name: Install hash-verified experiment dependencies
+        run: 'python -m pip install --require-hashes --only-binary=:all: --no-deps -r requirements-ci.lock'
+
+      - name: Download and normalize verified public SMAP/MSL benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          root='data/raw/telemanom'
+          expected_sha256='6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733'
+          mkdir -p "$root"
+          curl --fail --location --proto '=https' --tlsv1.2 --retry 3 --retry-delay 3 \
+            'https://www.kaggle.com/api/v1/datasets/download/patrickfleith/nasa-anomaly-detection-dataset-smap-msl' \
+            --output "$root/dataset.zip"
+          printf '%s  %s\n' "$expected_sha256" "$root/dataset.zip" | sha256sum --check --strict
+          printf '%s  %s\n' "$expected_sha256" "$root/dataset.zip" > "$root/dataset.zip.sha256"
+          unzip -q "$root/dataset.zip" -d "$root/extracted"
+
+          labels="$(find "$root/extracted" -type f -name 'labeled_anomalies.csv' -print -quit)"
+          train="$(find "$root/extracted" -type d -path '*/train' -print -quit)"
+          testdir="$(find "$root/extracted" -type d -path '*/test' -print -quit)"
+
+          test -n "$labels"
+          test -n "$train"
+          test -n "$testdir"
+
+          mkdir -p "$root/data"
+          cp "$labels" "$root/labeled_anomalies.csv"
+          ln -s "$(realpath "$train")" "$root/data/train"
+          ln -s "$(realpath "$testdir")" "$root/data/test"
+
+          echo "Resolved labels: $labels"
+          echo "Resolved train:  $train"
+          echo "Resolved test:   $testdir"
+          test "$(find "$train" -name '*.npy' | wc -l)" -ge 82
+          test "$(find "$testdir" -name '*.npy' | wc -l)" -ge 82
+
+      - name: Run frozen Phase 2 experiment
+        run: |
+          python scripts/run_phase2_adaptive_temporal.py | tee results-phase2.log
+          cat results/phase2/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload machine-generated Phase 2 results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: karzoun-x-phase2-adaptive-temporal
+          path: |
+            results/phase2/
+            results-phase2.log
+            data/raw/telemanom/dataset.zip.sha256
+          if-no-files-found: error
+          retention-days: 90
