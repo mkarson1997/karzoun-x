@@ -11,6 +11,8 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | `phase5-local-llm-diagnosis-v1` | Failed protocol execution; audit only | Local Ollama run, branch `phase5-local-results-20260909-172700` | `docs/phase5-v1-incident.md` |
 | `phase5-local-llm-diagnosis-v2` | Completed | Local Ollama run; result commit `3a175e39a1a96415c2d6c597a40391f198a24722` | `results/phase5_v2/summary.json`, `results/phase5_v2/per_response.csv`, `results/phase5_v2/raw_responses.jsonl` |
 | `phase6-communication-delay-v1` | Completed | GitHub Actions run `34371460382` | `results/phase6/summary.json`, `results/phase6/per_scenario_profile.csv` |
+| `phase7a-expanded-robustness-v1` | Completed | GitHub Actions run `34373347451` | `results/phase7a/summary.json`, `results/phase7a/per_scenario.csv` |
+| `phase7b-end-to-end-local-llm-v1` | Protocol frozen; local execution pending | Local Ollama required | `experiments/configs/phase7b_end_to_end_local_llm.json` |
 
 ## Phase 1 provenance
 
@@ -89,3 +91,26 @@ Phase 5 v1 completed 24 Ollama generation calls but is not a model-performance r
 - Mars-far reference propagation penalty: `2880 s` round trip
 - Ground-link outage: local completion `1.0000`, ground-dependent completion `0.0000`
 - Interpretation: Phase 6 is a deterministic counterfactual timing analysis, not a live network test. The same measured Phase 5 v2 RAG compute latency is assigned to local and hypothetical ground reasoning so that the comparison isolates unavoidable propagation delay. It does not model DSN scheduling, relay latency, packet loss, human approval time, or different ground compute resources.
+
+## Phase 7 provenance
+
+### Phase 7A expanded deterministic robustness
+
+- Frozen config SHA-256: `7d362baaf5593bf8ce8525f5dbea87be81e4c115ca8a808d3eba0c225ad69391`
+- Seeds: `3301` through `3310`
+- Difficulties: `clean`, `distractor`, `partial`
+- Fault classes: `6`
+- Synthetic scenarios: `180`
+- GitHub Actions run: https://github.com/mkarson1997/karzoun-x/actions/runs/34373347451
+- Detector scenario trigger rate: `1.0000`
+- Nominal false-trigger point rate: `0.001296`
+- Retrieval top-1 accuracy: `1.0000`
+- Retrieval top-3 recall: `1.0000`
+- Expected safe-action allow rate: `1.0000`
+- Unsafe-action block rate: `1.0000`
+- Integrated deterministic mechanics success: `1.0000`
+- Interpretation: Phase 7A expands deterministic synthetic mechanics testing to 180 cases and removes explicit fault labels from telemetry text. Perfect retrieval and gating results remain synthetic implementation evidence only; no language model participates in Phase 7A and the result does not demonstrate flight or real-spacecraft performance.
+
+### Phase 7B end-to-end local-LLM protocol
+
+Phase 7B is frozen before execution in `experiments/configs/phase7b_end_to_end_local_llm.json`. It uses 36 expanded synthetic scenarios per condition across clean, distractor, and partial-information variants. It compares detector-triggered no-RAG local LLM reasoning against the full detector + RAG + local LLM + deterministic SafetyGate path. Execution requires the local Ollama model and will be recorded only after machine-generated outputs are preserved.
