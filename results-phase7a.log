@@ -1,0 +1,17 @@
+KARZOUN_X_PHASE7A_RESULT={"schema_version":1,"generated_at_utc":"2026-09-09T15:52:43.397999+00:00","experiment_id":"phase7a-expanded-robustness-v1","study_role":"precommitted expanded synthetic robustness validation before local-LLM end-to-end execution","config_sha256":"7d362baaf5593bf8ce8525f5dbea87be81e4c115ca8a808d3eba0c225ad69391","overall":{"scenarios":180,"detector_scenario_trigger_rate":1.0,"nominal_false_trigger_point_rate":0.0012962962962962963,"retrieval_top1_accuracy":1.0,"retrieval_top3_recall":1.0,"expected_safe_action_allow_rate":1.0,"unsafe_action_block_rate":1.0,"integrated_mechanics_success_rate":1.0,"nominal_points":5400,"nominal_false_points":7},"by_difficulty":{"clean":{"scenarios":60,"detector_scenario_trigger_rate":1.0,"nominal_false_trigger_point_rate":0.0005555555555555556,"retrieval_top1_accuracy":1.0,"retrieval_top3_recall":1.0,"expected_safe_action_allow_rate":1.0,"unsafe_action_block_rate":1.0,"integrated_mechanics_success_rate":1.0,"nominal_points":1800,"nominal_false_points":1},"distractor":{"scenarios":60,"detector_scenario_trigger_rate":1.0,"nominal_false_trigger_point_rate":0.0022222222222222222,"retrieval_top1_accuracy":1.0,"retrieval_top3_recall":1.0,"expected_safe_action_allow_rate":1.0,"unsafe_action_block_rate":1.0,"integrated_mechanics_success_rate":1.0,"nominal_points":1800,"nominal_false_points":4},"partial":{"scenarios":60,"detector_scenario_trigger_rate":1.0,"nominal_false_trigger_point_rate":0.0011111111111111111,"retrieval_top1_accuracy":1.0,"retrieval_top3_recall":1.0,"expected_safe_action_allow_rate":1.0,"unsafe_action_block_rate":1.0,"integrated_mechanics_success_rate":1.0,"nominal_points":1800,"nominal_false_points":2}},"integrity":{"synthetic_testbed":true,"explicit_fault_label_removed_from_telemetry_context":true,"results_machine_generated":true,"no_manual_score_editing":true,"no_local_llm_in_phase7a":true,"phase7b_will_use_local_llm":true,"not_evidence_of_flight_readiness":true}}
+# KARZOUN-X Phase 7A Expanded Robustness Results
+
+Experiment: `phase7a-expanded-robustness-v1`
+Synthetic scenarios: **180**
+
+Phase 7A expands the synthetic mechanics testbed before the next local-LLM run. Explicit fault labels are removed from telemetry text, and cases include clean, distractor, and partial-information variants. No language model participates in this phase.
+
+| Scope | Scenarios | Detector trigger | Nominal false-point rate | Retrieval top-1 | Retrieval top-3 | Safe allow | Unsafe block | Integrated success |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| overall | 180 | 1.0000 | 0.0013 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| clean | 60 | 1.0000 | 0.0006 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| distractor | 60 | 1.0000 | 0.0022 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| partial | 60 | 1.0000 | 0.0011 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+
+> Phase 7A is a deterministic synthetic robustness test. It validates expanded detector/retrieval/safety mechanics only and is not evidence of spacecraft or language-model performance.
+
