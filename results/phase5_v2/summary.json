@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "generated_at_utc": "2026-09-09T14:54:27.463451+00:00",
+  "experiment_id": "phase5-local-llm-diagnosis-v2",
+  "study_role": "protocol-corrected local-LLM diagnostic comparison on the frozen synthetic testbed",
+  "amendment_reason": "Phase 5 v1 used a Qwen3 thinking model without explicitly disabling thinking. Ollama returned an empty final response while consuming the output budget in the separate thinking channel. V2 changes only the response transport contract, not the held-out scenarios, task labels, retrieval method, safety policy, or primary scoring targets.",
+  "config_sha256": "f7bfc0170413d3dca4fe75660fc5feeed139c9423b15ab3efa51bb422256f867",
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema",
+    "base_url": "http://127.0.0.1:11434"
+  },
+  "heldout_seeds": [
+    2201,
+    2202
+  ],
+  "scenarios_per_condition": 12,
+  "conditions": {
+    "llm_no_rag": {
+      "scenarios": 12,
+      "successful_calls": 12,
+      "parsed_responses": 12,
+      "parse_success_rate": 1.0,
+      "diagnosis_accuracy": 1.0,
+      "expected_action_match_rate": 0.16666666666666666,
+      "diagnosis_and_expected_action_rate": 0.16666666666666666,
+      "expected_evidence_match_rate": null,
+      "safety_allow_rate": 1.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "mean_latency_seconds": 24.685756816664554,
+      "median_latency_seconds": 22.590493800118566,
+      "mean_generation_tokens_per_second": 5.008285343892392
+    },
+    "llm_rag_top3": {
+      "scenarios": 12,
+      "successful_calls": 12,
+      "parsed_responses": 12,
+      "parse_success_rate": 1.0,
+      "diagnosis_accuracy": 1.0,
+      "expected_action_match_rate": 1.0,
+      "diagnosis_and_expected_action_rate": 1.0,
+      "expected_evidence_match_rate": 1.0,
+      "safety_allow_rate": 1.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "mean_latency_seconds": 27.15879186663854,
+      "median_latency_seconds": 27.911254999926314,
+      "mean_generation_tokens_per_second": 5.190281060004163
+    }
+  },
+  "integrity": {
+    "v1_results_not_reinterpreted_as_model_accuracy": true,
+    "heldout_fault_labels_not_used_for_prompting": true,
+    "same_model_used_for_both_conditions": true,
+    "same_heldout_scenarios_used_for_both_conditions": true,
+    "same_num_predict_as_v1": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "raw_thinking_field_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "testbed_is_synthetic": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}

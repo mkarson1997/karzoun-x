@@ -1,0 +1,7 @@
+﻿KARZOUN-X Phase 5 v2 local execution environment
+timestamp_local=2026-09-09T17:44:04.6511244+03:00
+source_commit=e859bfd997589328718887d1a9c239fca074c134
+python=Python 3.11.9
+ollama=ollama version is 0.33.3
+model=qwen3:14b-q4_K_M
+ollama_base_url=http://127.0.0.1:11434
