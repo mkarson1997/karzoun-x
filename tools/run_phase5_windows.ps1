@@ -49,6 +49,23 @@ function Invoke-Python([string[]]$PythonCommand, [string[]]$Arguments) {
     }
 }
 
+function Get-Sha256([string]$Path) {
+    $stream = [System.IO.File]::OpenRead($Path)
+    try {
+        $sha = [System.Security.Cryptography.SHA256]::Create()
+        try {
+            $bytes = $sha.ComputeHash($stream)
+            return ([System.BitConverter]::ToString($bytes)).Replace("-", "").ToLowerInvariant()
+        }
+        finally {
+            $sha.Dispose()
+        }
+    }
+    finally {
+        $stream.Dispose()
+    }
+}
+
 Write-Step "Checking required tools"
 Require-Command git
 Require-Command ollama
@@ -108,9 +125,43 @@ if (-not (Test-Path $PythonExe)) {
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to set the pinned pip version."
 }
-& $PythonExe -m pip install --require-hashes --only-binary=:all: --no-deps -r requirements-ci.lock
+
+Write-Step "Preparing Windows-compatible pinned dependencies"
+$LinuxLock = Join-Path $RunRoot "requirements-ci.lock"
+$WindowsPins = Join-Path $RunRoot "requirements-windows-runtime.txt"
+$Wheelhouse = Join-Path $RunRoot "wheelhouse-windows"
+$WheelManifest = Join-Path $RunRoot "dependency-wheel-manifest.sha256"
+New-Item -ItemType Directory -Force -Path $Wheelhouse | Out-Null
+
+$PinnedLines = Get-Content $LinuxLock |
+    Where-Object { $_ -and -not $_.TrimStart().StartsWith("#") } |
+    ForEach-Object { $_ -replace '\s+--hash=sha256:[0-9a-fA-F]+\s*$', '' }
+$PinnedLines | Set-Content -Path $WindowsPins -Encoding ascii
+
+Write-Host "The repository CI lock contains Linux-wheel hashes."
+Write-Host "For Windows, the same exact versions will be downloaded as Windows wheels."
+Write-Host "The actual Windows wheel SHA-256 hashes will be recorded before installation."
+
+& $PythonExe -m pip download --only-binary=:all: --no-deps -r $WindowsPins -d $Wheelhouse
 if ($LASTEXITCODE -ne 0) {
-    throw "Hash-verified dependency installation failed."
+    throw "Could not download the pinned Windows wheels."
+}
+
+$ManifestLines = New-Object System.Collections.Generic.List[string]
+Get-ChildItem -Path $Wheelhouse -File | Sort-Object Name | ForEach-Object {
+    $Hash = Get-Sha256 $_.FullName
+    $ManifestLines.Add("$Hash  $($_.Name)")
+}
+$ManifestLines | Set-Content -Path $WheelManifest -Encoding ascii
+Write-Host "Recorded Windows wheel SHA-256 manifest: $WheelManifest"
+
+& $PythonExe -m pip install --no-index --find-links $Wheelhouse --no-deps -r $WindowsPins
+if ($LASTEXITCODE -ne 0) {
+    throw "Pinned Windows dependency installation failed."
+}
+& $PythonExe -m pip check
+if ($LASTEXITCODE -ne 0) {
+    throw "Installed Python dependency set is inconsistent."
 }
 
 $env:PYTHONPATH = Join-Path $RunRoot "src"
@@ -144,6 +195,8 @@ if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
 }
 New-Item -ItemType Directory -Force -Path "results\phase5" | Out-Null
 $EnvironmentLines | Set-Content -Path "results\phase5\environment.txt" -Encoding utf8
+Copy-Item $WheelManifest "results\phase5\dependency-wheel-manifest.sha256" -Force
+& $PythonExe -m pip freeze | Set-Content -Path "results\phase5\pip-freeze.txt" -Encoding ascii
 
 Write-Step "Running the frozen Phase 5 local-LLM benchmark"
 $RunLog = Join-Path $RunRoot "results-phase5.log"
