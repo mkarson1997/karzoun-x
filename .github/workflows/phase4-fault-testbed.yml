@@ -1,0 +1,51 @@
+name: Phase 4 Fault Testbed
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/phase4-fault-testbed.yml
+      - scripts/run_phase4_fault_testbed.py
+      - experiments/configs/phase4_fault_testbed.json
+      - src/karzoun_x/simulator/**
+      - src/karzoun_x/rag/**
+      - src/karzoun_x/safety/**
+  workflow_dispatch:
+
+env:
+  PYTHONPATH: src
+
+jobs:
+  phase4:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.11.16"
+          pip-version: "26.2.1"
+          cache: pip
+          cache-dependency-path: requirements-ci.lock
+
+      - name: Install hash-verified dependencies
+        run: 'python -m pip install --require-hashes --only-binary=:all: --no-deps -r requirements-ci.lock'
+
+      - name: Run frozen Phase 4 heldout evaluation
+        run: |
+          python scripts/run_phase4_fault_testbed.py | tee results-phase4.log
+          cat results/phase4/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload Phase 4 machine-generated results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: karzoun-x-phase4-fault-testbed
+          path: |
+            results/phase4/
+            results-phase4.log
+          if-no-files-found: error
+          retention-days: 90
