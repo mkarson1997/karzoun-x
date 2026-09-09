@@ -1,0 +1,48 @@
+name: Phase 6 Communication Delay
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/phase6-communication-delay.yml"
+      - "experiments/configs/phase6_communication_delay.json"
+      - "results/phase5_v2/per_response.csv"
+      - "scripts/run_phase6_communication_delay.py"
+      - "src/karzoun_x/communication/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: src
+
+concurrency:
+  group: phase6-communication-delay
+  cancel-in-progress: false
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11.16"
+      - name: Run frozen Phase 6 experiment
+        run: python scripts/run_phase6_communication_delay.py | tee results-phase6.log
+      - name: Commit machine-generated results
+        run: |
+          git config user.name "Mahmoud Karzoun"
+          git config user.email "135722882+mkarson1997@users.noreply.github.com"
+          git add results/phase6 results-phase6.log
+          if git diff --cached --quiet; then
+            echo "No Phase 6 result changes to commit."
+            exit 0
+          fi
+          git commit -m "results: record Phase 6 communication delay experiment"
+          git pull --rebase origin main
+          git push origin HEAD:main
