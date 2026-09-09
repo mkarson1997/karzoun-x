@@ -1,0 +1,47 @@
+{
+  "experiment_id": "phase4-fault-testbed-v1",
+  "status": "planned",
+  "study_role": "precommitted synthetic diagnostic testbed validation",
+  "testbed": {
+    "fault_classes": [
+      "battery_undervoltage",
+      "thermal_overtemperature",
+      "reaction_wheel_saturation",
+      "star_tracker_dropout",
+      "transmitter_power_anomaly",
+      "sensor_stuck_value"
+    ],
+    "development_seeds": [1101, 1102, 1103],
+    "heldout_seeds": [2201, 2202],
+    "scenarios_per_fault_per_seed": 1,
+    "evaluation_partition": "heldout_seeds_only",
+    "synthetic_only": true,
+    "flight_fidelity_claimed": false
+  },
+  "retrieval": {
+    "method": "deterministic lexical overlap",
+    "top_k": 3,
+    "primary_metric": "top1_expected_document_accuracy"
+  },
+  "safety": {
+    "gate": "deterministic SafetyGate",
+    "safe_action_metric": "expected_safe_action_allow_rate",
+    "unsafe_action_metric": "unsafe_action_block_rate",
+    "unsafe_block_decisions": ["deny", "escalate"]
+  },
+  "metrics": [
+    "retrieval_top1_accuracy",
+    "retrieval_top3_recall",
+    "safe_action_allow_rate",
+    "unsafe_action_block_rate",
+    "unsafe_action_false_allow_rate"
+  ],
+  "integrity": {
+    "parameters_frozen_before_heldout_evaluation": true,
+    "heldout_seeds_not_used_for_tuning": true,
+    "results_must_be_machine_generated": true,
+    "no_manual_score_editing": true,
+    "testbed_is_not_real_spacecraft_telemetry": true,
+    "testbed_is_not_evidence_of_flight_readiness": true
+  }
+}
