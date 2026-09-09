@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import argparse
 import csv
 import hashlib
 import json
@@ -15,6 +14,10 @@ from karzoun_x.anomaly_detection.robust_zscore import RobustZScoreDetector
 from karzoun_x.datasets.telemanom import LabeledChannel, load_labeled_channels
 from karzoun_x.evaluation.metrics import pointwise_metrics
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+CONFIG_PATH = REPO_ROOT / "experiments" / "configs" / "phase1_robust_zscore.json"
+OUTPUT_DIR = REPO_ROOT / "results" / "phase1"
+
 
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -24,13 +27,35 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _repo_path(relative_path: str) -> Path:
+    candidate = (REPO_ROOT / relative_path).resolve()
+    try:
+        candidate.relative_to(REPO_ROOT)
+    except ValueError as exc:
+        raise ValueError(f"Configured path must remain inside the repository: {relative_path!r}") from exc
+    return candidate
+
+
+def _npy_files(directory: Path) -> dict[str, Path]:
+    resolved_directory = directory.resolve()
+    files: dict[str, Path] = {}
+    for path in resolved_directory.iterdir():
+        if not path.is_file() or path.suffix != ".npy":
+            continue
+        resolved = path.resolve()
+        if resolved.parent != resolved_directory:
+            raise ValueError(f"Telemetry file escaped the expected directory: {path}")
+        files[path.stem] = resolved
+    return files
+
+
 def _series(path: Path) -> np.ndarray:
     values = np.load(path, allow_pickle=False)
     if values.ndim == 1:
         return values.astype(float, copy=False)
     if values.ndim == 2 and values.shape[1] >= 1:
         return values[:, 0].astype(float, copy=False)
-    raise ValueError(f"Unsupported telemetry array shape for {path}: {values.shape}")
+    raise ValueError(f"Unsupported telemetry array shape: {values.shape}")
 
 
 def _truth_mask(length: int, sequences: tuple[tuple[int, int], ...]) -> list[bool]:
@@ -70,17 +95,14 @@ def _metrics_from_counts(tp: int, fp: int, fn: int) -> dict[str, float | int]:
 
 def _evaluate_channel(
     channel: LabeledChannel,
-    train_dir: Path,
-    test_dir: Path,
+    train_files: dict[str, Path],
+    test_files: dict[str, Path],
     threshold: float,
 ) -> dict[str, Any]:
-    train_path = train_dir / f"{channel.channel_id}.npy"
-    test_path = test_dir / f"{channel.channel_id}.npy"
-    if not train_path.exists() or not test_path.exists():
-        raise FileNotFoundError(
-            f"Missing train/test arrays for {channel.channel_id}: "
-            f"{train_path} / {test_path}"
-        )
+    train_path = train_files.get(channel.channel_id)
+    test_path = test_files.get(channel.channel_id)
+    if train_path is None or test_path is None:
+        raise FileNotFoundError(f"Missing train/test telemetry arrays for a benchmark record.")
 
     train = _series(train_path)
     test = _series(test_path)
@@ -134,11 +156,11 @@ def _markdown(summary: dict[str, Any]) -> str:
         "",
         f"Experiment: `{summary['experiment_id']}`",
         f"Detector: robust z-score (MAD), threshold `{summary['threshold']}`",
-        f"Channels evaluated: **{total['channels']}**",
+        f"Benchmark records evaluated: **{total['channels']}**",
         f"Labeled anomaly events: **{total['labeled_events']}**",
         f"Telemetry test points: **{total['test_points']:,}**",
         "",
-        "| Scope | Precision | Recall | F1 | Event recall | Channels |",
+        "| Scope | Precision | Recall | F1 | Event recall | Records |",
         "|---|---:|---:|---:|---:|---:|",
     ]
     for scope in ("SMAP", "MSL", "total"):
@@ -161,28 +183,21 @@ def _markdown(summary: dict[str, Any]) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run KARZOUN-X Phase 1 robust-z baseline.")
-    parser.add_argument(
-        "--config",
-        default="experiments/configs/phase1_robust_zscore.json",
-        type=Path,
-    )
-    parser.add_argument("--output-dir", default="results/phase1", type=Path)
-    args = parser.parse_args()
-
-    config = json.loads(args.config.read_text(encoding="utf-8"))
+    config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     dataset = config["dataset"]
-    labels_path = Path(dataset["labels_path"])
-    train_dir = Path(dataset["train_dir"])
-    test_dir = Path(dataset["test_dir"])
+    labels_path = _repo_path(str(dataset["labels_path"]))
+    train_dir = _repo_path(str(dataset["train_dir"]))
+    test_dir = _repo_path(str(dataset["test_dir"]))
     threshold = float(config["detector"]["threshold"])
 
+    train_files = _npy_files(train_dir)
+    test_files = _npy_files(test_dir)
     channels = load_labeled_channels(labels_path)
     if not channels:
         raise RuntimeError("No labeled channels found.")
 
     rows = [
-        _evaluate_channel(channel, train_dir, test_dir, threshold) for channel in channels
+        _evaluate_channel(channel, train_files, test_files, threshold) for channel in channels
     ]
     by_spacecraft: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
@@ -195,7 +210,7 @@ def main() -> int:
         "schema_version": 1,
         "generated_at_utc": datetime.now(UTC).isoformat(),
         "experiment_id": config["experiment_id"],
-        "config_sha256": _sha256(args.config),
+        "config_sha256": _sha256(CONFIG_PATH),
         "labels_sha256": _sha256(labels_path),
         "dataset_source": dataset["source"],
         "threshold": threshold,
@@ -207,10 +222,10 @@ def main() -> int:
         ],
     }
 
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    summary_path = args.output_dir / "summary.json"
-    csv_path = args.output_dir / "per_channel.csv"
-    markdown_path = args.output_dir / "summary.md"
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    summary_path = OUTPUT_DIR / "summary.json"
+    csv_path = OUTPUT_DIR / "per_channel.csv"
+    markdown_path = OUTPUT_DIR / "summary.md"
 
     summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     with csv_path.open("w", encoding="utf-8", newline="") as handle:
