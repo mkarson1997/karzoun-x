@@ -248,7 +248,11 @@ def _markdown(summary: dict[str, Any]) -> str:
         f"Model: `{summary['model']['model_name']}` via local Ollama",
         f"Held-out synthetic scenarios per condition: **{summary['scenarios_per_condition']}**",
         "",
-        "Protocol correction from v1: Qwen3 thinking is explicitly disabled and Ollama JSON-schema structured output is enforced. The held-out scenarios and evaluation targets are unchanged.",
+        (
+            "Protocol correction from v1: Qwen3 thinking is explicitly disabled and "
+            "Ollama JSON-schema structured output is enforced. The held-out scenarios "
+            "and evaluation targets are unchanged."
+        ),
         "",
         "| Metric | No RAG | RAG top-3 |",
         "|---|---:|---:|",
@@ -278,7 +282,10 @@ def _markdown(summary: dict[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "> Ground-truth fault labels were used for scoring only and were not inserted into prompts.",
+            (
+                "> Ground-truth fault labels were used for scoring only and were not "
+                "inserted into prompts."
+            ),
             "> These are synthetic diagnostic results and are not evidence of flight readiness.",
             "",
         ]
