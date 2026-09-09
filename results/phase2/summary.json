@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-09T10:24:35.138385+00:00",
+  "experiment_id": "phase2-adaptive-temporal-v1",
+  "config_sha256": "fe761b5f3170249e798a31a2bf9dcef1f4331570937cb607feb4d52088f173b8",
+  "labels_sha256": "057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539",
+  "dataset_source": "Telemanom SMAP/MSL public benchmark",
+  "detector": {
+    "name": "adaptive-robust-temporal",
+    "threshold": 3.5,
+    "center": "training median",
+    "scale": "max(training MAD sigma, training IQR sigma), std fallback on collapse",
+    "fit_scope": "training telemetry only",
+    "persistence_min_consecutive": 3
+  },
+  "integrity": {
+    "results_must_be_machine_generated": true,
+    "no_manual_score_editing": true,
+    "parameters_frozen_before_test_evaluation": true,
+    "no_test_label_parameter_tuning": true
+  },
+  "aggregate": {
+    "MSL": {
+      "precision": 0.16037276160311853,
+      "recall": 0.33904197785217616,
+      "f1": 0.21774727092292423,
+      "true_positives": 2633,
+      "false_positives": 13785,
+      "false_negatives": 5133,
+      "event_hits": 26,
+      "labeled_events": 36,
+      "event_recall": 0.7222222222222222,
+      "channels": 27,
+      "test_points": 73729,
+      "predicted_points": 16418,
+      "raw_predicted_points": 17267
+    },
+    "SMAP": {
+      "precision": 0.3686391565978121,
+      "recall": 0.40702627842154165,
+      "f1": 0.386882842050889,
+      "true_positives": 23218,
+      "false_positives": 39765,
+      "false_negatives": 33825,
+      "event_hits": 32,
+      "labeled_events": 69,
+      "event_recall": 0.463768115942029,
+      "channels": 55,
+      "test_points": 444035,
+      "predicted_points": 62983,
+      "raw_predicted_points": 66607
+    },
+    "total": {
+      "precision": 0.325575244644274,
+      "recall": 0.39887978521501644,
+      "f1": 0.3585188267110464,
+      "true_positives": 25851,
+      "false_positives": 53550,
+      "false_negatives": 38958,
+      "event_hits": 58,
+      "labeled_events": 105,
+      "event_recall": 0.5523809523809524,
+      "channels": 82,
+      "test_points": 517764,
+      "predicted_points": 79401,
+      "raw_predicted_points": 83874
+    }
+  },
+  "scale_source_counts": {
+    "epsilon-floor": 16,
+    "robust-max(mad,iqr)": 54,
+    "std-fallback": 12
+  },
+  "comparison_to_phase1": {
+    "reference_experiment": "phase1-robust-zscore-v1",
+    "reference_config_sha256": "af06f715a46a90e1efc5c0c037e805bdd28cbe36ac1f4e20565aab8bb197448a",
+    "total_delta": {
+      "precision": 0.05703680100114267,
+      "recall": -0.17107191902359242,
+      "f1": -0.006551517871160706,
+      "event_recall": -0.2761904761904762,
+      "predicted_points": -58151,
+      "false_positives": -47064
+    }
+  },
+  "metadata_length_mismatches": []
+}
