@@ -162,9 +162,11 @@ $HasChanges = (& git status --porcelain) -join "`n"
 if ([string]::IsNullOrWhiteSpace($HasChanges)) {
     Write-Host "No result changes were produced."
 } else {
+    & git config user.name "Mahmoud Karzoun"
+    & git config user.email "135722882+mkarson1997@users.noreply.github.com"
     & git commit -m "results: record phase5 local LLM benchmark"
     if ($LASTEXITCODE -ne 0) {
-        throw "Could not create the results commit. Check your Git user.name/user.email configuration."
+        throw "Could not create the Phase 5 results commit."
     }
 
     Write-Step "Pushing results to GitHub"
