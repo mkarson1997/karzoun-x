@@ -51,7 +51,10 @@ def _markdown(summary: dict[str, Any]) -> str:
             ),
             "",
             "> This is a deterministic synthetic research testbed, not real flight telemetry.",
-            "> It validates retrieval and safety mechanics; it does not validate LLM diagnosis yet.",
+            (
+                "> It validates retrieval and safety mechanics; "
+                "it does not validate LLM diagnosis yet."
+            ),
             "",
         ]
     )
