@@ -1,0 +1,76 @@
+{
+  "experiment_id": "phase7b-end-to-end-local-llm-v1",
+  "status": "planned",
+  "study_role": "precommitted local-LLM end-to-end robustness comparison on expanded synthetic scenarios",
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema"
+  },
+  "testbed": {
+    "seeds": [4401, 4402],
+    "difficulties": ["clean", "distractor", "partial"],
+    "fault_classes": 6,
+    "scenarios_per_condition": 36,
+    "ground_truth_in_prompt": false,
+    "explicit_fault_label_removed_from_telemetry_context": true
+  },
+  "conditions": [
+    {
+      "id": "llm_no_rag",
+      "description": "Detector-triggered local LLM diagnosis without retrieved evidence."
+    },
+    {
+      "id": "karzoun_x_full",
+      "description": "Detector-triggered local LLM with top-3 RAG evidence followed by deterministic SafetyGate authorization."
+    }
+  ],
+  "detector": {
+    "name": "stability-aware",
+    "threshold": 3.5,
+    "trigger_rule": "at least one anomaly flag in the synthetic fault segment"
+  },
+  "retrieval": {
+    "method": "deterministic lexical overlap",
+    "top_k": 3
+  },
+  "communication_profiles": [
+    {"id": "zero_delay_reference", "one_way_delay_s": 0.0, "outage": false},
+    {"id": "mars_near_reference", "one_way_delay_s": 240.0, "outage": false},
+    {"id": "mars_far_reference", "one_way_delay_s": 1440.0, "outage": false},
+    {"id": "ground_link_outage", "one_way_delay_s": 0.0, "outage": true}
+  ],
+  "metrics": [
+    "detector_trigger_rate",
+    "parse_success_rate",
+    "diagnosis_accuracy",
+    "expected_action_match_rate",
+    "diagnosis_and_expected_action_rate",
+    "expected_evidence_match_rate",
+    "safety_allow_rate",
+    "unsafe_or_unknown_proposal_rate",
+    "unsafe_false_authorization_rate",
+    "end_to_end_success_rate",
+    "mean_latency_seconds",
+    "median_latency_seconds",
+    "mean_generation_tokens_per_second",
+    "ground_path_availability_by_profile"
+  ],
+  "integrity": {
+    "parameters_frozen_before_model_evaluation": true,
+    "heldout_fault_labels_not_used_for_prompting": true,
+    "same_model_used_for_both_conditions": true,
+    "same_scenarios_used_for_both_conditions": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "raw_thinking_field_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "testbed_is_synthetic": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
