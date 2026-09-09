@@ -1,0 +1,45 @@
+{
+  "experiment_id": "phase3-stability-aware-v1",
+  "status": "planned",
+  "study_role": "exploratory iterative refinement after Phase 2",
+  "dataset": {
+    "source": "Telemanom SMAP/MSL public benchmark",
+    "labels_path": "data/raw/telemanom/labeled_anomalies.csv",
+    "train_dir": "data/raw/telemanom/data/train",
+    "test_dir": "data/raw/telemanom/data/test"
+  },
+  "detector": {
+    "name": "stability-aware-robust-zscore",
+    "threshold": 3.5,
+    "center": "training median",
+    "primary_scale": "training MAD with Phase 1-compatible 0.6745 normalization",
+    "fallback_scale": "training standard deviation only when training MAD collapses",
+    "constant_channel_behavior": "Phase 1-compatible epsilon floor",
+    "fit_scope": "training telemetry only",
+    "temporal_filter": "none"
+  },
+  "metrics": [
+    "pointwise_precision",
+    "pointwise_recall",
+    "pointwise_f1",
+    "event_recall"
+  ],
+  "comparison": {
+    "phase1_results": "results/phase1/summary.json",
+    "phase2_results": "results/phase2/summary.json"
+  },
+  "reporting": {
+    "per_record": true,
+    "aggregate_by_spacecraft": true,
+    "aggregate_total": true,
+    "report_scale_source_counts": true
+  },
+  "integrity": {
+    "results_must_be_machine_generated": true,
+    "no_manual_score_editing": true,
+    "parameters_frozen_before_phase3_test_evaluation": true,
+    "no_phase3_test_label_parameter_tuning": true,
+    "not_claimed_as_confirmatory_holdout": true,
+    "prior_phase_results_informed_detector_design": true
+  }
+}
