@@ -32,7 +32,8 @@ def _repo_path(relative_path: str) -> Path:
     try:
         candidate.relative_to(REPO_ROOT)
     except ValueError as exc:
-        raise ValueError(f"Configured path must remain inside the repository: {relative_path!r}") from exc
+        message = f"Configured path must remain inside the repository: {relative_path!r}"
+        raise ValueError(message) from exc
     return candidate
 
 
@@ -102,7 +103,7 @@ def _evaluate_channel(
     train_path = train_files.get(channel.channel_id)
     test_path = test_files.get(channel.channel_id)
     if train_path is None or test_path is None:
-        raise FileNotFoundError(f"Missing train/test telemetry arrays for a benchmark record.")
+        raise FileNotFoundError("Missing train/test telemetry arrays for a benchmark record.")
 
     train = _series(train_path)
     test = _series(test_path)
