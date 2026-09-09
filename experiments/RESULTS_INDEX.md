@@ -6,6 +6,7 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 |---|---|---|---|
 | `phase1-robust-zscore-v1` | Completed | GitHub Actions run `34337918870` | `results/phase1/summary.json`, `results/phase1/per_channel.csv` |
 | `phase2-adaptive-temporal-v1` | Completed (mixed result) | GitHub Actions run `34340023894` | `results/phase2/summary.json`, `results/phase2/per_record.csv` |
+| `phase3-stability-aware-v1` | Completed (best F1 so far, exploratory) | GitHub Actions run `34347057969` | `results/phase3/summary.json`, `results/phase3/per_record.csv` |
 
 ## Phase 1 provenance
 
@@ -25,3 +26,13 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 - GitHub Actions run: https://github.com/mkarson1997/karzoun-x/actions/runs/34340023894
 - Artifact SHA-256: `bc04b31fe386f9829ff0e8aaaf9659ac09e28dbb02f9f1494e285586fd6854b5`
 - Interpretation: Phase 2 reduced false positives and improved precision, but reduced recall, event recall, and overall F1 relative to Phase 1. It is therefore retained as an auditable mixed/negative result rather than promoted as the primary detector.
+
+## Phase 3 provenance
+
+- Frozen config SHA-256: `934b79837c0e30ab3328590f5c1e0af488d5ccaf56f075557548f9c055685fb1`
+- Dataset archive SHA-256: `6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733`
+- Labels SHA-256: `057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539`
+- Source commit executed: `e35aa798551eaf3213a8585617da7b883d4ffa0a`
+- GitHub Actions run: https://github.com/mkarson1997/karzoun-x/actions/runs/34347057969
+- Artifact SHA-256: `774df8db3e8da1ac5729dac73719b69753a41e93c1da06fab8d8e6a81b0eb8cd`
+- Interpretation: Phase 3 uses the Phase 1 MAD rule where training MAD is stable and switches to a training-standard-deviation fallback only when MAD collapses. It achieved the highest total F1 of the first three phases (`0.4054`) while reducing false positives by `28,606` relative to Phase 1. Because its design was informed by earlier benchmark results, it is explicitly exploratory and is not treated as an untouched confirmatory result.
