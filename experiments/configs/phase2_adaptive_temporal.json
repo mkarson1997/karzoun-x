@@ -1,0 +1,40 @@
+{
+  "experiment_id": "phase2-adaptive-temporal-v1",
+  "status": "planned",
+  "dataset": {
+    "source": "Telemanom SMAP/MSL public benchmark",
+    "labels_path": "data/raw/telemanom/labeled_anomalies.csv",
+    "train_dir": "data/raw/telemanom/data/train",
+    "test_dir": "data/raw/telemanom/data/test"
+  },
+  "detector": {
+    "name": "adaptive-robust-temporal",
+    "threshold": 3.5,
+    "center": "training median",
+    "scale": "max(training MAD sigma, training IQR sigma), std fallback on collapse",
+    "fit_scope": "training telemetry only",
+    "persistence_min_consecutive": 3
+  },
+  "metrics": [
+    "pointwise_precision",
+    "pointwise_recall",
+    "pointwise_f1",
+    "event_recall"
+  ],
+  "comparison": {
+    "reference_experiment": "phase1-robust-zscore-v1",
+    "reference_results": "results/phase1/summary.json"
+  },
+  "reporting": {
+    "per_record": true,
+    "aggregate_by_spacecraft": true,
+    "aggregate_total": true,
+    "report_scale_fallback_counts": true
+  },
+  "integrity": {
+    "results_must_be_machine_generated": true,
+    "no_manual_score_editing": true,
+    "parameters_frozen_before_test_evaluation": true,
+    "no_test_label_parameter_tuning": true
+  }
+}
