@@ -12,14 +12,13 @@ on:
       - src/karzoun_x/evaluation/**
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 env:
   PYTHONPATH: src
 
 jobs:
   baseline:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
