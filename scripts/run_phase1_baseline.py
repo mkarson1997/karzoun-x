@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
 from dataclasses import asdict
 from datetime import UTC, datetime
@@ -13,85 +12,19 @@ import numpy as np
 from karzoun_x.anomaly_detection.robust_zscore import RobustZScoreDetector
 from karzoun_x.datasets.telemanom import LabeledChannel, load_labeled_channels
 from karzoun_x.evaluation.metrics import pointwise_metrics
+from karzoun_x.evaluation.telemetry_benchmark import (
+    aggregate_rows,
+    event_hits,
+    load_series,
+    npy_files,
+    repo_path,
+    sha256_file,
+    truth_mask,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = REPO_ROOT / "experiments" / "configs" / "phase1_robust_zscore.json"
 OUTPUT_DIR = REPO_ROOT / "results" / "phase1"
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def _repo_path(relative_path: str) -> Path:
-    candidate = (REPO_ROOT / relative_path).resolve()
-    try:
-        candidate.relative_to(REPO_ROOT)
-    except ValueError as exc:
-        message = f"Configured path must remain inside the repository: {relative_path!r}"
-        raise ValueError(message) from exc
-    return candidate
-
-
-def _npy_files(directory: Path) -> dict[str, Path]:
-    resolved_directory = directory.resolve()
-    files: dict[str, Path] = {}
-    for path in resolved_directory.iterdir():
-        if not path.is_file() or path.suffix != ".npy":
-            continue
-        resolved = path.resolve()
-        if resolved.parent != resolved_directory:
-            raise ValueError(f"Telemetry file escaped the expected directory: {path}")
-        files[path.stem] = resolved
-    return files
-
-
-def _series(path: Path) -> np.ndarray:
-    values = np.load(path, allow_pickle=False)
-    if values.ndim == 1:
-        return values.astype(float, copy=False)
-    if values.ndim == 2 and values.shape[1] >= 1:
-        return values[:, 0].astype(float, copy=False)
-    raise ValueError(f"Unsupported telemetry array shape: {values.shape}")
-
-
-def _truth_mask(length: int, sequences: tuple[tuple[int, int], ...]) -> list[bool]:
-    truth = [False] * length
-    for start, end in sequences:
-        if start >= length:
-            continue
-        clipped_end = min(end, length - 1)
-        for index in range(start, clipped_end + 1):
-            truth[index] = True
-    return truth
-
-
-def _event_hits(
-    sequences: tuple[tuple[int, int], ...], predicted_indices: set[int]
-) -> tuple[int, int]:
-    hits = sum(
-        any(index in predicted_indices for index in range(start, end + 1))
-        for start, end in sequences
-    )
-    return hits, len(sequences)
-
-
-def _metrics_from_counts(tp: int, fp: int, fn: int) -> dict[str, float | int]:
-    precision = tp / (tp + fp) if tp + fp else 0.0
-    recall = tp / (tp + fn) if tp + fn else 0.0
-    f1 = 2.0 * precision * recall / (precision + recall) if precision + recall else 0.0
-    return {
-        "precision": precision,
-        "recall": recall,
-        "f1": f1,
-        "true_positives": tp,
-        "false_positives": fp,
-        "false_negatives": fn,
-    }
 
 
 def _evaluate_channel(
@@ -105,17 +38,17 @@ def _evaluate_channel(
     if train_path is None or test_path is None:
         raise FileNotFoundError("Missing train/test telemetry arrays for a benchmark record.")
 
-    train = _series(train_path)
-    test = _series(test_path)
+    train = load_series(train_path)
+    test = load_series(test_path)
     detector = RobustZScoreDetector(threshold=threshold).fit(train)
 
     scores = np.fromiter((detector.score(float(value)) for value in test), dtype=float)
     prediction_np = scores >= threshold
     prediction = prediction_np.tolist()
-    truth = _truth_mask(len(test), channel.anomaly_sequences)
+    truth = truth_mask(len(test), channel.anomaly_sequences)
     metrics = pointwise_metrics(truth, prediction)
     predicted_indices = set(np.flatnonzero(prediction_np).tolist())
-    event_hits, event_total = _event_hits(channel.anomaly_sequences, predicted_indices)
+    hit_count, event_total = event_hits(channel.anomaly_sequences, predicted_indices)
 
     return {
         "channel_id": channel.channel_id,
@@ -125,28 +58,11 @@ def _evaluate_channel(
         "metadata_num_values": channel.num_values,
         "length_matches_metadata": int(len(test)) == channel.num_values,
         "labeled_events": event_total,
-        "event_hits": event_hits,
-        "event_recall": event_hits / event_total if event_total else 0.0,
+        "event_hits": hit_count,
+        "event_recall": hit_count / event_total if event_total else 0.0,
         "predicted_points": int(prediction_np.sum()),
         "max_score": float(scores.max(initial=0.0)),
         **asdict(metrics),
-    }
-
-
-def _aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    tp = sum(int(row["true_positives"]) for row in rows)
-    fp = sum(int(row["false_positives"]) for row in rows)
-    fn = sum(int(row["false_negatives"]) for row in rows)
-    event_hits = sum(int(row["event_hits"]) for row in rows)
-    event_total = sum(int(row["labeled_events"]) for row in rows)
-    return {
-        **_metrics_from_counts(tp, fp, fn),
-        "event_hits": event_hits,
-        "labeled_events": event_total,
-        "event_recall": event_hits / event_total if event_total else 0.0,
-        "channels": len(rows),
-        "test_points": sum(int(row["test_points"]) for row in rows),
-        "predicted_points": sum(int(row["predicted_points"]) for row in rows),
     }
 
 
@@ -186,13 +102,13 @@ def _markdown(summary: dict[str, Any]) -> str:
 def main() -> int:
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     dataset = config["dataset"]
-    labels_path = _repo_path(str(dataset["labels_path"]))
-    train_dir = _repo_path(str(dataset["train_dir"]))
-    test_dir = _repo_path(str(dataset["test_dir"]))
+    labels_path = repo_path(REPO_ROOT, str(dataset["labels_path"]))
+    train_dir = repo_path(REPO_ROOT, str(dataset["train_dir"]))
+    test_dir = repo_path(REPO_ROOT, str(dataset["test_dir"]))
     threshold = float(config["detector"]["threshold"])
 
-    train_files = _npy_files(train_dir)
-    test_files = _npy_files(test_dir)
+    train_files = npy_files(train_dir)
+    test_files = npy_files(test_dir)
     channels = load_labeled_channels(labels_path)
     if not channels:
         raise RuntimeError("No labeled channels found.")
@@ -204,15 +120,17 @@ def main() -> int:
     for row in rows:
         by_spacecraft.setdefault(str(row["spacecraft"]), []).append(row)
 
-    aggregate = {name: _aggregate(group) for name, group in sorted(by_spacecraft.items())}
-    aggregate["total"] = _aggregate(rows)
+    aggregate = {
+        name: aggregate_rows(group) for name, group in sorted(by_spacecraft.items())
+    }
+    aggregate["total"] = aggregate_rows(rows)
 
     summary = {
         "schema_version": 1,
         "generated_at_utc": datetime.now(UTC).isoformat(),
         "experiment_id": config["experiment_id"],
-        "config_sha256": _sha256(CONFIG_PATH),
-        "labels_sha256": _sha256(labels_path),
+        "config_sha256": sha256_file(CONFIG_PATH),
+        "labels_sha256": sha256_file(labels_path),
         "dataset_source": dataset["source"],
         "threshold": threshold,
         "detector": config["detector"],
