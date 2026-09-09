@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-09T10:01:19.772713+00:00",
+  "experiment_id": "phase1-robust-zscore-v1",
+  "config_sha256": "af06f715a46a90e1efc5c0c037e805bdd28cbe36ac1f4e20565aab8bb197448a",
+  "labels_sha256": "057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539",
+  "dataset_source": "Telemanom SMAP/MSL public benchmark",
+  "threshold": 3.5,
+  "detector": {
+    "name": "robust-zscore",
+    "threshold": 3.5,
+    "fit_scope": "training telemetry only"
+  },
+  "integrity": {
+    "results_must_be_machine_generated": true,
+    "no_manual_score_editing": true
+  },
+  "aggregate": {
+    "MSL": {
+      "precision": 0.14486758167407693,
+      "recall": 0.4824877671903168,
+      "f1": 0.2228301269661919,
+      "true_positives": 3747,
+      "false_positives": 22118,
+      "false_negatives": 4019,
+      "event_hits": 32,
+      "labeled_events": 36,
+      "event_recall": 0.8888888888888888,
+      "channels": 27,
+      "test_points": 73729,
+      "predicted_points": 25865
+    },
+    "SMAP": {
+      "precision": 0.2971787226803478,
+      "recall": 0.5818592991252213,
+      "f1": 0.3934214425413382,
+      "true_positives": 33191,
+      "false_positives": 78496,
+      "false_negatives": 23852,
+      "event_hits": 55,
+      "labeled_events": 69,
+      "event_recall": 0.7971014492753623,
+      "channels": 55,
+      "test_points": 444035,
+      "predicted_points": 111687
+    },
+    "total": {
+      "precision": 0.26853844364313134,
+      "recall": 0.5699517042386089,
+      "f1": 0.3650703445822071,
+      "true_positives": 36938,
+      "false_positives": 100614,
+      "false_negatives": 27871,
+      "event_hits": 87,
+      "labeled_events": 105,
+      "event_recall": 0.8285714285714286,
+      "channels": 82,
+      "test_points": 517764,
+      "predicted_points": 137552
+    }
+  },
+  "metadata_length_mismatches": []
+}
