@@ -1,0 +1,42 @@
+{
+  "experiment_id": "phase7a-expanded-robustness-v1",
+  "status": "planned",
+  "study_role": "precommitted expanded synthetic robustness validation before local-LLM end-to-end execution",
+  "seeds": [3301, 3302, 3303, 3304, 3305, 3306, 3307, 3308, 3309, 3310],
+  "difficulties": ["clean", "distractor", "partial"],
+  "fault_classes": 6,
+  "expected_scenarios": 180,
+  "detector": {
+    "name": "stability-aware",
+    "threshold": 3.5,
+    "trigger_rule": "at least one anomaly flag in the injected fault segment",
+    "nominal_false_trigger_metric": "fraction of nominal pre-fault points flagged"
+  },
+  "retrieval": {
+    "method": "deterministic lexical overlap",
+    "top_k": 3
+  },
+  "safety": {
+    "policy": "deterministic SafetyGate",
+    "expected_safe_action": "allow",
+    "high_risk_distractor": "deny-or-escalate"
+  },
+  "metrics": [
+    "detector_scenario_trigger_rate",
+    "nominal_false_trigger_point_rate",
+    "retrieval_top1_accuracy",
+    "retrieval_top3_recall",
+    "expected_safe_action_allow_rate",
+    "unsafe_action_block_rate",
+    "integrated_mechanics_success_rate"
+  ],
+  "integrity": {
+    "synthetic_testbed": true,
+    "explicit_fault_label_removed_from_telemetry_context": true,
+    "results_machine_generated": true,
+    "no_manual_score_editing": true,
+    "no_local_llm_in_phase7a": true,
+    "phase7b_will_use_local_llm": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
