@@ -1,0 +1,82 @@
+{
+  "experiment_id": "phase6-communication-delay-v1",
+  "status": "planned",
+  "study_role": "precommitted deterministic communication-latency analysis using measured Phase 5 v2 local RAG inference times",
+  "input": {
+    "path": "results/phase5_v2/per_response.csv",
+    "condition": "llm_rag_top3",
+    "required_successful_scenarios": 12,
+    "source_result_commit": "3a175e39a1a96415c2d6c597a40391f198a24722"
+  },
+  "profiles": [
+    {
+      "id": "zero_delay_reference",
+      "one_way_delay_s": 0.0,
+      "outage": false,
+      "interpretation": "Propagation-free reference used to isolate the communication term."
+    },
+    {
+      "id": "lunar_reference",
+      "one_way_delay_s": 1.0,
+      "outage": false,
+      "interpretation": "Approximate Earth-to-Moon one-way light-time reference."
+    },
+    {
+      "id": "mars_near_reference",
+      "one_way_delay_s": 240.0,
+      "outage": false,
+      "interpretation": "Four-minute Mars one-way light-time reference near the low end of NASA educational ranges."
+    },
+    {
+      "id": "mars_far_reference",
+      "one_way_delay_s": 1440.0,
+      "outage": false,
+      "interpretation": "Twenty-four-minute Mars one-way light-time reference near the high end of NASA educational ranges."
+    },
+    {
+      "id": "ground_link_outage",
+      "one_way_delay_s": 0.0,
+      "outage": true,
+      "interpretation": "Complete ground-link unavailability."
+    }
+  ],
+  "deadlines_s": [30.0, 60.0, 600.0, 1800.0, 3600.0],
+  "timing_model": {
+    "local_onboard_s": "measured_phase5_v2_rag_inference_latency_s",
+    "ground_in_loop_s": "same_compute_latency_s + 2 * one_way_delay_s",
+    "outage_behavior": "ground-dependent decision unavailable; local onboard path unchanged",
+    "purpose": "isolate unavoidable communication propagation cost rather than claim a complete mission-operations timing model"
+  },
+  "reference_sources": [
+    {
+      "title": "NASA Deep Space Communications",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/03/ps-03435-deepspacecomm-508.pdf",
+      "note": "NASA educational reference gives about 1 second Earth-to-Moon latency and about 4 to 24 minutes one-way Earth-to-Mars latency."
+    },
+    {
+      "title": "NASA Mars Communications Disruption and Delay",
+      "url": "https://www.nasa.gov/wp-content/uploads/2024/01/mars-communications-disruption-and-delay.pdf",
+      "note": "NASA analysis discusses one-way Mars delays upward of roughly 21 to 23 minutes and the autonomy implications of disruptions and delay."
+    }
+  ],
+  "metrics": [
+    "local_completion_rate",
+    "ground_completion_rate",
+    "mean_local_decision_latency_s",
+    "median_local_decision_latency_s",
+    "mean_ground_decision_latency_s",
+    "median_ground_decision_latency_s",
+    "mean_propagation_penalty_s",
+    "deadline_success_rates_local",
+    "deadline_success_rates_ground"
+  ],
+  "integrity": {
+    "phase5_outputs_reused_without_rescoring": true,
+    "same_compute_latency_used_for_local_and_ground_paths": true,
+    "no_manual_score_editing": true,
+    "deterministic_profiles": true,
+    "no_packet_loss_or_ground_scheduling_modeled": true,
+    "not_a_live_network_test": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
