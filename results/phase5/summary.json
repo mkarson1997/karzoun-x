@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-09T13:48:57.026575+00:00",
+  "experiment_id": "phase5-local-llm-diagnosis-v1",
+  "study_role": "precommitted local-LLM diagnostic comparison on the frozen synthetic testbed",
+  "config_sha256": "2cceef418b6531f283a5280c094541171f00ae83320058f86f15eae917486945",
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "base_url": "http://127.0.0.1:11434"
+  },
+  "heldout_seeds": [
+    2201,
+    2202
+  ],
+  "scenarios_per_condition": 12,
+  "conditions": {
+    "llm_no_rag": {
+      "scenarios": 12,
+      "parsed_responses": 0,
+      "parse_success_rate": 0.0,
+      "diagnosis_accuracy": 0.0,
+      "expected_action_match_rate": 0.0,
+      "diagnosis_and_expected_action_rate": 0.0,
+      "expected_evidence_match_rate": null,
+      "safety_allow_rate": 0.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "mean_latency_seconds": 0.0,
+      "median_latency_seconds": 0.0,
+      "mean_generation_tokens_per_second": 5.431448228774928
+    },
+    "llm_rag_top3": {
+      "scenarios": 12,
+      "parsed_responses": 0,
+      "parse_success_rate": 0.0,
+      "diagnosis_accuracy": 0.0,
+      "expected_action_match_rate": 0.0,
+      "diagnosis_and_expected_action_rate": 0.0,
+      "expected_evidence_match_rate": null,
+      "safety_allow_rate": 0.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "mean_latency_seconds": 0.0,
+      "median_latency_seconds": 0.0,
+      "mean_generation_tokens_per_second": 5.701815403158274
+    }
+  },
+  "integrity": {
+    "parameters_frozen_before_model_evaluation": true,
+    "heldout_fault_labels_not_used_for_prompting": true,
+    "same_model_used_for_both_conditions": true,
+    "same_heldout_scenarios_used_for_both_conditions": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "no_manual_score_editing": true,
+    "testbed_is_synthetic": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}

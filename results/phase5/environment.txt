@@ -1,0 +1,8 @@
+﻿KARZOUN-X Phase 5 local execution environment
+timestamp_local=2026-09-09T16:30:28.5099277+03:00
+source_commit=fc322176eba15bbf94b3348ebe17b8d94d293b54
+python=Python 3.11.9
+ollama=ollama version is 0.33.3
+model=qwen3:14b-q4_K_M
+ollama_base_url=http://127.0.0.1:11434
+gpu=nvidia-smi unavailable
