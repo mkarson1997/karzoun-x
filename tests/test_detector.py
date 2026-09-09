@@ -3,6 +3,7 @@ import numpy as np
 from karzoun_x.anomaly_detection import (
     AdaptiveRobustDetector,
     RobustZScoreDetector,
+    StabilityAwareDetector,
     apply_persistence_filter,
 )
 
@@ -27,6 +28,23 @@ def test_adaptive_detector_flags_clear_excursion() -> None:
     )
     result = detector.predict_one(1.3)
     assert result.is_anomaly is True
+
+
+def test_stability_aware_keeps_mad_for_normal_training_series() -> None:
+    detector = StabilityAwareDetector().fit([1.0, 1.01, 0.99, 1.02, 0.98, 1.0])
+    assert detector.scale_source == "mad"
+
+
+def test_stability_aware_uses_std_only_when_mad_collapses() -> None:
+    detector = StabilityAwareDetector().fit([0.0] * 99 + [1.0])
+    assert detector.scale_source == "std-fallback"
+    assert detector.scale > 0.0
+
+
+def test_stability_aware_preserves_constant_channel_epsilon_floor() -> None:
+    detector = StabilityAwareDetector().fit([4.0, 4.0, 4.0, 4.0])
+    assert detector.scale_source == "epsilon-floor"
+    assert detector.predict_one(4.0).is_anomaly is False
 
 
 def test_persistence_filter_removes_short_runs() -> None:
