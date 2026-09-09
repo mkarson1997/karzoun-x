@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-09T11:43:53.483329+00:00",
+  "experiment_id": "phase3-stability-aware-v1",
+  "study_role": "exploratory iterative refinement after Phase 2",
+  "config_sha256": "934b79837c0e30ab3328590f5c1e0af488d5ccaf56f075557548f9c055685fb1",
+  "labels_sha256": "057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539",
+  "dataset_source": "Telemanom SMAP/MSL public benchmark",
+  "detector": {
+    "name": "stability-aware-robust-zscore",
+    "threshold": 3.5,
+    "center": "training median",
+    "primary_scale": "training MAD with Phase 1-compatible 0.6745 normalization",
+    "fallback_scale": "training standard deviation only when training MAD collapses",
+    "constant_channel_behavior": "Phase 1-compatible epsilon floor",
+    "fit_scope": "training telemetry only",
+    "temporal_filter": "none"
+  },
+  "integrity": {
+    "results_must_be_machine_generated": true,
+    "no_manual_score_editing": true,
+    "parameters_frozen_before_phase3_test_evaluation": true,
+    "no_phase3_test_label_parameter_tuning": true,
+    "not_claimed_as_confirmatory_holdout": true,
+    "prior_phase_results_informed_detector_design": true
+  },
+  "aggregate": {
+    "MSL": {
+      "precision": 0.14744006806466142,
+      "recall": 0.37934586659799124,
+      "f1": 0.2123472807871121,
+      "true_positives": 2946,
+      "false_positives": 17035,
+      "false_negatives": 4820,
+      "event_hits": 31,
+      "labeled_events": 36,
+      "event_recall": 0.8611111111111112,
+      "channels": 27,
+      "test_points": 73729,
+      "predicted_points": 19981
+    },
+    "SMAP": {
+      "precision": 0.366714282422874,
+      "recall": 0.5580526970881615,
+      "f1": 0.4425891038519559,
+      "true_positives": 31833,
+      "false_positives": 54973,
+      "false_negatives": 25210,
+      "event_hits": 46,
+      "labeled_events": 69,
+      "event_recall": 0.6666666666666666,
+      "channels": 55,
+      "test_points": 444035,
+      "predicted_points": 86806
+    },
+    "total": {
+      "precision": 0.3256857108074953,
+      "recall": 0.5366384298477064,
+      "f1": 0.40535909927970354,
+      "true_positives": 34779,
+      "false_positives": 72008,
+      "false_negatives": 30030,
+      "event_hits": 77,
+      "labeled_events": 105,
+      "event_recall": 0.7333333333333333,
+      "channels": 82,
+      "test_points": 517764,
+      "predicted_points": 106787
+    }
+  },
+  "scale_source_counts": {
+    "epsilon-floor": 16,
+    "mad": 49,
+    "std-fallback": 17
+  },
+  "comparison": {
+    "phase1_reference": "phase1-robust-zscore-v1",
+    "phase1_total_delta": {
+      "precision": 0.05714726716436397,
+      "recall": -0.03331327439090248,
+      "f1": 0.04028875469749643,
+      "event_recall": -0.09523809523809534,
+      "false_positives": -28606,
+      "predicted_points": -30765
+    },
+    "phase2_reference": "phase2-adaptive-temporal-v1",
+    "phase2_total_delta": {
+      "precision": 0.0001104661632213011,
+      "recall": 0.13775864463268994,
+      "f1": 0.04684027256865714,
+      "event_recall": 0.18095238095238086,
+      "false_positives": 18458,
+      "predicted_points": 27386
+    }
+  },
+  "metadata_length_mismatches": []
+}
