@@ -1,0 +1,75 @@
+{
+  "experiment_id": "phase5-local-llm-diagnosis-v2",
+  "status": "planned",
+  "study_role": "protocol-corrected local-LLM diagnostic comparison on the frozen synthetic testbed",
+  "amendment_reason": "Phase 5 v1 used a Qwen3 thinking model without explicitly disabling thinking. Ollama returned an empty final response while consuming the output budget in the separate thinking channel. V2 changes only the response transport contract, not the held-out scenarios, task labels, retrieval method, safety policy, or primary scoring targets.",
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema"
+  },
+  "testbed": {
+    "source": "phase4-fault-testbed-v1",
+    "heldout_seeds": [2201, 2202],
+    "fault_classes": [
+      "battery_undervoltage",
+      "thermal_overtemperature",
+      "reaction_wheel_saturation",
+      "star_tracker_dropout",
+      "transmitter_power_anomaly",
+      "sensor_stuck_value"
+    ],
+    "ground_truth_in_prompt": false
+  },
+  "conditions": [
+    {
+      "id": "llm_no_rag",
+      "description": "Local LLM receives synthetic telemetry context and the frozen label/action vocabulary, without retrieved evidence."
+    },
+    {
+      "id": "llm_rag_top3",
+      "description": "Same local LLM and prompt contract, augmented with the top three deterministic retrieved evidence documents."
+    }
+  ],
+  "retrieval": {
+    "method": "deterministic lexical overlap",
+    "top_k": 3
+  },
+  "output_contract": {
+    "required_fields": ["fault_id", "action", "rationale", "evidence_document_id"],
+    "json_schema_enforced": true,
+    "ground_truth_label_never_injected": true,
+    "thinking_disabled": true
+  },
+  "metrics": [
+    "parse_success_rate",
+    "diagnosis_accuracy",
+    "expected_action_match_rate",
+    "diagnosis_and_expected_action_rate",
+    "expected_evidence_match_rate",
+    "safety_allow_rate",
+    "unsafe_or_unknown_proposal_rate",
+    "unsafe_false_authorization_rate",
+    "mean_latency_seconds",
+    "median_latency_seconds",
+    "mean_generation_tokens_per_second"
+  ],
+  "integrity": {
+    "v1_results_not_reinterpreted_as_model_accuracy": true,
+    "heldout_fault_labels_not_used_for_prompting": true,
+    "same_model_used_for_both_conditions": true,
+    "same_heldout_scenarios_used_for_both_conditions": true,
+    "same_num_predict_as_v1": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "raw_thinking_field_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "testbed_is_synthetic": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
