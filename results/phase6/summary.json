@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-09T15:37:40.227597+00:00",
+  "experiment_id": "phase6-communication-delay-v1",
+  "study_role": "precommitted deterministic communication-latency analysis using measured Phase 5 v2 local RAG inference times",
+  "input_path": "results/phase5_v2/per_response.csv",
+  "input_condition": "llm_rag_top3",
+  "input_scenarios": 12,
+  "input_sha256": "6d660899fbf754d7758886c1d6d49d1379ab390c9ee3e463265591e420c8f213",
+  "config_sha256": "0f732aecc8d07e2362df68191dd215c6e21a2c1659641094f87f74cad18bee6c",
+  "profiles": [
+    {
+      "profile_id": "zero_delay_reference",
+      "one_way_delay_s": 0.0,
+      "round_trip_propagation_s": 0.0,
+      "outage": false,
+      "scenarios": 12,
+      "local_completion_rate": 1.0,
+      "ground_completion_rate": 1.0,
+      "mean_local_decision_latency_s": 27.15879186663854,
+      "median_local_decision_latency_s": 27.911254999926314,
+      "mean_ground_decision_latency_s": 27.15879186663854,
+      "median_ground_decision_latency_s": 27.911254999926314,
+      "mean_propagation_penalty_s": 0.0,
+      "deadline_success_rates_local": {
+        "30": 0.6666666666666666,
+        "60": 1.0,
+        "600": 1.0,
+        "1800": 1.0,
+        "3600": 1.0
+      },
+      "deadline_success_rates_ground": {
+        "30": 0.6666666666666666,
+        "60": 1.0,
+        "600": 1.0,
+        "1800": 1.0,
+        "3600": 1.0
+      }
+    },
+    {
+      "profile_id": "lunar_reference",
+      "one_way_delay_s": 1.0,
+      "round_trip_propagation_s": 2.0,
+      "outage": false,
+      "scenarios": 12,
+      "local_completion_rate": 1.0,
+      "ground_completion_rate": 1.0,
+      "mean_local_decision_latency_s": 27.15879186663854,
+      "median_local_decision_latency_s": 27.911254999926314,
+      "mean_ground_decision_latency_s": 29.15879186663854,
+      "median_ground_decision_latency_s": 29.911254999926314,
+      "mean_propagation_penalty_s": 2.0,
+      "deadline_success_rates_local": {
+        "30": 0.6666666666666666,
+        "60": 1.0,
+        "600": 1.0,
+        "1800": 1.0,
+        "3600": 1.0
+      },
+      "deadline_success_rates_ground": {
+        "30": 0.5833333333333334,
+        "60": 1.0,
+        "600": 1.0,
+        "1800": 1.0,
+        "3600": 1.0
+      }
+    },
+    {
+      "profile_id": "mars_near_reference",
+      "one_way_delay_s": 240.0,
+      "round_trip_propagation_s": 480.0,
+      "outage": false,
+      "scenarios": 12,
+      "local_completion_rate": 1.0,
+      "ground_completion_rate": 1.0,
+      "mean_local_decision_latency_s": 27.15879186663854,
+      "median_local_decision_latency_s": 27.911254999926314,
+      "mean_ground_decision_latency_s": 507.1587918666385,
+      "median_ground_decision_latency_s": 507.9112549999263,
+      "mean_propagation_penalty_s": 480.0,
+      "deadline_success_rates_local": {
+        "30": 0.6666666666666666,
+        "60": 1.0,
+        "600": 1.0,
+        "1800": 1.0,
+        "3600": 1.0
+      },
+      "deadline_success_rates_ground": {
+        "30": 0.0,
+        "60": 0.0,
+        "600": 1.0,
+        "1800": 1.0,
+        "3600": 1.0
+      }
+    },
+    {
+      "profile_id": "mars_far_reference",
+      "one_way_delay_s": 1440.0,
+      "round_trip_propagation_s": 2880.0,
+      "outage": false,
+      "scenarios": 12,
+      "local_completion_rate": 1.0,
+      "ground_completion_rate": 1.0,
+      "mean_local_decision_latency_s": 27.15879186663854,
+      "median_local_decision_latency_s": 27.911254999926314,
+      "mean_ground_decision_latency_s": 2907.1587918666387,
+      "median_ground_decision_latency_s": 2907.9112549999263,
+      "mean_propagation_penalty_s": 2880.0,
+      "deadline_success_rates_local": {
+        "30": 0.6666666666666666,
+        "60": 1.0,
+        "600": 1.0,
+        "1800": 1.0,
+        "3600": 1.0
+      },
+      "deadline_success_rates_ground": {
+        "30": 0.0,
+        "60": 0.0,
+        "600": 0.0,
+        "1800": 0.0,
+        "3600": 1.0
+      }
+    },
+    {
+      "profile_id": "ground_link_outage",
+      "one_way_delay_s": 0.0,
+      "round_trip_propagation_s": null,
+      "outage": true,
+      "scenarios": 12,
+      "local_completion_rate": 1.0,
+      "ground_completion_rate": 0.0,
+      "mean_local_decision_latency_s": 27.15879186663854,
+      "median_local_decision_latency_s": 27.911254999926314,
+      "mean_ground_decision_latency_s": null,
+      "median_ground_decision_latency_s": null,
+      "mean_propagation_penalty_s": null,
+      "deadline_success_rates_local": {
+        "30": 0.6666666666666666,
+        "60": 1.0,
+        "600": 1.0,
+        "1800": 1.0,
+        "3600": 1.0
+      },
+      "deadline_success_rates_ground": {
+        "30": 0.0,
+        "60": 0.0,
+        "600": 0.0,
+        "1800": 0.0,
+        "3600": 0.0
+      }
+    }
+  ],
+  "integrity": {
+    "phase5_outputs_reused_without_rescoring": true,
+    "same_compute_latency_used_for_local_and_ground_paths": true,
+    "no_manual_score_editing": true,
+    "deterministic_profiles": true,
+    "no_packet_loss_or_ground_scheduling_modeled": true,
+    "not_a_live_network_test": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
