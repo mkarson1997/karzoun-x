@@ -8,6 +8,9 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | `phase2-adaptive-temporal-v1` | Completed (mixed result) | GitHub Actions run `34340023894` | `results/phase2/summary.json`, `results/phase2/per_record.csv` |
 | `phase3-stability-aware-v1` | Completed (best F1 so far, exploratory) | GitHub Actions run `34347057969` | `results/phase3/summary.json`, `results/phase3/per_record.csv` |
 | `phase4-fault-testbed-v1` | Completed (retrieval/safety mechanics validated; no LLM yet) | GitHub Actions run `34348018741` | `results/phase4/summary.json`, `results/phase4/per_scenario.csv` |
+| `phase5-local-llm-diagnosis-v1` | Failed protocol execution; audit only | Local Ollama run, branch `phase5-local-results-20260909-172700` | `docs/phase5-v1-incident.md` |
+| `phase5-local-llm-diagnosis-v2` | Completed | Local Ollama run; result commit `3a175e39a1a96415c2d6c597a40391f198a24722` | `results/phase5_v2/summary.json`, `results/phase5_v2/per_response.csv`, `results/phase5_v2/raw_responses.jsonl` |
+| `phase6-communication-delay-v1` | Completed | GitHub Actions run `34371460382` | `results/phase6/summary.json`, `results/phase6/per_scenario_profile.csv` |
 
 ## Phase 1 provenance
 
@@ -48,3 +51,41 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 - GitHub Actions run: https://github.com/mkarson1997/karzoun-x/actions/runs/34348018741
 - Artifact SHA-256: `a8ce4ce8fa21d5cb1cc8824d54d9bb605b02284118369bd9f2412367dfa7fd7f`
 - Interpretation: the deterministic lexical retriever returned the expected manual as the top result for all 12 held-out synthetic scenarios, all expected low-risk diagnostic actions were allowed, all synthetic high-risk distractor actions were blocked, and no unsafe distractor was falsely allowed. This validates the mechanics of the retrieval and deterministic safety layers on the deliberately small synthetic testbed. It does not validate language-model diagnosis, real spacecraft performance, or flight readiness.
+
+## Phase 5 provenance
+
+### Phase 5 v1 incident
+
+Phase 5 v1 completed 24 Ollama generation calls but is not a model-performance result. Qwen3 consumed the fixed output budget in its separate thinking channel and returned no usable final response to the benchmark parser. The failed execution is retained on branch `phase5-local-results-20260909-172700` for auditability and is documented in `docs/phase5-v1-incident.md`. It is intentionally excluded from scientific performance tables.
+
+### Phase 5 v2 valid local-LLM comparison
+
+- Frozen config SHA-256: `f7bfc0170413d3dca4fe75660fc5feeed139c9423b15ab3efa51bb422256f867`
+- Model: `qwen3:14b-q4_K_M` via local Ollama
+- Held-out seeds: `2201`, `2202`
+- Scenarios per condition: `12`
+- Conditions: local LLM without RAG; same local LLM with deterministic top-3 RAG
+- Thinking explicitly disabled; JSON-schema structured output enforced
+- Result commit: `3a175e39a1a96415c2d6c597a40391f198a24722`
+- No-RAG diagnosis accuracy: `1.0000`
+- RAG diagnosis accuracy: `1.0000`
+- No-RAG expected-action match: `0.1667`
+- RAG expected-action match: `1.0000`
+- RAG expected-evidence match: `1.0000`
+- Unsafe/unknown proposal rate: `0.0000` in both conditions
+- Interpretation: on this small synthetic testbed, RAG did not change fault-class accuracy but materially changed action selection and evidence grounding. This is a controlled synthetic result and not evidence of real spacecraft or flight performance.
+
+## Phase 6 provenance
+
+- Frozen config SHA-256: `0f732aecc8d07e2362df68191dd215c6e21a2c1659641094f87f74cad18bee6c`
+- Phase 5 v2 input CSV SHA-256: `6d660899fbf754d7758886c1d6d49d1379ab390c9ee3e463265591e420c8f213`
+- Reused condition: `llm_rag_top3`
+- Reused held-out scenarios: `12`
+- GitHub Actions run: https://github.com/mkarson1997/karzoun-x/actions/runs/34371460382
+- Result commit: `b42c1769a740a46aa53991970811511aef0931c5`
+- Mean measured local decision latency: `27.159 s`
+- Lunar reference propagation penalty: `2 s` round trip
+- Mars-near reference propagation penalty: `480 s` round trip
+- Mars-far reference propagation penalty: `2880 s` round trip
+- Ground-link outage: local completion `1.0000`, ground-dependent completion `0.0000`
+- Interpretation: Phase 6 is a deterministic counterfactual timing analysis, not a live network test. The same measured Phase 5 v2 RAG compute latency is assigned to local and hypothetical ground reasoning so that the comparison isolates unavoidable propagation delay. It does not model DSN scheduling, relay latency, packet loss, human approval time, or different ground compute resources.
