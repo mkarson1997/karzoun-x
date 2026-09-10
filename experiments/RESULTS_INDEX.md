@@ -32,7 +32,7 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 - Labels SHA-256: `057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539`
 - Source commit: `8144e60765fd154bf9b1eebefe40badaf8bb951b`
 - GitHub Actions run: `34340023894`
-- Artifact SHA-256: `bc04b31fe386f9829ff0e8aaaf9659ac09e28bb02f9f1494e285586fd6854b5`
+- Artifact SHA-256: `bc04b31fe386f9829ff0e8aaaf9659ac09e28dbb02f9f1494e285586fd6854b5`
 - Result: precision improved and false positives decreased, but recall, event recall, and total F1 decreased relative to Phase 1. The mixed result is retained rather than hidden.
 
 ## Phase 3 provenance
