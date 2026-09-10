@@ -1,0 +1,74 @@
+{
+  "experiment_id": "phase8b-resource-instrumentation-v1",
+  "status": "planned",
+  "study_role": "follow-up local resource instrumentation replication designed after Phase 8 v1 observability review",
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema"
+  },
+  "testbed": {
+    "seeds": [5502],
+    "difficulties": ["clean", "distractor", "partial"],
+    "fault_classes": 6,
+    "scenarios": 18,
+    "explicit_fault_label_in_prompt": false
+  },
+  "pipeline": {
+    "detector": "stability-aware",
+    "detector_threshold": 3.5,
+    "retrieval": "deterministic-lexical-top3",
+    "safety_gate": "deterministic-fail-closed"
+  },
+  "resource_sampling": {
+    "interval_seconds": 0.5,
+    "process_name_tokens": ["ollama", "llama", "runner"],
+    "collect_system_cpu": true,
+    "collect_system_memory": true,
+    "collect_model_process_family_cpu": true,
+    "collect_model_process_family_rss": true,
+    "collect_ollama_ps_model_size": true,
+    "collect_ollama_ps_vram_size": true,
+    "collect_nvidia_gpu_when_available": true,
+    "cold_start": "runner requests model unload through Ollama HTTP API before measured run"
+  },
+  "metrics": [
+    "end_to_end_success_rate",
+    "mean_latency_seconds",
+    "median_latency_seconds",
+    "p95_latency_seconds",
+    "cold_start_latency_seconds",
+    "warm_mean_latency_seconds",
+    "mean_generation_tokens_per_second",
+    "peak_system_memory_used_bytes",
+    "peak_model_process_family_rss_bytes",
+    "mean_system_cpu_percent",
+    "peak_system_cpu_percent",
+    "mean_model_process_family_cpu_percent_normalized",
+    "peak_model_process_family_cpu_percent_normalized",
+    "peak_ollama_reported_model_size_bytes",
+    "peak_ollama_reported_vram_size_bytes",
+    "peak_gpu_memory_used_mib",
+    "mean_gpu_utilization_percent",
+    "peak_gpu_utilization_percent",
+    "mean_gpu_power_watts",
+    "peak_gpu_power_watts"
+  ],
+  "integrity": {
+    "parameters_frozen_before_phase8b_measurement": true,
+    "phase8b_designed_after_phase8_v1_observability_review": true,
+    "model_performance_is_secondary_to_instrumentation": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "raw_resource_samples_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "testbed_is_synthetic": true,
+    "single_machine_measurement": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
