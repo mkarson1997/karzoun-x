@@ -13,7 +13,8 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | `phase6-communication-delay-v1` | Completed | GitHub Actions `34371460382` | `results/phase6/` |
 | `phase7a-expanded-robustness-v1` | Completed, synthetic mechanics | GitHub Actions `34373347451` | `results/phase7a/` |
 | `phase7b-end-to-end-local-llm-v1` | Completed | Local Ollama, commit `8ffab178a4635aeef54142c0bfcb8df28d63406d` | `results/phase7b/` |
-| `phase8-resource-benchmark-v1` | Protocol frozen, local execution pending | Local hardware required | `experiments/configs/phase8_resource_benchmark.json` |
+| `phase8-resource-benchmark-v1` | Completed, partial resource observability | Local hardware, commit `69df26079cd853b962809fa38f6de023d69b182a` | `results/phase8/` |
+| `phase8b-resource-instrumentation-v1` | Planned follow-up | Local hardware required | protocol pending |
 
 ## Phase 1 provenance
 
@@ -102,7 +103,7 @@ Phase 5 v1 completed 24 Ollama generation calls but is not a model-performance r
 - Synthetic scenarios: `180`
 - GitHub Actions run: `34373347451`
 - Result commit: `c97e232fa70742b2e030410400791dbeb69454e7`
-- Detector trigger rate: `1.0000`
+- Detector scenario trigger rate: `1.0000`
 - Nominal false-trigger point rate: `0.001296`
 - Retrieval top-1 accuracy: `1.0000`
 - Retrieval top-3 recall: `1.0000`
@@ -135,6 +136,27 @@ Phase 5 v1 completed 24 Ollama generation calls but is not a model-performance r
 
 A detailed interpretation is recorded in `docs/phase7b-analysis.md`.
 
-## Phase 8 protocol
+## Phase 8 provenance
 
-Phase 8 is frozen before execution in `experiments/configs/phase8_resource_benchmark.json`. It characterizes the full local KARZOUN-X path on one machine using 18 synthetic cases across clean, distractor, and partial variants. The runner samples system CPU and memory, Ollama process CPU/RSS, and NVIDIA GPU utilization, memory, and power when available at 0.5-second intervals. It records cold-start latency, warm latency, P95 latency, generation throughput, and raw resource samples. The measurement is explicitly a single-machine research benchmark and not a claim about flight hardware.
+### Phase 8 v1 local resource benchmark
+
+- Frozen config SHA-256: `05a81a0eab8fd6a13f3ca64b775ddce120085d947673f3c185e2014b33710cac`
+- Source commit executed: `c806d9673b1994e39fec01db2d0b38c2f2e856f0`
+- Result commit: `69df26079cd853b962809fa38f6de023d69b182a`
+- Result-commit CI: GitHub Actions `34497544736`, conclusion `success`
+- Model: `qwen3:14b-q4_K_M`, Ollama `0.33.3`, Python `3.11.9`
+- Synthetic scenarios: `18`; raw resource samples: `720`
+- End-to-end success: `1.0000`
+- Mean latency: `21.575 s`; median `20.607 s`
+- Cold-start latency: `49.308 s`; warm mean latency: `19.944 s`
+- Mean generation throughput: `5.860 tok/s`
+- Mean system CPU: `49.575%`; peak system CPU: `95.1%`
+- Peak system memory used: `27,592,134,656` bytes
+- NVIDIA GPU telemetry: unavailable
+- Interpretation: valid single-host timing and system-load observations, but the sampled Ollama RSS (`74,756,096` bytes) is not treated as total model memory because Windows/Ollama can use separate runner processes or mappings. GPU/VRAM/power claims are not made from this run.
+
+Detailed interpretation and instrumentation limitations are recorded in `docs/phase8-analysis.md`.
+
+### Phase 8B follow-up instrumentation
+
+A follow-up instrumentation replication is planned to strengthen the resource-aware claim. It will preserve Phase 8 v1 unchanged, expand process-family accounting beyond the parent Ollama process, and query Ollama `/api/ps` for model size and reported VRAM allocation even when `nvidia-smi` is unavailable.
