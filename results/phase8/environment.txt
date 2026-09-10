@@ -1,0 +1,10 @@
+﻿KARZOUN-X Phase 8 local resource benchmark environment
+timestamp_local=2026-09-10T18:37:13.9724425+03:00
+source_commit=c806d9673b1994e39fec01db2d0b38c2f2e856f0
+python=Python 3.11.9
+ollama=ollama version is 0.33.3
+model=qwen3:14b-q4_K_M
+ollama_base_url=http://127.0.0.1:11434
+psutil=7.0.0
+nvidia_smi=unavailable
+requirements_phase8_sha256=76b9a57ebe7f684bf0985c5b2f1f19aa5963852b099eb0cc934bbe6088cb85c6

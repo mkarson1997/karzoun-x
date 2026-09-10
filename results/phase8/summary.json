@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-10T15:43:43.335188+00:00",
+  "experiment_id": "phase8-resource-benchmark-v1",
+  "study_role": "precommitted local hardware characterization of the full KARZOUN-X path",
+  "config_sha256": "05a81a0eab8fd6a13f3ca64b775ddce120085d947673f3c185e2014b33710cac",
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema",
+    "base_url": "http://127.0.0.1:11434"
+  },
+  "hardware": {
+    "platform": "Windows-10-10.0.19045-SP0",
+    "logical_cpu_count": 12,
+    "physical_cpu_count": 6,
+    "total_memory_bytes": 34208501760,
+    "nvidia_gpu": null
+  },
+  "scenarios": 18,
+  "model_metrics": {
+    "end_to_end_success_rate": 1.0,
+    "mean_latency_seconds": 21.575301116666296,
+    "median_latency_seconds": 20.60704645000078,
+    "p95_latency_seconds": 49.30787309999869,
+    "cold_start_latency_seconds": 49.30787309999869,
+    "warm_mean_latency_seconds": 19.943973352940862,
+    "mean_generation_tokens_per_second": 5.860236929880857
+  },
+  "resource_metrics": {
+    "samples": 720,
+    "mean_system_cpu_percent": 49.57472222222223,
+    "peak_system_cpu_percent": 95.1,
+    "mean_ollama_cpu_percent_normalized": 0.11700059856953526,
+    "peak_ollama_cpu_percent_normalized": 1.4533049070772774,
+    "peak_system_memory_used_bytes": 27592134656.0,
+    "peak_ollama_rss_bytes": 74756096.0,
+    "mean_gpu_utilization_percent": null,
+    "peak_gpu_utilization_percent": null,
+    "peak_gpu_memory_used_mib": null,
+    "mean_gpu_power_watts": null,
+    "peak_gpu_power_watts": null,
+    "peak_ollama_rss_gib": 0.06962203979492188
+  },
+  "integrity": {
+    "parameters_frozen_before_resource_measurement": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "raw_resource_samples_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "testbed_is_synthetic": true,
+    "single_machine_measurement": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
