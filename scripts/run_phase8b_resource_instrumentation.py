@@ -26,7 +26,6 @@ from run_phase8_resource_benchmark import (
     _parse_response,
     _tokens_per_second,
 )
-
 from karzoun_x.anomaly_detection.stability_aware import StabilityAwareDetector
 from karzoun_x.rag.retriever import LocalRetriever
 from karzoun_x.safety import SafetyGate
