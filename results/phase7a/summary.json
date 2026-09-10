@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-09-09T15:54:53.692797+00:00",
+  "generated_at_utc": "2026-09-10T16:43:33.938164+00:00",
   "experiment_id": "phase7a-expanded-robustness-v1",
   "study_role": "precommitted expanded synthetic robustness validation before local-LLM end-to-end execution",
   "config_sha256": "7d362baaf5593bf8ce8525f5dbea87be81e4c115ca8a808d3eba0c225ad69391",
