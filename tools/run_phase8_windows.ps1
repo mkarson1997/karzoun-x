@@ -17,6 +17,71 @@ function Require-Command([string]$Name) {
     }
 }
 
+function Resolve-NvidiaSmi {
+    $Command = Get-Command "nvidia-smi" -ErrorAction SilentlyContinue
+    if ($null -ne $Command -and -not [string]::IsNullOrWhiteSpace($Command.Source)) {
+        return $Command.Source
+    }
+
+    $Candidates = @(
+        (Join-Path $env:WINDIR "System32\nvidia-smi.exe"),
+        (Join-Path $env:ProgramFiles "NVIDIA Corporation\NVSMI\nvidia-smi.exe")
+    )
+
+    if (${env:ProgramW6432}) {
+        $Candidates += (Join-Path ${env:ProgramW6432} "NVIDIA Corporation\NVSMI\nvidia-smi.exe")
+    }
+
+    foreach ($Candidate in ($Candidates | Select-Object -Unique)) {
+        if (Test-Path -LiteralPath $Candidate) {
+            return $Candidate
+        }
+    }
+
+    return $null
+}
+
+function Request-ModelUnload {
+    Write-Host "Requesting Ollama model unload through the local HTTP API..." -ForegroundColor DarkGray
+    $Body = @{
+        model = $Model
+        keep_alive = 0
+    } | ConvertTo-Json -Compress
+
+    try {
+        $null = Invoke-RestMethod `
+            -Uri "$OllamaBaseUrl/api/generate" `
+            -Method Post `
+            -ContentType "application/json" `
+            -Body $Body `
+            -TimeoutSec 60
+    } catch {
+        throw "Ollama model-unload API request failed: $($_.Exception.Message)"
+    }
+
+    $Verified = $false
+    for ($Attempt = 0; $Attempt -lt 10; $Attempt++) {
+        Start-Sleep -Seconds 1
+        try {
+            $Running = Invoke-RestMethod -Uri "$OllamaBaseUrl/api/ps" -Method Get -TimeoutSec 10
+            $Names = @($Running.models | ForEach-Object { $_.name })
+            if ($Names -notcontains $Model) {
+                $Verified = $true
+                break
+            }
+        } catch {
+            # The unload request itself succeeded. Older Ollama builds may not expose /api/ps.
+            Write-Host "Could not query /api/ps; continuing after successful unload request." -ForegroundColor Yellow
+            $Verified = $true
+            break
+        }
+    }
+
+    if (-not $Verified) {
+        throw "Ollama still reports '$Model' as loaded after the unload request. Cold-start benchmark aborted."
+    }
+}
+
 Write-Step "Locating the verified KARZOUN-X Python environment"
 $OldWorkspace = Get-ChildItem -Path $Downloads -Directory |
     Where-Object { $_.Name -like "karzoun-x-phase5-*" } |
@@ -47,10 +112,16 @@ $AvailableModels = @($Tags.models | ForEach-Object { $_.name })
 if ($AvailableModels -notcontains $Model) {
     throw "Required model '$Model' is not installed locally."
 }
-if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
-    Write-Host "NVIDIA telemetry is available." -ForegroundColor Green
+
+$NvidiaSmi = Resolve-NvidiaSmi
+if ($null -ne $NvidiaSmi) {
+    $NvidiaDir = Split-Path -Parent $NvidiaSmi
+    if (($env:PATH -split ";") -notcontains $NvidiaDir) {
+        $env:PATH = "$NvidiaDir;$env:PATH"
+    }
+    Write-Host "NVIDIA telemetry available: $NvidiaSmi" -ForegroundColor Green
 } else {
-    Write-Host "nvidia-smi not found; GPU metrics will be recorded as unavailable." -ForegroundColor Yellow
+    Write-Host "nvidia-smi was not found; GPU metrics will be recorded as unavailable." -ForegroundColor Yellow
 }
 
 Write-Step "Preparing a clean current-main workspace"
@@ -86,9 +157,9 @@ if ($LASTEXITCODE -ne 0) { throw "Tests failed." }
 Write-Host "Quality checks passed." -ForegroundColor Green
 
 Write-Step "Preparing cold-start measurement"
-& ollama stop $Model 2>$null
-Start-Sleep -Seconds 3
-Write-Host "Requested model unload. First measured call is marked as cold-start." -ForegroundColor Green
+Request-ModelUnload
+Start-Sleep -Seconds 2
+Write-Host "Model unload verified. First measured call is the cold-start case." -ForegroundColor Green
 
 Write-Step "Recording local execution environment"
 $ResultDir = Join-Path $RunRoot "results\phase8"
@@ -101,12 +172,9 @@ $EnvironmentLines = @(
     "ollama=$(& ollama --version 2>&1)",
     "model=$Model",
     "ollama_base_url=$OllamaBaseUrl",
-    "psutil=$(& $PythonExe -c 'import psutil; print(psutil.__version__)' 2>&1)"
+    "psutil=$(& $PythonExe -c 'import psutil; print(psutil.__version__)' 2>&1)",
+    "nvidia_smi=$($NvidiaSmi ?? 'unavailable')"
 )
-if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
-    $GpuInfo = & nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader,nounits 2>&1
-    foreach ($Line in $GpuInfo) { $EnvironmentLines += "gpu=$Line" }
-}
 $EnvironmentLines | Set-Content -Path (Join-Path $ResultDir "environment.txt") -Encoding utf8
 & $PythonExe -m pip freeze | Set-Content -Path (Join-Path $ResultDir "pip-freeze.txt") -Encoding utf8
 Get-FileHash requirements-phase8.txt -Algorithm SHA256 |
