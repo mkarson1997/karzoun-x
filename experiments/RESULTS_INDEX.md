@@ -14,7 +14,8 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | `phase7a-expanded-robustness-v1` | Completed, synthetic mechanics | GitHub Actions `34373347451` | `results/phase7a/` |
 | `phase7b-end-to-end-local-llm-v1` | Completed | Local Ollama, commit `8ffab178a4635aeef54142c0bfcb8df28d63406d` | `results/phase7b/` |
 | `phase8-resource-benchmark-v1` | Completed, partial resource observability | Local hardware, commit `69df26079cd853b962809fa38f6de023d69b182a` | `results/phase8/` |
-| `phase8b-resource-instrumentation-v1` | Planned follow-up | Local hardware required | protocol pending |
+| `phase8b-resource-instrumentation-v1` | Completed | Local hardware, commit `2965abd06d449e69d05f32860eb876e829d075c6` | `results/phase8b/` |
+| `phase9-hard-stress-local-llm-v1` | Protocol frozen, local execution pending | Local Ollama required | `experiments/configs/phase9_hard_stress.json` |
 
 ## Phase 1 provenance
 
@@ -29,8 +30,7 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 ## Phase 2 provenance
 
 - Frozen config SHA-256: `fe761b5f3170249e798a31a2bf9dcef1f4331570937cb607feb4d52088f173b8`
-- Dataset archive SHA-256: `6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733`
-- Labels SHA-256: `057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539`
+- Dataset archive and labels are identical to Phase 1.
 - Source commit: `8144e60765fd154bf9b1eebefe40badaf8bb951b`
 - GitHub Actions run: `34340023894`
 - Artifact SHA-256: `bc04b31fe386f9829ff0e8aaaf9659ac09e28dbb02f9f1494e285586fd6854b5`
@@ -39,8 +39,6 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 ## Phase 3 provenance
 
 - Frozen config SHA-256: `934b79837c0e30ab3328590f5c1e0af488d5ccaf56f075557548f9c055685fb1`
-- Dataset archive SHA-256: `6084d3ee3906381f2c98aa3773b6b2d77c82413503faa78f962196582e873733`
-- Labels SHA-256: `057ce2d6c8875982bf4e5404aefea14efdcbce413d80826d2b737c95b59b7539`
 - Source commit: `e35aa798551eaf3213a8585617da7b883d4ffa0a`
 - GitHub Actions run: `34347057969`
 - Artifact SHA-256: `774df8db3e8da1ac5729dac73719b69753a41e93c1da06fab8d8e6a81b0eb8cd`
@@ -50,9 +48,7 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 ## Phase 4 provenance
 
 - Frozen config SHA-256: `fb3bd9b084be3c3a27eb714d99f9b40771cbedd2b9895b28aba35c4ae1637f20`
-- Held-out seeds: `2201`, `2202`
-- Fault classes: `6`
-- Held-out synthetic scenarios: `12`
+- Held-out seeds: `2201`, `2202`; fault classes: `6`; scenarios: `12`.
 - GitHub Actions run: `34348018741`
 - Artifact SHA-256: `a8ce4ce8fa21d5cb1cc8824d54d9bb605b02284118369bd9f2412367dfa7fd7f`
 - Result: retrieval top-1 `1.0000`, expected safe-action allow `1.0000`, unsafe-action block `1.0000`.
@@ -67,96 +63,79 @@ Phase 5 v1 completed 24 Ollama generation calls but is not a model-performance r
 ### Phase 5 v2 valid local-LLM comparison
 
 - Frozen config SHA-256: `f7bfc0170413d3dca4fe75660fc5feeed139c9423b15ab3efa51bb422256f867`
-- Model: `qwen3:14b-q4_K_M` via local Ollama
-- Held-out seeds: `2201`, `2202`
-- Scenarios per condition: `12`
-- Thinking disabled; JSON-schema structured output enforced
+- Model: `qwen3:14b-q4_K_M` via local Ollama; held-out seeds: `2201`, `2202`; scenarios per condition: `12`.
+- Thinking disabled; JSON-schema structured output enforced.
 - Result commit: `3a175e39a1a96415c2d6c597a40391f198a24722`
-- No-RAG diagnosis accuracy: `1.0000`
-- RAG diagnosis accuracy: `1.0000`
-- No-RAG expected-action match: `0.1667`
-- RAG expected-action match: `1.0000`
-- RAG expected-evidence match: `1.0000`
-- Unsafe/unknown proposal rate: `0.0000` in both conditions
+- Diagnosis accuracy: `1.0000` with and without RAG.
+- Expected-action match: `0.1667` without RAG, `1.0000` with RAG.
+- RAG expected-evidence match: `1.0000`; unsafe/unknown proposal rate: `0.0000` in both conditions.
 - Interpretation: on the small synthetic testbed, RAG materially changed action selection and evidence grounding, not fault-class accuracy.
 
 ## Phase 6 provenance
 
 - Frozen config SHA-256: `0f732aecc8d07e2362df68191dd215c6e21a2c1659641094f87f74cad18bee6c`
 - Phase 5 v2 input CSV SHA-256: `6d660899fbf754d7758886c1d6d49d1379ab390c9ee3e463265591e420c8f213`
-- Reused condition: `llm_rag_top3`
-- Reused synthetic scenarios: `12`
-- GitHub Actions run: `34371460382`
-- Result commit: `b42c1769a740a46aa53991970811511aef0931c5`
-- Mean measured local decision latency: `27.159 s`
-- Ground-link outage: local completion `1.0000`, ground-dependent completion `0.0000`
-- Interpretation: deterministic counterfactual timing analysis that isolates propagation delay. It is not a live mission-network test.
+- GitHub Actions run: `34371460382`; result commit: `b42c1769a740a46aa53991970811511aef0931c5`.
+- Mean measured local decision latency: `27.159 s`.
+- Ground-link outage: local completion `1.0000`, ground-dependent completion `0.0000`.
+- Interpretation: deterministic counterfactual timing analysis that isolates propagation delay, not a live mission-network test.
 
 ## Phase 7 provenance
 
 ### Phase 7A expanded deterministic robustness
 
 - Frozen config SHA-256: `7d362baaf5593bf8ce8525f5dbea87be81e4c115ca8a808d3eba0c225ad69391`
-- Seeds: `3301` through `3310`
-- Difficulties: `clean`, `distractor`, `partial`
-- Fault classes: `6`
-- Synthetic scenarios: `180`
-- GitHub Actions run: `34373347451`
-- Result commit: `c97e232fa70742b2e030410400791dbeb69454e7`
-- Detector scenario trigger rate: `1.0000`
-- Nominal false-trigger point rate: `0.001296`
-- Retrieval top-1 accuracy: `1.0000`
-- Retrieval top-3 recall: `1.0000`
-- Expected safe-action allow rate: `1.0000`
-- Unsafe-action block rate: `1.0000`
-- Integrated deterministic mechanics success: `1.0000`
+- Seeds: `3301` through `3310`; difficulties: `clean`, `distractor`, `partial`; scenarios: `180`.
+- GitHub Actions run: `34373347451`; result commit: `c97e232fa70742b2e030410400791dbeb69454e7`.
+- Detector trigger `1.0000`; nominal false-trigger point rate `0.001296`; retrieval top-1/top-3 `1.0000`; safe-action allow and unsafe-action block `1.0000`.
 - Interpretation: synthetic mechanics validation with no language model.
 
 ### Phase 7B expanded end-to-end local-LLM run
 
 - Frozen config SHA-256: `caa72650628425e6f9248f0f9b1853c8bbc51f372c150c6ac7de3a7ea5b9388e`
-- Source commit executed: `aabb14273a1afe7a41fb225c9913c5dd1e69997a`
-- Result commit: `8ffab178a4635aeef54142c0bfcb8df28d63406d`
-- Result-commit CI: GitHub Actions `34486399042`, conclusion `success`
-- Model: `qwen3:14b-q4_K_M`, Ollama `0.33.3`, Python `3.11.9`
-- Scenarios per condition: `36`; total model calls: `72`
-- Difficulties: `clean`, `distractor`, `partial`
-- Parse success: `1.0000` in both conditions
-- Diagnosis accuracy: `1.0000` in both conditions
-- No-RAG expected-action match: `0.1667`
-- Full KARZOUN-X expected-action match: `1.0000`
-- Full expected-evidence match: `1.0000`
-- No-RAG end-to-end success: `0.1667`
-- Full KARZOUN-X end-to-end success: `1.0000`
-- Unsafe/unknown proposal rate: `0.0000` in both conditions
-- Mean latency: `20.9429 s` no-RAG, `23.1414 s` full system
-- Mean generation throughput: `5.1329 tok/s` no-RAG, `5.3349 tok/s` full system
-- Counterfactual mean ground latency: `503.1414 s` at 240 s one-way delay and `2903.1414 s` at 1440 s one-way delay; ground-dependent completion is `0.0000` under outage.
-- Interpretation: the expanded synthetic benchmark supports a narrow effect of retrieved evidence on action selection and grounding. The uniformly perfect full-system scores also show that this synthetic task remains highly separable; harder ambiguous and out-of-distribution stress tests are required before publication claims are strengthened.
+- Source commit: `aabb14273a1afe7a41fb225c9913c5dd1e69997a`; result commit: `8ffab178a4635aeef54142c0bfcb8df28d63406d`.
+- Result-commit CI: GitHub Actions `34486399042`, conclusion `success`.
+- Model: `qwen3:14b-q4_K_M`, Ollama `0.33.3`, Python `3.11.9`; 36 scenarios per condition, 72 calls total.
+- Diagnosis accuracy: `1.0000` in both conditions.
+- Expected-action match and end-to-end success: `0.1667` without RAG, `1.0000` for full KARZOUN-X.
+- Full expected-evidence match: `1.0000`; unsafe/unknown proposal rate: `0.0000`.
+- Mean latency: `20.9429 s` no-RAG, `23.1414 s` full system.
+- Counterfactual ground latency: `503.1414 s` at 240 s OWLT and `2903.1414 s` at 1440 s OWLT; ground-dependent completion is `0.0000` under outage.
+- Interpretation: supports a narrow effect of retrieved evidence on action selection and grounding. Uniformly perfect full-system scores also indicate that harder ambiguous and out-of-distribution stress tests are needed.
 
-A detailed interpretation is recorded in `docs/phase7b-analysis.md`.
+Detailed interpretation: `docs/phase7b-analysis.md`.
 
 ## Phase 8 provenance
 
 ### Phase 8 v1 local resource benchmark
 
 - Frozen config SHA-256: `05a81a0eab8fd6a13f3ca64b775ddce120085d947673f3c185e2014b33710cac`
-- Source commit executed: `c806d9673b1994e39fec01db2d0b38c2f2e856f0`
-- Result commit: `69df26079cd853b962809fa38f6de023d69b182a`
-- Result-commit CI: GitHub Actions `34497544736`, conclusion `success`
-- Model: `qwen3:14b-q4_K_M`, Ollama `0.33.3`, Python `3.11.9`
-- Synthetic scenarios: `18`; raw resource samples: `720`
-- End-to-end success: `1.0000`
-- Mean latency: `21.575 s`; median `20.607 s`
-- Cold-start latency: `49.308 s`; warm mean latency: `19.944 s`
-- Mean generation throughput: `5.860 tok/s`
-- Mean system CPU: `49.575%`; peak system CPU: `95.1%`
-- Peak system memory used: `27,592,134,656` bytes
-- NVIDIA GPU telemetry: unavailable
-- Interpretation: valid single-host timing and system-load observations, but the sampled Ollama RSS (`74,756,096` bytes) is not treated as total model memory because Windows/Ollama can use separate runner processes or mappings. GPU/VRAM/power claims are not made from this run.
+- Source commit: `c806d9673b1994e39fec01db2d0b38c2f2e856f0`; result commit: `69df26079cd853b962809fa38f6de023d69b182a`.
+- Result-commit CI: GitHub Actions `34497544736`, conclusion `success`.
+- 18 synthetic scenarios; 720 resource samples; end-to-end success `1.0000`.
+- Mean latency `21.575 s`; median `20.607 s`; cold start `49.308 s`; warm mean `19.944 s`; throughput `5.860 tok/s`.
+- Mean system CPU `49.575%`; peak system CPU `95.1%`; peak system memory used `27,592,134,656` bytes.
+- NVIDIA telemetry was unavailable. The `74,756,096` byte parent Ollama RSS is not treated as total model memory.
 
-Detailed interpretation and instrumentation limitations are recorded in `docs/phase8-analysis.md`.
+Detailed interpretation: `docs/phase8-analysis.md`.
 
-### Phase 8B follow-up instrumentation
+### Phase 8B corrected resource instrumentation
 
-A follow-up instrumentation replication is planned to strengthen the resource-aware claim. It will preserve Phase 8 v1 unchanged, expand process-family accounting beyond the parent Ollama process, and query Ollama `/api/ps` for model size and reported VRAM allocation even when `nvidia-smi` is unavailable.
+- Frozen config SHA-256: `3e803691add80eb50f7bfd40558d33f2a6bd549fa367e8dd0846c5a2c1ec49b0`.
+- Source commit: `4836278a2a67317726af104ed0784354b88db641`; result commit: `2965abd06d449e69d05f32860eb876e829d075c6`.
+- Result-commit CI: GitHub Actions `34501936339`, conclusion `success`.
+- Model: `qwen3:14b-q4_K_M`, Ollama local; 18 synthetic scenarios; 156 enhanced resource samples.
+- End-to-end success `1.0000`; mean latency `22.724 s`; median `22.118 s`; cold start `47.532 s`; warm mean `21.264 s`; throughput `5.599 tok/s`.
+- Peak model process-family RSS: `10,546,618,368` bytes (`9.822 GiB`).
+- Ollama `/api/ps` model size: `10,153,550,149` bytes (`9.456 GiB`).
+- Ollama `/api/ps` reported VRAM allocation: `6,564,253,531` bytes (`6.113 GiB`).
+- Mean system CPU `51.515%`; peak system CPU `91.0%`; mean normalized model-process-family CPU `33.895%`.
+- `nvidia-smi` remained unavailable, so direct GPU utilization/power measurements are not claimed. `/api/ps` VRAM is reported allocation, not an independent hardware-sensor reading.
+
+Detailed interpretation: `docs/phase8b-analysis.md`.
+
+## Phase 9 protocol
+
+Phase 9 is frozen before execution in `experiments/configs/phase9_hard_stress.json`. It contains 60 deterministic synthetic cases across two seeds, five stress families, and six source fault families. The stress families are ambiguous dual signatures, conflicting retrieval, out-of-distribution telemetry, adversarial evidence containing unsafe embedded instructions, and missing evidence. The precommitted policy adds an explicit `unknown` diagnosis and requires a safe defer action when evidence is ambiguous, conflicting, missing, or outside the local catalogue. Model proposals and downstream SafetyGate containment are scored separately. No automatic retries or manual score edits are allowed.
+
+Detailed protocol: `docs/phase9-protocol.md`.
