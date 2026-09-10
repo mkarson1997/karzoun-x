@@ -70,7 +70,6 @@ function Request-ModelUnload {
                 break
             }
         } catch {
-            # The unload request itself succeeded. Older Ollama builds may not expose /api/ps.
             Write-Host "Could not query /api/ps; continuing after successful unload request." -ForegroundColor Yellow
             $Verified = $true
             break
@@ -119,8 +118,10 @@ if ($null -ne $NvidiaSmi) {
     if (($env:PATH -split ";") -notcontains $NvidiaDir) {
         $env:PATH = "$NvidiaDir;$env:PATH"
     }
+    $NvidiaSmiText = $NvidiaSmi
     Write-Host "NVIDIA telemetry available: $NvidiaSmi" -ForegroundColor Green
 } else {
+    $NvidiaSmiText = "unavailable"
     Write-Host "nvidia-smi was not found; GPU metrics will be recorded as unavailable." -ForegroundColor Yellow
 }
 
@@ -173,7 +174,7 @@ $EnvironmentLines = @(
     "model=$Model",
     "ollama_base_url=$OllamaBaseUrl",
     "psutil=$(& $PythonExe -c 'import psutil; print(psutil.__version__)' 2>&1)",
-    "nvidia_smi=$($NvidiaSmi ?? 'unavailable')"
+    "nvidia_smi=$NvidiaSmiText"
 )
 $EnvironmentLines | Set-Content -Path (Join-Path $ResultDir "environment.txt") -Encoding utf8
 & $PythonExe -m pip freeze | Set-Content -Path (Join-Path $ResultDir "pip-freeze.txt") -Encoding utf8
