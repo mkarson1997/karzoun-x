@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-10T14:01:55.222710+00:00",
+  "experiment_id": "phase7b-end-to-end-local-llm-v1",
+  "study_role": "precommitted local-LLM end-to-end robustness comparison on expanded synthetic scenarios",
+  "config_sha256": "caa72650628425e6f9248f0f9b1853c8bbc51f372c150c6ac7de3a7ea5b9388e",
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema",
+    "base_url": "http://127.0.0.1:11434"
+  },
+  "scenarios_per_condition": 36,
+  "conditions": {
+    "llm_no_rag": {
+      "scenarios": 36,
+      "detector_trigger_rate": 1.0,
+      "parse_success_rate": 1.0,
+      "diagnosis_accuracy": 1.0,
+      "expected_action_match_rate": 0.16666666666666666,
+      "diagnosis_and_expected_action_rate": 0.16666666666666666,
+      "expected_evidence_match_rate": null,
+      "safety_allow_rate": 1.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "end_to_end_success_rate": 0.16666666666666666,
+      "mean_latency_seconds": 20.942941519443494,
+      "median_latency_seconds": 19.778466750001826,
+      "mean_generation_tokens_per_second": 5.132901938695247
+    },
+    "karzoun_x_full": {
+      "scenarios": 36,
+      "detector_trigger_rate": 1.0,
+      "parse_success_rate": 1.0,
+      "diagnosis_accuracy": 1.0,
+      "expected_action_match_rate": 1.0,
+      "diagnosis_and_expected_action_rate": 1.0,
+      "expected_evidence_match_rate": 1.0,
+      "safety_allow_rate": 1.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "end_to_end_success_rate": 1.0,
+      "mean_latency_seconds": 23.14138486388846,
+      "median_latency_seconds": 23.022895099995367,
+      "mean_generation_tokens_per_second": 5.334910285919956
+    }
+  },
+  "full_by_difficulty": {
+    "clean": {
+      "scenarios": 12,
+      "detector_trigger_rate": 1.0,
+      "parse_success_rate": 1.0,
+      "diagnosis_accuracy": 1.0,
+      "expected_action_match_rate": 1.0,
+      "diagnosis_and_expected_action_rate": 1.0,
+      "expected_evidence_match_rate": 1.0,
+      "safety_allow_rate": 1.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "end_to_end_success_rate": 1.0,
+      "mean_latency_seconds": 23.028973366665014,
+      "median_latency_seconds": 22.91771945000073,
+      "mean_generation_tokens_per_second": 5.396175120106531
+    },
+    "distractor": {
+      "scenarios": 12,
+      "detector_trigger_rate": 1.0,
+      "parse_success_rate": 1.0,
+      "diagnosis_accuracy": 1.0,
+      "expected_action_match_rate": 1.0,
+      "diagnosis_and_expected_action_rate": 1.0,
+      "expected_evidence_match_rate": 1.0,
+      "safety_allow_rate": 1.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "end_to_end_success_rate": 1.0,
+      "mean_latency_seconds": 23.30074743333292,
+      "median_latency_seconds": 23.417014649996418,
+      "mean_generation_tokens_per_second": 5.315858854442408
+    },
+    "partial": {
+      "scenarios": 12,
+      "detector_trigger_rate": 1.0,
+      "parse_success_rate": 1.0,
+      "diagnosis_accuracy": 1.0,
+      "expected_action_match_rate": 1.0,
+      "diagnosis_and_expected_action_rate": 1.0,
+      "expected_evidence_match_rate": 1.0,
+      "safety_allow_rate": 1.0,
+      "unsafe_or_unknown_proposals": 0,
+      "unsafe_or_unknown_proposal_rate": 0.0,
+      "unsafe_false_authorizations": 0,
+      "unsafe_false_authorization_rate": null,
+      "end_to_end_success_rate": 1.0,
+      "mean_latency_seconds": 23.094433791667445,
+      "median_latency_seconds": 22.794777149996662,
+      "mean_generation_tokens_per_second": 5.292696883210926
+    }
+  },
+  "communication_profiles": [
+    {
+      "profile_id": "zero_delay_reference",
+      "one_way_delay_s": 0.0,
+      "outage": false,
+      "ground_completion_rate": 1.0,
+      "mean_ground_decision_latency_s": 23.14138486388846
+    },
+    {
+      "profile_id": "mars_near_reference",
+      "one_way_delay_s": 240.0,
+      "outage": false,
+      "ground_completion_rate": 1.0,
+      "mean_ground_decision_latency_s": 503.14138486388845
+    },
+    {
+      "profile_id": "mars_far_reference",
+      "one_way_delay_s": 1440.0,
+      "outage": false,
+      "ground_completion_rate": 1.0,
+      "mean_ground_decision_latency_s": 2903.1413848638886
+    },
+    {
+      "profile_id": "ground_link_outage",
+      "one_way_delay_s": 0.0,
+      "outage": true,
+      "ground_completion_rate": 0.0,
+      "mean_ground_decision_latency_s": null
+    }
+  ],
+  "integrity": {
+    "parameters_frozen_before_model_evaluation": true,
+    "heldout_fault_labels_not_used_for_prompting": true,
+    "same_model_used_for_both_conditions": true,
+    "same_scenarios_used_for_both_conditions": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "raw_thinking_field_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "testbed_is_synthetic": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
