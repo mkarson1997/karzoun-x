@@ -1,0 +1,10 @@
+﻿KARZOUN-X Phase 8B local resource instrumentation environment
+timestamp_local=2026-09-10T19:17:54.5294864+03:00
+source_commit=4836278a2a67317726af104ed0784354b88db641
+python=Python 3.11.9
+ollama=ollama version is 0.33.3
+model=qwen3:14b-q4_K_M
+ollama_base_url=http://127.0.0.1:11434
+psutil=7.0.0
+nvidia_smi=unavailable
+windows_gpu=AMD Radeon RX 580 2048SP

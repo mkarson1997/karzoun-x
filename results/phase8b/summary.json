@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-10T16:24:46.420325+00:00",
+  "experiment_id": "phase8b-resource-instrumentation-v1",
+  "study_role": "follow-up local resource instrumentation replication designed after Phase 8 v1 observability review",
+  "config_sha256": "3e803691add80eb50f7bfd40558d33f2a6bd549fa367e8dd0846c5a2c1ec49b0",
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema",
+    "base_url": "http://127.0.0.1:11434"
+  },
+  "hardware": {
+    "platform": "Windows-10-10.0.19045-SP0",
+    "logical_cpu_count": 12,
+    "physical_cpu_count": 6,
+    "total_memory_bytes": 34208501760,
+    "nvidia_gpu": null
+  },
+  "scenarios": 18,
+  "model_metrics": {
+    "end_to_end_success_rate": 1.0,
+    "mean_latency_seconds": 22.723736483333695,
+    "median_latency_seconds": 22.11776149999787,
+    "p95_latency_seconds": 47.53190020000329,
+    "cold_start_latency_seconds": 47.53190020000329,
+    "warm_mean_latency_seconds": 21.26443273529431,
+    "mean_generation_tokens_per_second": 5.59919563599035
+  },
+  "resource_metrics": {
+    "samples": 156,
+    "mean_system_cpu_percent": 51.51474358974359,
+    "peak_system_cpu_percent": 91.0,
+    "mean_model_process_family_cpu_percent_normalized": 33.895170153942736,
+    "peak_model_process_family_cpu_percent_normalized": 48.0122475887439,
+    "peak_system_memory_used_bytes": 26864623616.0,
+    "peak_model_process_family_rss_bytes": 10546618368.0,
+    "peak_ollama_reported_model_size_bytes": 10153550149.0,
+    "peak_ollama_reported_vram_size_bytes": 6564253531.0,
+    "mean_gpu_utilization_percent": null,
+    "peak_gpu_utilization_percent": null,
+    "peak_gpu_memory_used_mib": null,
+    "mean_gpu_power_watts": null,
+    "peak_gpu_power_watts": null,
+    "matched_processes_observed": [
+      "11308:ollama.exe",
+      "13480:ollama app.exe",
+      "2860:llama-server.exe"
+    ]
+  },
+  "integrity": {
+    "parameters_frozen_before_phase8b_measurement": true,
+    "phase8b_designed_after_phase8_v1_observability_review": true,
+    "model_performance_is_secondary_to_instrumentation": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "raw_resource_samples_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "testbed_is_synthetic": true,
+    "single_machine_measurement": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
