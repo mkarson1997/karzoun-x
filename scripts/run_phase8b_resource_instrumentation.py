@@ -17,11 +17,6 @@ from typing import Any
 import httpx
 import psutil
 
-from karzoun_x.anomaly_detection.stability_aware import StabilityAwareDetector
-from karzoun_x.rag.retriever import LocalRetriever
-from karzoun_x.safety import SafetyGate
-from karzoun_x.simulator import generate_robustness_scenarios, knowledge_documents
-from karzoun_x.types import GateDecision
 from run_phase8_resource_benchmark import (
     _build_prompt,
     _call_ollama,
@@ -31,6 +26,12 @@ from run_phase8_resource_benchmark import (
     _parse_response,
     _tokens_per_second,
 )
+
+from karzoun_x.anomaly_detection.stability_aware import StabilityAwareDetector
+from karzoun_x.rag.retriever import LocalRetriever
+from karzoun_x.safety import SafetyGate
+from karzoun_x.simulator import generate_robustness_scenarios, knowledge_documents
+from karzoun_x.types import GateDecision
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = REPO_ROOT / "experiments" / "configs" / "phase8b_resource_instrumentation.json"
@@ -138,7 +139,8 @@ class ResourceSamplerV2:
         current_cpu_times: dict[int, float] = {}
         matched: list[str] = []
 
-        for process in psutil.process_iter(["pid", "name", "memory_info", "cpu_times", "cmdline"]):
+        attributes = ["pid", "name", "memory_info", "cpu_times", "cmdline"]
+        for process in psutil.process_iter(attributes):
             try:
                 name = str(process.info["name"] or "")
                 cmdline = " ".join(str(part) for part in (process.info["cmdline"] or []))
@@ -243,6 +245,11 @@ def _gib(value: float | None) -> float | None:
 def _markdown(summary: dict[str, Any]) -> str:
     model = summary["model_metrics"]
     resource = summary["resource_metrics"]
+    throughput = _metric(model["mean_generation_tokens_per_second"])
+    family_rss = _metric(_gib(resource["peak_model_process_family_rss_bytes"]))
+    model_size = _metric(_gib(resource["peak_ollama_reported_model_size_bytes"]))
+    vram_size = _metric(_gib(resource["peak_ollama_reported_vram_size_bytes"]))
+    gpu_memory = _metric(resource["peak_gpu_memory_used_mib"])
     lines = [
         "# KARZOUN-X Phase 8B Resource Instrumentation Replication",
         "",
@@ -258,16 +265,22 @@ def _markdown(summary: dict[str, Any]) -> str:
         f"| P95 latency (s) | {_metric(model['p95_latency_seconds'])} |",
         f"| Cold-start latency (s) | {_metric(model['cold_start_latency_seconds'])} |",
         f"| Warm mean latency (s) | {_metric(model['warm_mean_latency_seconds'])} |",
-        f"| Mean generation throughput (tok/s) | {_metric(model['mean_generation_tokens_per_second'])} |",
-        f"| Peak process-family RSS (GiB) | {_metric(_gib(resource['peak_model_process_family_rss_bytes']))} |",
-        f"| Ollama reported model size (GiB) | {_metric(_gib(resource['peak_ollama_reported_model_size_bytes']))} |",
-        f"| Ollama reported VRAM allocation (GiB) | {_metric(_gib(resource['peak_ollama_reported_vram_size_bytes']))} |",
+        f"| Mean generation throughput (tok/s) | {throughput} |",
+        f"| Peak process-family RSS (GiB) | {family_rss} |",
+        f"| Ollama reported model size (GiB) | {model_size} |",
+        f"| Ollama reported VRAM allocation (GiB) | {vram_size} |",
         f"| Mean system CPU (%) | {_metric(resource['mean_system_cpu_percent'])} |",
         f"| Peak system CPU (%) | {_metric(resource['peak_system_cpu_percent'])} |",
-        f"| Peak GPU memory via nvidia-smi (MiB) | {_metric(resource['peak_gpu_memory_used_mib'])} |",
+        f"| Peak GPU memory via nvidia-smi (MiB) | {gpu_memory} |",
         "",
-        "> Phase 8B was designed after Phase 8 v1 revealed incomplete process/GPU observability.",
-        "> Model-performance metrics are secondary; this run is an instrumentation replication on one host.",
+        (
+            "> Phase 8B was designed after Phase 8 v1 revealed incomplete "
+            "process/GPU observability."
+        ),
+        (
+            "> Model-performance metrics are secondary; this run is an "
+            "instrumentation replication on one host."
+        ),
         "> Results remain synthetic and are not evidence of flight readiness.",
         "",
     ]
@@ -355,13 +368,18 @@ def main() -> int:
                                     "increase_logging",
                                     "override_thermal_protection",
                                     "request_subsystem_status",
-                                    "run_read_only_diagnostic"
+                                    "run_read_only_diagnostic",
                                 ],
                             },
                             "rationale": {"type": "string"},
                             "evidence_document_id": {"type": "string"},
                         },
-                        "required": ["fault_id", "action", "rationale", "evidence_document_id"],
+                        "required": [
+                            "fault_id",
+                            "action",
+                            "rationale",
+                            "evidence_document_id",
+                        ],
                         "additionalProperties": False,
                     },
                     float(model_config["temperature"]),
@@ -372,7 +390,9 @@ def main() -> int:
                 safety = gate.evaluate(action)
                 diagnosis_correct = parsed["fault_id"] == scenario.fault_id
                 action_correct = parsed["action"] == scenario.safe_action.name
-                evidence_correct = parsed["evidence_document_id"] == scenario.expected_document_id
+                evidence_correct = (
+                    parsed["evidence_document_id"] == scenario.expected_document_id
+                )
                 safety_allowed = safety.decision == GateDecision.ALLOW
                 success = (
                     detector_triggered
