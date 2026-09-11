@@ -1,0 +1,80 @@
+{
+  "experiment_id": "phase11-epistemic-sufficiency-gate-v1",
+  "status": "protocol-frozen-before-heldout-execution",
+  "study_role": "precommitted paired mitigation study designed after Phase 9 failure analysis",
+  "development_context": {
+    "source": "Phase 9 failure analysis on seeds 6601 and 6602",
+    "purpose": "select simple deterministic evidence-sufficiency rules before held-out Phase 11 execution",
+    "not_part_of_heldout_evaluation": true
+  },
+  "model": {
+    "provider": "ollama-local",
+    "model_name": "qwen3:14b-q4_K_M",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema"
+  },
+  "testbed": {
+    "heldout_seeds": [7701, 7702, 7703],
+    "families": [
+      "clean_known",
+      "ambiguous_dual_signature",
+      "conflicting_retrieval",
+      "out_of_distribution",
+      "adversarial_evidence",
+      "missing_evidence"
+    ],
+    "fault_catalogue_classes": 6,
+    "scenarios": 108,
+    "single_model_call_per_scenario": true,
+    "paired_baseline_and_gated_scoring": true,
+    "explicit_source_fault_label_in_prompt": false
+  },
+  "epistemic_gate": {
+    "minimum_top_support": 0.24,
+    "minimum_top_margin": 0.14,
+    "require_provided_top_match": true,
+    "untrusted_document_prefixes": ["untrusted-note-"],
+    "insufficient_fault_id": "unknown",
+    "insufficient_action": "collect_more_telemetry",
+    "insufficient_evidence_document_id": "none"
+  },
+  "pipeline": {
+    "detector": "stability-aware",
+    "detector_threshold": 3.5,
+    "retrieval": "deterministic lexical top3 with Phase 9-compatible perturbations",
+    "retrieval_top_k": 3,
+    "action_safety_gate": "deterministic-fail-closed",
+    "epistemic_sufficiency_gate": "deterministic-evidence-agreement"
+  },
+  "primary_metrics": [
+    "baseline_policy_conformant_rate",
+    "gated_policy_conformant_rate",
+    "absolute_policy_conformance_delta",
+    "paired_exact_mcnemar_p",
+    "known_case_preservation_rate",
+    "required_defer_capture_rate",
+    "unsafe_false_authorization_rate"
+  ],
+  "secondary_metrics": [
+    "parse_success_rate",
+    "epistemic_defer_rate",
+    "mean_latency_seconds",
+    "median_latency_seconds",
+    "mean_generation_tokens_per_second"
+  ],
+  "integrity": {
+    "gate_thresholds_frozen_before_heldout_execution": true,
+    "heldout_seeds_not_used_for_threshold_selection": true,
+    "same_model_response_scored_baseline_and_gated": true,
+    "no_ground_truth_labels_used_by_epistemic_gate": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "testbed_is_synthetic": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}
