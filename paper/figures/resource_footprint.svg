@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="540" viewBox="0 0 900 540">
+  <style>
+    .axis{stroke:#222;stroke-width:2}.grid{stroke:#d0d0d0;stroke-width:1}.bar{fill:#666}.label{font:17px sans-serif;fill:#111}.small{font:14px sans-serif;fill:#333}.value{font:600 17px sans-serif;fill:#111;text-anchor:middle}.title{font:600 22px sans-serif;fill:#111;text-anchor:middle}
+  </style>
+  <text x="450" y="38" class="title">Phase 8B: Local model memory footprint</text>
+  <text x="450" y="64" class="small" text-anchor="middle">Single-host instrumentation; GiB</text>
+  <line x1="110" y1="440" x2="820" y2="440" class="axis"/>
+  <line x1="110" y1="100" x2="110" y2="440" class="axis"/>
+  <g class="grid"><line x1="110" y1="372" x2="820" y2="372"/><line x1="110" y1="304" x2="820" y2="304"/><line x1="110" y1="236" x2="820" y2="236"/><line x1="110" y1="168" x2="820" y2="168"/><line x1="110" y1="100" x2="820" y2="100"/></g>
+  <text x="80" y="445" class="small">0</text><text x="80" y="377" class="small">2</text><text x="80" y="309" class="small">4</text><text x="80" y="241" class="small">6</text><text x="80" y="173" class="small">8</text><text x="70" y="105" class="small">10</text>
+  <rect x="180" y="106" width="150" height="334" class="bar"/><text x="255" y="96" class="value">9.822</text>
+  <rect x="390" y="119" width="150" height="321" class="bar"/><text x="465" y="109" class="value">9.456</text>
+  <rect x="600" y="232" width="150" height="208" class="bar"/><text x="675" y="222" class="value">6.113</text>
+  <text x="255" y="475" class="label" text-anchor="middle">Peak process-family RSS</text>
+  <text x="465" y="475" class="label" text-anchor="middle">Ollama model size</text>
+  <text x="675" y="475" class="label" text-anchor="middle">Reported VRAM allocation</text>
+  <text x="450" y="515" class="small" text-anchor="middle">VRAM is Ollama-reported allocation, not an independent GPU sensor measurement.</text>
+</svg>
