@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use KARZOUN-X in research before a DOI-backed release, cite this software repository."
+message: "If you use KARZOUN-X in research, cite the tagged software release and its archival DOI once available."
 title: "KARZOUN-X: Resource-Aware, Safety-Gated Local AI for Autonomous Spacecraft Fault Diagnosis"
 type: software
 authors:
@@ -8,7 +8,7 @@ authors:
     orcid: "https://orcid.org/0009-0006-2752-7744"
 repository-code: "https://github.com/mkarson1997/karzoun-x"
 license: Apache-2.0
-version: 0.1.0a0
+version: 0.1.0-rc1
 keywords:
   - spacecraft autonomy
   - local LLM
