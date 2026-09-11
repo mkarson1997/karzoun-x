@@ -33,7 +33,7 @@ def _prepare_markdown() -> Path:
             "This is deterministic counterfactual timing, not a live network experiment. It isolates the propagation-delay consequence of requiring a ground round trip."
         ),
         "In all 30 discordant action-selection pairs, the full system was correct and the no-RAG condition was not.": (
-            "![Paired Phase 7B expected-action match with and without retrieved evidence.](paper/figures/phase7b_rag_ablation.png){#fig:rag-ablation width=88%}\n\n"
+            "![Paired Phase 7B expected-action match with and without retrieved evidence.](paper/figures/phase7b_rag_ablation.png){#fig:rag-ablation width=72%}\n\n"
             "In all 30 discordant action-selection pairs, the full system was correct and the no-RAG condition was not."
         ),
         "The mean-latency difference between Phase 8 and Phase 8B was only about `+1.148 s`": (
@@ -49,6 +49,10 @@ def _prepare_markdown() -> Path:
         if needle not in body:
             raise RuntimeError(f"Expected manuscript insertion marker not found: {needle[:80]}")
         body = body.replace(needle, replacement, 1)
+
+    # Citeproc appends the bibliography after the manuscript body. A raw TeX page break
+    # keeps the reference list together in PDF output; non-LaTeX writers ignore it.
+    body += "\n\n\\newpage\n"
 
     front = f'''---
 title: "{TITLE}"
@@ -107,6 +111,7 @@ def build(output_dir: Path) -> None:
         "--variable=mainfont:DejaVu Serif",
         "--variable=sansfont:DejaVu Sans",
         "--variable=monofont:DejaVu Sans Mono",
+        "--variable=monofontoptions:Scale=0.82",
         "--output",
         str(pdf),
     )
