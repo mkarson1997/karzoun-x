@@ -1,0 +1,36 @@
+{
+  "article_type": "Research article",
+  "author": {
+    "family_name": "Karzoun",
+    "given_name": "Mahmoud",
+    "orcid": "0009-0006-2752-7744"
+  },
+  "competing_interests": "None declared.",
+  "funding": "No specific external funding.",
+  "keywords": [
+    "spacecraft autonomy",
+    "fault diagnosis",
+    "local language model",
+    "retrieval-augmented generation",
+    "evidence sufficiency",
+    "communication delay"
+  ],
+  "phase11": {
+    "absolute_delta": 0.4722222222222222,
+    "baseline_policy_conformance": 0.5277777777777778,
+    "gated_policy_conformance": 1.0,
+    "paired_exact_mcnemar_p": 8.881784197001252e-16
+  },
+  "phase12": {
+    "best_label_by_gated_conformance_then_latency": "medium",
+    "best_model_name": "qwen3:8b",
+    "pareto_efficient_labels": [
+      "medium",
+      "small"
+    ]
+  },
+  "prior_preprint_doi": "10.5281/zenodo.22710335",
+  "software_doi": "10.5281/zenodo.22708005",
+  "target_journal": "Acta Astronautica",
+  "title": "KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay"
+}

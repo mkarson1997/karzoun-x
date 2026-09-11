@@ -1,0 +1,5 @@
+Local RAG improved evidence-grounded action selection on paired synthetic cases.
+Hard-stress tests exposed abstention failures under conflicting or missing evidence.
+A held-out deterministic evidence gate tests epistemic safety beyond action gating.
+Three local model sizes quantify quality, latency, memory and VRAM trade-offs.
+All real telemetry claims are separated from synthetic diagnosis experiments.
