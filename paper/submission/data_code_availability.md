@@ -8,9 +8,13 @@ The archived software release is available through Zenodo:
 
 https://doi.org/10.5281/zenodo.22708005
 
-The first public preprint is available through Zenodo:
+The canonical public preprint version is available through Zenodo:
 
-https://doi.org/10.5281/zenodo.22708262
+https://doi.org/10.5281/zenodo.22710335
+
+The preprint concept DOI for all versions is:
+
+https://doi.org/10.5281/zenodo.22708261
 
 The real-data anomaly-detection track uses the public SMAP/MSL benchmark associated with Telemanom. KARZOUN-X does not redistribute the upstream benchmark by default. Acquisition instructions, upstream provenance, and cryptographic hashes are documented in `data/README.md` and `experiments/RESULTS_INDEX.md`.
 
