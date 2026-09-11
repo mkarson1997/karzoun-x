@@ -10,13 +10,18 @@ on:
         options:
           - "no"
           - "yes"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/release-v0.1.0-rc1.confirmed"
 
 permissions:
   contents: write
 
 jobs:
   release:
-    if: ${{ inputs.confirm_zenodo_enabled == 'yes' }}
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.confirm_zenodo_enabled == 'yes') }}
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
