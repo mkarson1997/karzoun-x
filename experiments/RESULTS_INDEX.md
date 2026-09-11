@@ -17,6 +17,9 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | `phase8b-resource-instrumentation-v1` | Completed | Local hardware, commit `2965abd06d449e69d05f32860eb876e829d075c6` | `results/phase8b/` |
 | `phase9-hard-stress-local-llm-v1` | Completed, mixed hard-stress result | Local Ollama, commit `f7efc3db67c9ae152daae7c08c40c2369c94e31c` | `results/phase9/` |
 | `phase10-statistical-synthesis-v1` | Completed, retrospective synthesis | GitHub Actions `34588327705` | `results/phase10/` |
+| `phase11-epistemic-sufficiency-gate-v1` | Protocol frozen, held-out execution pending | Local Ollama | `results/phase11/` after execution |
+| `phase12-model-resource-ablation-v1` | Protocol frozen, execution pending | Local Ollama + local hardware | `results/phase12/` after execution |
+| `phase13-final-statistical-synthesis` | Prepared; runs after Phase 11/12 | GitHub Actions | `results/phase13/` after synthesis |
 
 ## Phase 1 provenance
 
@@ -169,3 +172,36 @@ Detailed interpretation: `docs/phase9-analysis.md`.
 - Phase 9 unsafe-action proposals: `0/60`, 95% Wilson upper bound `0.0602`.
 - Phase 8 versus Phase 8B mean-latency difference: `+1.148 s`; warm-mean difference: `+1.320 s`, descriptive only because the runs use different synthetic seeds.
 - Interpretation: this synthesis quantifies uncertainty and the paired RAG action-selection effect without reinterpreting the original protocols. It is retrospective and is not presented as preregistered confirmatory inference.
+
+## Phase 11 frozen protocol
+
+Phase 11 is a **new held-out mitigation experiment**, explicitly designed after inspecting the Phase 9 failure modes. It does not retroactively modify Phase 9.
+
+- Config: `experiments/configs/phase11_epistemic_gate.json`.
+- Held-out seeds: `7701`, `7702`, `7703`; total scenarios: `108`.
+- Families: clean known, ambiguous dual signature, conflicting retrieval, out of distribution, adversarial evidence, and missing evidence.
+- One Qwen3 14B model call is made per scenario; the same raw response is scored both before and after the deterministic epistemic gate.
+- Frozen gate checks observable evidence properties only: minimum lexical support `0.24`, minimum top-two margin `0.14`, and agreement between provided trusted evidence and an independent local-catalogue top match.
+- Ground-truth fault labels are not inputs to the gate.
+- Primary comparison: baseline versus gated fail-safe policy conformance with paired exact McNemar analysis.
+- Required-defer cases and known/adversarial cases are both included so a trivial defer-everything policy cannot score perfectly.
+
+## Phase 12 frozen protocol
+
+Phase 12 extends the resource claim from one model size to a precommitted three-model local ablation.
+
+- Config: `experiments/configs/phase12_model_resource_ablation.json`.
+- Models: `qwen3:4b`, `qwen3:8b`, `qwen3:14b-q4_K_M`.
+- Held-out seed: `8801`; `36` identical scenarios per model; `108` total model calls.
+- The Phase 11 epistemic gate thresholds are reused unchanged.
+- Resource sampling uses the corrected Phase 8B process-family sampler plus Ollama `/api/ps` model/VRAM allocation, with optional `nvidia-smi` telemetry when available.
+- Primary trade-off: gated policy conformance versus warm latency, generation throughput, model-process RSS, model size, and VRAM allocation.
+- Measurements remain single-host synthetic research measurements.
+
+## Phase 13 prepared synthesis
+
+- Script: `scripts/run_phase13_final_synthesis.py`.
+- Workflow: `.github/workflows/phase13-final-synthesis.yml`.
+- Runs only when both Phase 11 and Phase 12 result files are present.
+- Produces Wilson 95% intervals, paired exact McNemar comparisons, and a resource/quality Pareto analysis.
+- Phase 13 is retrospective synthesis of the completed new experiments and does not make new model calls.
