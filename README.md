@@ -8,9 +8,9 @@
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
 [![License](https://img.shields.io/badge/code-Apache--2.0-green)](LICENSE)
 
-KARZOUN-X is an open research project investigating whether a **locally deployed language model**, augmented with **retrieval-augmented generation (RAG)** and deterministic safety constraints, can support spacecraft fault diagnosis and low-risk decision support when Earth communication is delayed or unavailable.
+KARZOUN-X is an open research project investigating whether a **locally deployed language model**, augmented with **retrieval-augmented generation (RAG)**, a deterministic **epistemic evidence-sufficiency gate**, and deterministic **action-safety constraints**, can support spacecraft fault diagnosis and low-risk decision support when Earth communication is delayed or unavailable.
 
-The canonical public manuscript is now a DOI-backed Zenodo **preprint**. The project remains a reproducible research prototype, not flight software. It separates probabilistic reasoning from deterministic action authorization and preserves machine-generated experiment artifacts, raw model responses, hashes, environment metadata, and negative results for audit.
+The canonical public manuscript is a DOI-backed Zenodo preprint. The project remains a reproducible research prototype, not flight software. It separates real telemetry anomaly detection from synthetic diagnosis/action evaluation and preserves machine-generated experiment artifacts, raw model responses, hashes, environment metadata, and negative results for audit.
 
 ## Archival records
 
@@ -20,11 +20,11 @@ The canonical public manuscript is now a DOI-backed Zenodo **preprint**. The pro
 - **Software concept DOI:** https://doi.org/10.5281/zenodo.22708004
 - **ORCID:** https://orcid.org/0009-0006-2752-7744
 
-The preprint DOI and software DOI are intentionally distinct and cross-linked as related research outputs.
+The preprint DOI and software DOI are intentionally distinct research outputs.
 
 ## Research question
 
-> Can a locally deployed LLM augmented with retrieval and deterministic safety constraints improve spacecraft fault diagnosis and decision support during long communication delays or loss of Earth connectivity?
+> Can a locally deployed LLM augmented with retrieval and deterministic evidence/action constraints improve spacecraft fault diagnosis and decision support during long communication delays or loss of Earth connectivity?
 
 ## Architecture
 
@@ -41,7 +41,7 @@ Local Knowledge Retrieval (RAG)
 Local LLM Reasoner
    |
    v
-Epistemic Evidence Gate   # Phase 11 mitigation under evaluation
+Epistemic Evidence Gate
    |
    v
 Deterministic Action Safety Gate
@@ -55,34 +55,27 @@ Audit Log + Metrics
 
 The evaluated system does **not** execute commands on a real spacecraft.
 
-## What has been evaluated
+## Completed experiment program
 
-The DOI-backed preprint reports the completed experiment program through **Phase 10**:
+KARZOUN-X now includes the original Phase 1-10 preprint program and the Phase 11-13 follow-up program.
 
 | Area | Evidence |
 |---|---|
 | Real telemetry anomaly detection | SMAP/MSL benchmark, 82 benchmark records, 517,764 evaluated test points |
 | Detector iteration | Three auditable statistical detector experiments, including a retained mixed result |
 | Synthetic retrieval/safety mechanics | Held-out and expanded deterministic fault scenarios |
-| Local LLM reasoning | Qwen3 14B local Ollama experiments with structured JSON output |
+| Local LLM reasoning | Local Ollama experiments with schema-constrained Qwen3 models |
 | RAG ablation | Paired no-RAG versus full-evidence comparison |
 | Communication delay/outage | Deterministic local versus ground-dependent timing analysis |
-| Resource characterization | Cold/warm latency, CPU, process-family memory, Ollama-reported model/VRAM allocation |
+| Resource characterization | Cold/warm latency, CPU, process-family memory, model size and Ollama-reported VRAM allocation |
 | Hard-stress behavior | Ambiguity, conflicting retrieval, missing evidence, OOD telemetry, adversarial evidence |
-| Statistical synthesis | Wilson intervals and retrospective exact paired McNemar analysis |
+| Epistemic mitigation | 108 newly held-out paired cases with frozen evidence-sufficiency thresholds |
+| Model/resource ablation | Identical 36-case benchmark across Qwen3 4B, 8B and 14B local models |
+| Final statistics | Wilson intervals, exact paired McNemar tests and resource/quality Pareto analysis |
 
-Two follow-up protocols are now frozen before execution:
+Detailed provenance is maintained in [`experiments/RESULTS_INDEX.md`](experiments/RESULTS_INDEX.md) and under [`results/`](results/).
 
-- **Phase 11:** held-out paired evaluation of a deterministic evidence-sufficiency / epistemic gate designed after the Phase 9 failure analysis.
-- **Phase 12:** three-model local resource/quality ablation (`qwen3:4b`, `qwen3:8b`, `qwen3:14b-q4_K_M`) using the same Phase 11 gate and identical held-out scenarios.
-
-A Phase 13 workflow will synthesize confidence intervals, paired tests, and resource/quality Pareto results after both follow-up experiments are complete.
-
-Detailed provenance is in [`experiments/RESULTS_INDEX.md`](experiments/RESULTS_INDEX.md).
-
-## Selected published-preprint results
-
-These results must be interpreted within their stated experimental scope.
+## Selected results
 
 ### Real SMAP/MSL telemetry
 
@@ -93,7 +86,7 @@ The strongest of the first three detector runs was Phase 3, with total pointwise
 - F1: **0.4054**
 - event recall: **0.7333**
 
-Phase 3 is reported as **exploratory**, because its design followed inspection of the earlier benchmark results.
+Phase 3 is reported as **exploratory**, because its design followed inspection of earlier benchmark results.
 
 ### Paired local-LLM RAG comparison
 
@@ -106,7 +99,7 @@ On the 36-scenario-per-condition Phase 7B synthetic benchmark:
 
 A retrospective exact McNemar synthesis produced `p = 1.8626e-09` for the paired action-selection difference. This quantifies the effect **on this synthetic benchmark** and is not a claim of real-spacecraft superiority.
 
-### Hard-stress result
+### Phase 9 hard-stress boundary
 
 Phase 9 intentionally made the reasoning task harder. Overall fail-safe policy conformance fell to **26/60 = 43.3%**.
 
@@ -117,26 +110,53 @@ Phase 9 intentionally made the reasoning task harder. Overall fail-safe policy c
 - missing-evidence cases: **0/12** policy conformant
 - explicitly unsafe action proposals: **0/60**
 
-This mixed result is central to the paper: deterministic action gating can constrain hazardous actions, but it does not by itself guarantee appropriate uncertainty or evidence sufficiency. Phase 11 is explicitly designed to test a mitigation for this failure mode on newly held-out seeds.
+This negative result motivated a separate evidence-sufficiency mitigation instead of being hidden.
 
-### Local resource footprint
+### Phase 11 held-out epistemic-gate mitigation
 
-Phase 8B measured the full local path on one Windows host:
+Phase 11 was designed after Phase 9 but frozen **before** executing new held-out seeds `7701`, `7702`, and `7703`. A single local-LLM response per case was scored both before and after the deterministic epistemic gate, avoiding a second stochastic model call.
 
-- mean latency: **22.724 s**
-- warm mean latency: **21.264 s**
-- cold start: **47.532 s**
-- peak model process-family RSS: **9.822 GiB**
-- Ollama-reported model size: **9.456 GiB**
-- Ollama-reported VRAM allocation: **6.113 GiB**
+Across **108 newly held-out synthetic cases**:
 
-Direct `nvidia-smi` utilization and power telemetry were unavailable, so those measurements are not claimed. Phase 12 extends the resource study across three frozen local model sizes on the same host and scenarios.
+- baseline policy conformance: **57/108 = 52.78%**
+- gated policy conformance: **108/108 = 100%**
+- absolute improvement: **+47.22 percentage points**
+- known-case preservation: **36/36 = 100%**
+- required-defer capture: **72/72 = 100%**
+- exact paired McNemar: **p = 8.8818e-16**
+- unsafe false authorizations: **0**
+
+The result is deliberately scoped to the frozen synthetic benchmark. The gate uses observable telemetry/evidence agreement, not ground-truth labels.
+
+### Phase 12 three-model quality/resource ablation
+
+All three local models were evaluated on the **same 36 synthetic scenarios** and the unchanged Phase 11 gate:
+
+| Model | Gated policy | Known preserve | Required defer | Warm mean | Throughput | Peak process RSS | Ollama VRAM |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `qwen3:4b` | 35/36 = **97.22%** | 11/12 = **91.67%** | 24/24 = **100%** | **8.227 s** | **18.602 tok/s** | **4.184 GiB** | **2.960 GiB** |
+| `qwen3:8b` | 36/36 = **100%** | 12/12 = **100%** | 24/24 = **100%** | **9.051 s** | **14.864 tok/s** | **6.423 GiB** | **5.187 GiB** |
+| `qwen3:14b-q4_K_M` | 36/36 = **100%** | 12/12 = **100%** | 24/24 = **100%** | **26.380 s** | **4.730 tok/s** | **10.656 GiB** | **6.113 GiB** |
+
+Phase 13 identifies **small and medium** as Pareto-efficient under the study's joint objective of maximizing gated conformance while minimizing warm latency and peak model-process-family RSS. Pairwise model differences are not statistically significant on this 36-case-per-model benchmark, so the result supports a resource/quality trade-off rather than a universal ranking.
+
+### Final Phase 13 statistical synthesis
+
+Phase 13 reports Wilson 95% intervals and paired exact tests. In particular:
+
+- Phase 11 baseline conformance 95% Wilson interval: **0.4343-0.6194**
+- Phase 11 gated conformance 95% Wilson interval: **0.9657-1.0000**
+- 4B gated conformance: **35/36 = 0.9722 [0.8583, 0.9951]**
+- 8B gated conformance: **36/36 = 1.0000 [0.9036, 1.0000]**
+- 14B gated conformance: **36/36 = 1.0000 [0.9036, 1.0000]**
+
+These statistics remain synthetic and single-host where applicable. They do not establish flight readiness or operational spacecraft safety.
 
 ## Dataset
 
-The real-data track uses the public SMAP/MSL anomaly benchmark associated with the Telemanom work. Dataset files are not redistributed by default. Acquisition instructions, source hashes, and benchmark caveats are documented in [`data/README.md`](data/README.md).
+The real-data track uses the public SMAP/MSL anomaly benchmark associated with Telemanom. Dataset files are not redistributed by default. Acquisition instructions, source hashes, and benchmark caveats are documented in [`data/README.md`](data/README.md).
 
-SMAP/MSL is used for **anomaly detection only**. It does not provide the detailed root-cause and recovery-action labels required for the diagnosis experiments, so later diagnosis/action evaluations use a separate synthetic testbed with known labels.
+SMAP/MSL is used for **anomaly detection only**. It does not provide detailed root-cause and recovery-action labels for every anomaly, so diagnosis/action claims come from a separate synthetic testbed with known labels.
 
 ## Quick start
 
@@ -168,19 +188,10 @@ karzoun-x ollama-check
 ```text
 karzoun-x/
 ├── src/karzoun_x/
-│   ├── telemetry/
-│   ├── anomaly_detection/
-│   ├── rag/
-│   ├── reasoning/
-│   ├── safety/
-│   ├── communication/
-│   ├── simulator/
-│   ├── pipeline.py
-│   └── cli.py
 ├── data/                     # acquisition/provenance instructions
 ├── experiments/              # frozen configurations + results index
 ├── results/                  # machine-generated experiment artifacts
-├── paper/                    # manuscript and bibliography
+├── paper/                    # manuscripts, bibliography, figures, submission material
 ├── docs/                     # architecture, protocols, analyses, incidents
 ├── tests/
 └── .github/workflows/
@@ -188,7 +199,7 @@ karzoun-x/
 
 ## Research status
 
-**Stage:** DOI-backed public preprint + archived software RC; follow-up safety/resource experiments frozen before execution.
+**Stage:** DOI-backed public preprint + completed Phase 11-13 follow-up + journal-submission manuscript candidate.
 
 Completed:
 
@@ -202,17 +213,18 @@ Completed:
 - [x] corrected resource instrumentation replication
 - [x] precommitted hard-stress experiment
 - [x] confidence intervals and paired statistical synthesis
-- [x] manuscript updated through Phase 10
 - [x] archived software release candidate with real DOI
 - [x] canonical public preprint v0.1.0-rc2 with DOI
-- [x] Phase 11 protocol frozen before held-out execution
-- [x] Phase 12 multi-model resource-ablation protocol frozen before execution
-- [ ] execute Phase 11 and Phase 12 locally and archive machine-generated results
-- [ ] run Phase 13 final synthesis
-- [ ] resolve or document the remaining Dependabot moderate alert before stable v1.0.0
-- [ ] produce final v1.0.0 manuscript/release after follow-up results
+- [x] Phase 11 held-out epistemic-gate experiment completed and archived
+- [x] Phase 12 three-model local resource/quality ablation completed and archived
+- [x] Phase 13 final statistical synthesis completed
+- [x] journal-submission manuscript v1 generated from machine-readable results
+- [x] cover letter, highlights, declarations and data/code statement generated
+- [ ] resolve or explicitly document the remaining private Dependabot moderate alert
+- [ ] promote software metadata/release to stable v1.0.0
+- [ ] publish the final v1 manuscript as a new Zenodo preprint version after proofread
 - [ ] add DOI-backed work to ORCID
-- [ ] submit the final manuscript to an appropriate peer-reviewed venue
+- [ ] submit the final manuscript to a peer-reviewed venue
 
 ## Scientific integrity
 
@@ -222,16 +234,16 @@ KARZOUN-X distinguishes between:
 2. **synthetic diagnosis/action experiments**;
 3. **deterministic counterfactual communication analysis**;
 4. **single-host resource measurements**;
-5. **retrospective analyses**;
-6. **newly frozen follow-up experiments that have not yet been executed**.
+5. **retrospective statistical synthesis**;
+6. **held-out mitigation experiments designed after the earlier failure analysis**.
 
 Negative and mixed findings are retained rather than hidden. The repository does not claim flight qualification, NASA endorsement, mission deployment, or certified autonomous superiority.
 
-See [`RESEARCH_ETHICS.md`](RESEARCH_ETHICS.md), [`paper/manuscript.md`](paper/manuscript.md), and [`experiments/RESULTS_INDEX.md`](experiments/RESULTS_INDEX.md).
+See [`RESEARCH_ETHICS.md`](RESEARCH_ETHICS.md), [`paper/manuscript_v1.md`](paper/manuscript_v1.md), and [`experiments/RESULTS_INDEX.md`](experiments/RESULTS_INDEX.md).
 
 ## Citation
 
-For the research manuscript, cite:
+For the research manuscript, cite the current canonical public preprint:
 
 > Karzoun, Mahmoud. (2026). *KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay* (v0.1.0-rc2). Zenodo. https://doi.org/10.5281/zenodo.22710335
 
