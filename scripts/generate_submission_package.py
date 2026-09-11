@@ -13,6 +13,8 @@ TITLE = (
     "KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture "
     "for Autonomous Spacecraft Fault Diagnosis Under Communication Delay"
 )
+PREPRINT_DOI = "10.5281/zenodo.22710335"
+SOFTWARE_DOI = "10.5281/zenodo.22708005"
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -74,7 +76,7 @@ The manuscript makes three points that we believe are relevant to spacecraft aut
 
 The real-data track is kept methodologically separate: public SMAP/MSL telemetry is used for anomaly-detection evaluation only, because that benchmark does not provide detailed recovery-action labels for each anomaly. Diagnosis, retrieval, and action-policy claims come from separately labeled synthetic experiments. Negative and mixed results, raw model responses, frozen configurations, hashes, and environment metadata are preserved in the public repository.
 
-A prior version is publicly available as a Zenodo preprint (DOI **10.5281/zenodo.22708262**). The associated research software is archived separately (DOI **10.5281/zenodo.22708005**). The preprint is disclosed here for transparency and is not under consideration by another peer-reviewed journal.
+A prior version is publicly available as a Zenodo preprint (DOI **{PREPRINT_DOI}**). The associated research software is archived separately (DOI **{SOFTWARE_DOI}**). The preprint is disclosed here for transparency and is not under consideration by another peer-reviewed journal.
 
 The manuscript has one author, Mahmoud Karzoun (ORCID 0009-0006-2752-7744). The author declares no competing interests and no specific external research funding. The study involves no human or animal subjects.
 
@@ -96,8 +98,8 @@ ORCID: 0009-0006-2752-7744
             "family_name": "Karzoun",
             "orcid": "0009-0006-2752-7744",
         },
-        "prior_preprint_doi": "10.5281/zenodo.22708262",
-        "software_doi": "10.5281/zenodo.22708005",
+        "prior_preprint_doi": PREPRINT_DOI,
+        "software_doi": SOFTWARE_DOI,
         "keywords": [
             "spacecraft autonomy",
             "fault diagnosis",
@@ -125,14 +127,14 @@ ORCID: 0009-0006-2752-7744
         encoding="utf-8",
     )
 
-    checklist = '''# Submission checklist
+    checklist = f'''# Submission checklist
 
 - [ ] Final Phase 11, 12 and 13 machine-generated results are committed and CI is green.
 - [ ] `paper/manuscript_v1.md` was generated from the completed results, not hand-edited around them.
 - [ ] Journal-submission PDF and DOCX pass preflight.
 - [ ] Title and author match ORCID and Zenodo records.
-- [ ] Preprint DOI 10.5281/zenodo.22708262 is disclosed.
-- [ ] Software DOI 10.5281/zenodo.22708005 is disclosed.
+- [ ] Preprint DOI {PREPRINT_DOI} is disclosed.
+- [ ] Software DOI {SOFTWARE_DOI} is disclosed.
 - [ ] Highlights are uploaded as a separate file if requested by the submission system.
 - [ ] Cover letter is pasted or uploaded.
 - [ ] Funding statement: no specific external funding.
