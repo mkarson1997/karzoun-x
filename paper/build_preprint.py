@@ -98,7 +98,6 @@ def build(output_dir: Path) -> None:
         "--standalone",
         "--citeproc",
         f"--bibliography={PAPER / 'references.bib'}",
-        "--number-sections",
         "--metadata=link-citations:true",
         "--metadata=reference-section-title:References",
     ]
