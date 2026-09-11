@@ -1,0 +1,7 @@
+﻿KARZOUN-X Phase 11 local environment
+timestamp_local=2026-09-11T19:10:09.2169831+03:00
+source_commit=ebe6364e1602a559068b145a5d0f9e0a4ed1e943
+python=Python 3.11.9
+ollama=ollama version is 0.34.0
+model=qwen3:14b-q4_K_M
+ollama_base_url=http://127.0.0.1:11434

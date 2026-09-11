@@ -1,0 +1,144 @@
+{
+  "by_model": {
+    "large": {
+      "model_metrics": {
+        "baseline_policy_conformant_rate": 0.5277777777777778,
+        "cold_start_latency_seconds": 77.92814509998425,
+        "epistemic_defer_rate": 0.6666666666666666,
+        "gated_policy_conformant_rate": 1.0,
+        "known_case_preservation_rate": 1.0,
+        "mean_generation_tokens_per_second": 4.730455189741596,
+        "mean_latency_seconds": 27.812165186116342,
+        "median_latency_seconds": 27.407155850014533,
+        "p95_latency_seconds": 33.697600100014824,
+        "parse_success_rate": 1.0,
+        "required_defer_capture_rate": 1.0,
+        "scenarios": 36,
+        "warm_mean_latency_seconds": 26.380280045720117
+      },
+      "model_name": "qwen3:14b-q4_K_M",
+      "resource_metrics": {
+        "matched_processes_observed": [
+          "12600:llama-server.exe",
+          "16804:cmd.exe",
+          "18196:ollama app.exe",
+          "5732:ollama.exe"
+        ],
+        "mean_gpu_power_watts": null,
+        "mean_gpu_utilization_percent": null,
+        "mean_model_process_family_cpu_percent_normalized": 36.231996813618146,
+        "mean_system_cpu_percent": 74.55446428571429,
+        "peak_gpu_memory_used_mib": null,
+        "peak_gpu_power_watts": null,
+        "peak_gpu_utilization_percent": null,
+        "peak_model_process_family_cpu_percent_normalized": 48.777511401290596,
+        "peak_model_process_family_rss_bytes": 11441291264.0,
+        "peak_ollama_reported_model_size_bytes": 10153550149.0,
+        "peak_ollama_reported_vram_size_bytes": 6564253531.0,
+        "peak_system_cpu_percent": 100.0,
+        "peak_system_memory_used_bytes": 31644004352.0,
+        "samples": 336
+      }
+    },
+    "medium": {
+      "model_metrics": {
+        "baseline_policy_conformant_rate": 0.5833333333333334,
+        "cold_start_latency_seconds": 27.742557899997337,
+        "epistemic_defer_rate": 0.6666666666666666,
+        "gated_policy_conformant_rate": 1.0,
+        "known_case_preservation_rate": 1.0,
+        "mean_generation_tokens_per_second": 14.86358019177979,
+        "mean_latency_seconds": 9.570426155553529,
+        "median_latency_seconds": 9.35509239998646,
+        "p95_latency_seconds": 12.057969899993623,
+        "parse_success_rate": 1.0,
+        "required_defer_capture_rate": 1.0,
+        "scenarios": 36,
+        "warm_mean_latency_seconds": 9.051222391426563
+      },
+      "model_name": "qwen3:8b",
+      "resource_metrics": {
+        "matched_processes_observed": [
+          "16804:cmd.exe",
+          "18196:ollama app.exe",
+          "24840:llama-server.exe",
+          "5732:ollama.exe"
+        ],
+        "mean_gpu_power_watts": null,
+        "mean_gpu_utilization_percent": null,
+        "mean_model_process_family_cpu_percent_normalized": 2.314952587041083,
+        "mean_system_cpu_percent": 43.08524590163934,
+        "peak_gpu_memory_used_mib": null,
+        "peak_gpu_power_watts": null,
+        "peak_gpu_utilization_percent": null,
+        "peak_model_process_family_cpu_percent_normalized": 4.3343942099435155,
+        "peak_model_process_family_rss_bytes": 6897057792.0,
+        "peak_ollama_reported_model_size_bytes": 5569815510.0,
+        "peak_ollama_reported_vram_size_bytes": 5569815510.0,
+        "peak_system_cpu_percent": 100.0,
+        "peak_system_memory_used_bytes": 26920382464.0,
+        "samples": 122
+      }
+    },
+    "small": {
+      "model_metrics": {
+        "baseline_policy_conformant_rate": 0.4722222222222222,
+        "cold_start_latency_seconds": 24.25636719999602,
+        "epistemic_defer_rate": 0.6666666666666666,
+        "gated_policy_conformant_rate": 0.9722222222222222,
+        "known_case_preservation_rate": 0.9166666666666666,
+        "mean_generation_tokens_per_second": 18.602177885553665,
+        "mean_latency_seconds": 8.672642772222591,
+        "median_latency_seconds": 8.27183795000019,
+        "p95_latency_seconds": 12.378705600014655,
+        "parse_success_rate": 1.0,
+        "required_defer_capture_rate": 1.0,
+        "scenarios": 36,
+        "warm_mean_latency_seconds": 8.227393502857636
+      },
+      "model_name": "qwen3:4b",
+      "resource_metrics": {
+        "matched_processes_observed": [
+          "10900:llama-server.exe",
+          "16804:cmd.exe",
+          "18196:ollama app.exe",
+          "5732:ollama.exe"
+        ],
+        "mean_gpu_power_watts": null,
+        "mean_gpu_utilization_percent": null,
+        "mean_model_process_family_cpu_percent_normalized": 2.583070453754433,
+        "mean_system_cpu_percent": 56.99082568807339,
+        "peak_gpu_memory_used_mib": null,
+        "peak_gpu_power_watts": null,
+        "peak_gpu_utilization_percent": null,
+        "peak_model_process_family_cpu_percent_normalized": 3.592104771646679,
+        "peak_model_process_family_rss_bytes": 4492435456.0,
+        "peak_ollama_reported_model_size_bytes": 3178149969.0,
+        "peak_ollama_reported_vram_size_bytes": 3178149969.0,
+        "peak_system_cpu_percent": 100.0,
+        "peak_system_memory_used_bytes": 27434098688.0,
+        "samples": 109
+      }
+    }
+  },
+  "config_sha256": "2abb33231d014bb5922c5938435cd209aff3aed7631488da14f12821d7376516",
+  "experiment_id": "phase12-model-resource-ablation-v1",
+  "generated_at_utc": "2026-09-11T16:37:58.852277+00:00",
+  "integrity": {
+    "models_and_scenarios_frozen_before_execution": true,
+    "no_automatic_retries": true,
+    "no_manual_score_editing": true,
+    "not_evidence_of_flight_readiness": true,
+    "raw_model_responses_preserved": true,
+    "raw_resource_samples_preserved": true,
+    "results_must_be_machine_generated": true,
+    "same_gate_thresholds_as_phase11": true,
+    "same_scenarios_across_models": true,
+    "single_machine_measurement": true,
+    "testbed_is_synthetic": true
+  },
+  "scenarios_per_model": 36,
+  "schema_version": 1,
+  "study_role": "precommitted resource-aware local-model size ablation using the Phase 11 epistemic gate",
+  "total_model_calls": 108
+}
