@@ -2,6 +2,30 @@
 
 All notable project changes are documented here.
 
+## 1.0.0 - 2026-09-11
+
+### Follow-up research
+- added a deterministic epistemic evidence-sufficiency gate motivated by the Phase 9 failure analysis
+- completed a newly held-out paired Phase 11 mitigation experiment across 108 synthetic cases
+- completed a frozen three-model Phase 12 quality/resource ablation on identical scenarios
+- added Phase 13 Wilson intervals, paired exact McNemar analyses, and resource/quality Pareto synthesis
+
+### Security and reproducibility
+- updated the CI pytest pin from 8.4.2 to 9.1.1 to address the published tmpdir-handling advisory affecting versions below 9.0.3
+- preserved historical `pip-freeze.txt` experiment snapshots unchanged for provenance
+- kept the hash-verified CI lock and validated the update in GitHub Actions
+
+### Publication
+- finalized a v1 journal-submission manuscript generated from machine-readable Phase 11-13 results
+- prepared a canonical v1.0.0 Zenodo preprint build using reserved DOI `10.5281/zenodo.22712634`
+- added cover letter, highlights, declarations, data/code statement, and stable release notes
+- preserved the earlier Zenodo preprint versions as immutable prior records
+
+### Stable software
+- promoted the Python package metadata to `1.0.0`
+- updated citation and Zenodo metadata for the completed Phase 1-13 research program
+- retained the software concept DOI separately from the manuscript DOI
+
 ## 0.1.0-rc1 - 2026-09-11
 
 ### Research program
