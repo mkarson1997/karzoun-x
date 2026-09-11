@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+PREPRINT_DOI = "10.5281/zenodo.22710335"
 
 
 def _replace(path: Path, old: str, new: str) -> None:
@@ -48,11 +49,11 @@ def main() -> int:
     related = [
         item
         for item in zenodo.get("related_identifiers", [])
-        if item.get("identifier") != "10.5281/zenodo.22708262"
+        if item.get("identifier") != PREPRINT_DOI
     ]
     related.append(
         {
-            "identifier": "10.5281/zenodo.22708262",
+            "identifier": PREPRINT_DOI,
             "relation": "isSupplementTo",
             "scheme": "doi",
         }
