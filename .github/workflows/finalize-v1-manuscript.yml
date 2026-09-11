@@ -67,7 +67,7 @@ jobs:
           grep -F "Phase 11" dist-v1/manuscript.txt
           grep -F "Phase 12" dist-v1/manuscript.txt
           grep -F "Conclusion" dist-v1/manuscript.txt
-          grep -F "10.5281/zenodo.22708262" dist-v1/manuscript.txt
+          grep -F "10.5281/zenodo.22710335" dist-v1/manuscript.txt
 
       - name: Commit generated final research text and submission metadata
         run: |
