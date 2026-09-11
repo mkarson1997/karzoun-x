@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-11T10:15:40.610217+00:00",
+  "experiment_id": "phase10-statistical-synthesis-v1",
+  "study_role": "retrospective statistical synthesis of completed KARZOUN-X experiments",
+  "phase7b_rag_ablation": {
+    "paired_scenarios": 36,
+    "no_rag_expected_action": {
+      "successes": 6,
+      "total": 36,
+      "rate": 0.16666666666666666,
+      "wilson_95_low": 0.07870447595018114,
+      "wilson_95_high": 0.31890794311279463
+    },
+    "full_karzoun_x_expected_action": {
+      "successes": 36,
+      "total": 36,
+      "rate": 1.0,
+      "wilson_95_low": 0.9035813714055363,
+      "wilson_95_high": 1.0
+    },
+    "absolute_rate_difference": 0.8333333333333334,
+    "mcnemar_exact": {
+      "discordant_a": 0,
+      "discordant_b": 30,
+      "discordant_total": 30,
+      "two_sided_exact_p": 1.862645149230957e-09
+    }
+  },
+  "phase9_hard_stress": {
+    "policy_conformance": {
+      "successes": 26,
+      "total": 60,
+      "rate": 0.43333333333333335,
+      "wilson_95_low": 0.3157239680468677,
+      "wilson_95_high": 0.5589656122387444
+    },
+    "safe_defer": {
+      "successes": 14,
+      "total": 48,
+      "rate": 0.2916666666666667,
+      "wilson_95_low": 0.18241578926516536,
+      "wilson_95_high": 0.431792598095717
+    },
+    "unsafe_action_proposals": {
+      "successes": 0,
+      "total": 60,
+      "rate": 0.0,
+      "wilson_95_low": 0.0,
+      "wilson_95_high": 0.06017185214208986
+    },
+    "by_stress_type": {
+      "adversarial_evidence": {
+        "successes": 12,
+        "total": 12,
+        "rate": 1.0,
+        "wilson_95_low": 0.7575059933447592,
+        "wilson_95_high": 1.0
+      },
+      "ambiguous_dual_signature": {
+        "successes": 2,
+        "total": 12,
+        "rate": 0.16666666666666666,
+        "wilson_95_low": 0.04696514218385378,
+        "wilson_95_high": 0.4480308622529734
+      },
+      "conflicting_retrieval": {
+        "successes": 0,
+        "total": 12,
+        "rate": 0.0,
+        "wilson_95_low": 2.7755575615628914e-17,
+        "wilson_95_high": 0.24249400665524085
+      },
+      "missing_evidence": {
+        "successes": 0,
+        "total": 12,
+        "rate": 0.0,
+        "wilson_95_low": 2.7755575615628914e-17,
+        "wilson_95_high": 0.24249400665524085
+      },
+      "out_of_distribution": {
+        "successes": 12,
+        "total": 12,
+        "rate": 1.0,
+        "wilson_95_low": 0.7575059933447592,
+        "wilson_95_high": 1.0
+      }
+    }
+  },
+  "phase9_source_config_sha256": "eb215e07a2e514da49bf21281b33152f14d34ad3c5086900b654fb15a59219e7",
+  "resource_replication": {
+    "phase8_mean_latency_seconds": 21.575301116666296,
+    "phase8b_mean_latency_seconds": 22.723736483333695,
+    "mean_latency_difference_seconds": 1.1484353666673996,
+    "phase8_warm_mean_latency_seconds": 19.943973352940862,
+    "phase8b_warm_mean_latency_seconds": 21.26443273529431,
+    "warm_mean_latency_difference_seconds": 1.320459382353448,
+    "interpretation": "Descriptive single-host replication only; Phase 8 and Phase 8B used different synthetic seeds and are not treated as paired inferential samples."
+  },
+  "integrity": {
+    "no_new_model_calls": true,
+    "source_results_unchanged": true,
+    "retrospective_not_preregistered": true,
+    "wilson_confidence_level": 0.95,
+    "mcnemar_test": "exact two-sided binomial",
+    "synthetic_results_not_flight_readiness": true
+  }
+}
