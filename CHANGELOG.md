@@ -2,7 +2,7 @@
 
 All notable project changes are documented here.
 
-## 0.1.0 - Unreleased
+## 0.1.0-rc1 - 2026-09-11
 
 ### Research program
 - completed three auditable SMAP/MSL telemetry detector experiments
@@ -28,12 +28,14 @@ All notable project changes are documented here.
 - raw local-model responses retained for local-LLM experiments
 - environment, timing, and resource artifacts retained where applicable
 - CI uses pinned, hash-verified binary dependencies
+- added a reproducible PDF/DOCX preprint build and preflight workflow
 
 ### Paper
 - expanded the manuscript through Phase 10
 - filled related-work framing and clarified novelty relative to prior LLM spacecraft-operator research
 - added executed RAG ablation, communication, resource, hard-stress, statistical, safety, limitation, and conclusion sections
 - expanded bibliography with spacecraft autonomy, fault-management, and LLM-spacecraft references
+- added publication figures and completed a 14-page A4 preprint proofread pass
 
 ## 0.1.0-alpha - 2026-09-08
 

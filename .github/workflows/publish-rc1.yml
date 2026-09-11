@@ -1,0 +1,67 @@
+name: Publish v0.1.0-rc1
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_zenodo_enabled:
+        description: "Confirm Zenodo GitHub integration is enabled for mkarson1997/karzoun-x"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: ${{ inputs.confirm_zenodo_enabled == 'yes' }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: v0.1.0-rc1
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Refuse duplicate release
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG already exists; refusing to overwrite it."
+            exit 1
+          fi
+
+      - name: Install publication toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pandoc \
+            texlive-xetex \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            fonts-dejavu-core \
+            lmodern \
+            librsvg2-bin \
+            poppler-utils
+
+      - name: Build release preprint assets
+        run: python paper/build_preprint.py --output-dir dist
+
+      - name: Preflight release PDF
+        run: |
+          pdfinfo dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf
+          pdftotext dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf dist/preprint.txt
+          grep -F "KARZOUN-X" dist/preprint.txt
+          grep -F "Phase 9" dist/preprint.txt
+          grep -F "References" dist/preprint.txt
+
+      - name: Create immutable GitHub release candidate
+        run: |
+          gh release create "$RELEASE_TAG" \
+            dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf \
+            dist/KARZOUN-X-preprint-v0.1.0-rc1.docx \
+            --target "$GITHUB_SHA" \
+            --title "KARZOUN-X v0.1.0-rc1" \
+            --notes-file docs/releases/v0.1.0-rc1.md \
+            --prerelease
