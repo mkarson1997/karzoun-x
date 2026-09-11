@@ -1,8 +1,8 @@
 # KARZOUN-X preprint release metadata
 
-This file records the metadata for the first public KARZOUN-X preprint deposit. It deliberately separates the **paper/preprint record** from the **software release record** so that the paper DOI is not confused with the software DOI.
+This file records the public KARZOUN-X preprint deposits. It deliberately separates the **paper/preprint record** from the **software release record** so that paper and software identifiers are never conflated.
 
-## Preprint deposit
+## Canonical current preprint
 
 - **Resource type:** Publication / Preprint
 - **Title:** KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay
@@ -11,9 +11,19 @@ This file records the metadata for the first public KARZOUN-X preprint deposit. 
 - **Publication date:** 2026-09-11
 - **Language:** English
 - **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
-- **Version:** v0.1.0-rc1
+- **Version:** v0.1.0-rc2
 - **Repository:** https://github.com/mkarson1997/karzoun-x
-- **Reserved preprint DOI:** 10.5281/zenodo.22708262
+- **Version DOI:** 10.5281/zenodo.22710335
+- **Concept DOI for all preprint versions:** 10.5281/zenodo.22708261
+
+The rc2 PDF is the canonical published Phase 1–10 manuscript baseline. Later Phase 11–13 follow-up work must be added as a new version rather than silently rewriting the rc2 record.
+
+### Historical first preprint version
+
+- **Version:** v0.1.0-rc1
+- **Version DOI:** 10.5281/zenodo.22708262
+
+The rc1 record is retained as immutable publication history.
 
 ### Description
 
@@ -34,10 +44,10 @@ KARZOUN-X studies a local-first spacecraft fault-diagnosis and low-risk decision
 
 ### Related identifiers
 
-For the preprint deposit, add:
+The preprint record is linked to:
 
-1. Software DOI `10.5281/zenodo.22708005` as the software associated with this preprint.
-2. Repository URL `https://github.com/mkarson1997/karzoun-x` as the source-code repository.
+1. Software DOI `10.5281/zenodo.22708005` as associated research software.
+2. Repository URL `https://github.com/mkarson1997/karzoun-x` as source code.
 
 ## Software archival record
 
@@ -46,16 +56,14 @@ The GitHub release `v0.1.0-rc1` is archived separately as **Software** through t
 - **Software version DOI:** 10.5281/zenodo.22708005
 - **Software concept DOI:** 10.5281/zenodo.22708004
 
-The software DOI and the preprint DOI remain distinct. After the preprint is published, cross-link the two Zenodo records, update repository citation guidance, and then add the DOI-backed preprint to ORCID.
-
-## Publication order
+## Publication chronology
 
 1. Zenodo GitHub integration enabled for `mkarson1997/karzoun-x`.
-2. GitHub release `v0.1.0-rc1` published and archived by Zenodo as Software.
-3. Software DOI issued: `10.5281/zenodo.22708005`.
-4. Preprint DOI reserved: `10.5281/zenodo.22708262`.
-5. Rebuild the preprint PDF with the reserved DOI embedded in the title-page metadata.
-6. Upload that PDF to the separate Zenodo Preprint draft, complete metadata, and publish.
-7. Cross-link software and preprint records, update repository citation guidance, and add the DOI-backed preprint to ORCID.
+2. GitHub software release `v0.1.0-rc1` archived by Zenodo.
+3. Software version DOI issued: `10.5281/zenodo.22708005`.
+4. Preprint rc1 published with DOI `10.5281/zenodo.22708262`.
+5. Corrected canonical rc2 preprint published with DOI `10.5281/zenodo.22710335`.
+6. The preprint concept DOI `10.5281/zenodo.22708261` resolves across the version chain.
+7. Phase 11–13 follow-up research is kept separate from the frozen rc2 evidence until a new manuscript version is generated from completed machine-readable results.
 
-Do not invent identifiers. Record only identifiers actually issued or reserved by Zenodo.
+Do not invent identifiers and do not overwrite published evidence retrospectively. Record only identifiers actually issued by Zenodo.
