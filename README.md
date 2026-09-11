@@ -2,19 +2,20 @@
 
 **Resource-Aware, Safety-Gated Local AI for Autonomous Spacecraft Fault Diagnosis**
 
-[![Research status: DOI-backed preprint](https://img.shields.io/badge/research-DOI--backed%20preprint-blueviolet)](https://doi.org/10.5281/zenodo.22708262)
-[![Preprint DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22708262.svg)](https://doi.org/10.5281/zenodo.22708262)
+[![Research status: DOI-backed preprint](https://img.shields.io/badge/research-DOI--backed%20preprint-blueviolet)](https://doi.org/10.5281/zenodo.22710335)
+[![Preprint DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22710335.svg)](https://doi.org/10.5281/zenodo.22710335)
 [![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22708005.svg)](https://doi.org/10.5281/zenodo.22708005)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
 [![License](https://img.shields.io/badge/code-Apache--2.0-green)](LICENSE)
 
 KARZOUN-X is an open research project investigating whether a **locally deployed language model**, augmented with **retrieval-augmented generation (RAG)** and deterministic safety constraints, can support spacecraft fault diagnosis and low-risk decision support when Earth communication is delayed or unavailable.
 
-The first public manuscript is now a DOI-backed Zenodo **preprint**. The project remains a reproducible research prototype, not flight software. It separates probabilistic reasoning from deterministic action authorization and preserves machine-generated experiment artifacts, raw model responses, hashes, environment metadata, and negative results for audit.
+The canonical public manuscript is now a DOI-backed Zenodo **preprint**. The project remains a reproducible research prototype, not flight software. It separates probabilistic reasoning from deterministic action authorization and preserves machine-generated experiment artifacts, raw model responses, hashes, environment metadata, and negative results for audit.
 
 ## Archival records
 
-- **Preprint:** https://doi.org/10.5281/zenodo.22708262
+- **Canonical preprint v0.1.0-rc2:** https://doi.org/10.5281/zenodo.22710335
+- **Preprint concept DOI (all versions):** https://doi.org/10.5281/zenodo.22708261
 - **Software release v0.1.0-rc1:** https://doi.org/10.5281/zenodo.22708005
 - **Software concept DOI:** https://doi.org/10.5281/zenodo.22708004
 - **ORCID:** https://orcid.org/0009-0006-2752-7744
@@ -203,7 +204,7 @@ Completed:
 - [x] confidence intervals and paired statistical synthesis
 - [x] manuscript updated through Phase 10
 - [x] archived software release candidate with real DOI
-- [x] public preprint with real DOI
+- [x] canonical public preprint v0.1.0-rc2 with DOI
 - [x] Phase 11 protocol frozen before held-out execution
 - [x] Phase 12 multi-model resource-ablation protocol frozen before execution
 - [ ] execute Phase 11 and Phase 12 locally and archive machine-generated results
@@ -232,7 +233,7 @@ See [`RESEARCH_ETHICS.md`](RESEARCH_ETHICS.md), [`paper/manuscript.md`](paper/ma
 
 For the research manuscript, cite:
 
-> Karzoun, Mahmoud. (2026). *KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay* (v0.1.0-rc1). Zenodo. https://doi.org/10.5281/zenodo.22708262
+> Karzoun, Mahmoud. (2026). *KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay* (v0.1.0-rc2). Zenodo. https://doi.org/10.5281/zenodo.22710335
 
 For the archived software release, use DOI **10.5281/zenodo.22708005**. Machine-readable citation metadata is available in [`CITATION.cff`](CITATION.cff).
 
