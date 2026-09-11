@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -22,6 +23,10 @@ def _prepare_markdown() -> Path:
     source = (PAPER / "manuscript.md").read_text(encoding="utf-8")
     abstract_at = source.index("## Abstract")
     body = source[abstract_at:]
+
+    # Long hexadecimal provenance identifiers do not wrap reliably in Pandoc's
+    # LaTeX inline-code representation. Start each SHA-256 value on its own line.
+    body = re.sub(r"SHA-256 (`[0-9a-f]{64}`)", r"SHA-256  \n\1", body)
 
     insertions = {
         "`Telemetry → Anomaly Detection → Local Retrieval → Local LLM → Deterministic Safety Gate → Allowed Low-Risk Action / Denial / Escalation`": (
