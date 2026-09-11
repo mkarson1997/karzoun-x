@@ -26,22 +26,22 @@ def _prepare_markdown() -> Path:
     insertions = {
         "`Telemetry → Anomaly Detection → Local Retrieval → Local LLM → Deterministic Safety Gate → Allowed Low-Risk Action / Denial / Escalation`": (
             "`Telemetry → Anomaly Detection → Local Retrieval → Local LLM → Deterministic Safety Gate → Allowed Low-Risk Action / Denial / Escalation`\n\n"
-            "![KARZOUN-X evaluated local decision architecture. Probabilistic reasoning is separated from deterministic action authorization.](figures/architecture.png){#fig:architecture width=95%}"
+            "![KARZOUN-X evaluated local decision architecture. Probabilistic reasoning is separated from deterministic action authorization.](paper/figures/architecture.png){#fig:architecture width=95%}"
         ),
         "This is deterministic counterfactual timing, not a live network experiment. It isolates the propagation-delay consequence of requiring a ground round trip.": (
-            "![Local versus ground-dependent decision time under deterministic communication-delay references. The horizontal scale is logarithmic.](figures/communication_latency.png){#fig:communication width=92%}\n\n"
+            "![Local versus ground-dependent decision time under deterministic communication-delay references. The horizontal scale is logarithmic.](paper/figures/communication_latency.png){#fig:communication width=92%}\n\n"
             "This is deterministic counterfactual timing, not a live network experiment. It isolates the propagation-delay consequence of requiring a ground round trip."
         ),
         "In all 30 discordant action-selection pairs, the full system was correct and the no-RAG condition was not.": (
-            "![Paired Phase 7B expected-action match with and without retrieved evidence.](figures/phase7b_rag_ablation.png){#fig:rag-ablation width=88%}\n\n"
+            "![Paired Phase 7B expected-action match with and without retrieved evidence.](paper/figures/phase7b_rag_ablation.png){#fig:rag-ablation width=88%}\n\n"
             "In all 30 discordant action-selection pairs, the full system was correct and the no-RAG condition was not."
         ),
         "The mean-latency difference between Phase 8 and Phase 8B was only about `+1.148 s`": (
-            "![Phase 8B local model memory measurements. VRAM is Ollama-reported allocation, not an independent hardware-sensor reading.](figures/resource_footprint.png){#fig:resource width=88%}\n\n"
+            "![Phase 8B local model memory measurements. VRAM is Ollama-reported allocation, not an independent hardware-sensor reading.](paper/figures/resource_footprint.png){#fig:resource width=88%}\n\n"
             "The mean-latency difference between Phase 8 and Phase 8B was only about `+1.148 s`"
         ),
         "No explicitly unsafe action was proposed (`0/60`; 95% Wilson upper bound approximately `0.0602`)": (
-            "![Phase 9 hard-stress policy conformance by stress family. Perfect performance on OOD and tested adversarial evidence coexists with severe abstention failures under ambiguity, conflicting retrieval, and missing evidence.](figures/phase9_hard_stress.png){#fig:phase9 width=92%}\n\n"
+            "![Phase 9 hard-stress policy conformance by stress family. Perfect performance on OOD and tested adversarial evidence coexists with severe abstention failures under ambiguity, conflicting retrieval, and missing evidence.](paper/figures/phase9_hard_stress.png){#fig:phase9 width=92%}\n\n"
             "No explicitly unsafe action was proposed (`0/60`; 95% Wilson upper bound approximately `0.0602`)"
         ),
     }
