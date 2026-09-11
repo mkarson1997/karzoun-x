@@ -2,27 +2,19 @@
 
 **Resource-Aware, Safety-Gated Local AI for Autonomous Spacecraft Fault Diagnosis**
 
-[![Research status: prototype](https://img.shields.io/badge/research-prototype-orange)](#research-status)
+[![Research status: preprint candidate](https://img.shields.io/badge/research-preprint%20candidate-blueviolet)](#research-status)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
 [![License](https://img.shields.io/badge/code-Apache--2.0-green)](LICENSE)
 
-KARZOUN-X is an open research project exploring whether a **locally deployed, resource-constrained language model**, augmented with **retrieval-augmented generation (RAG)** and a **deterministic safety gate**, can improve spacecraft fault diagnosis and decision support when Earth communication is delayed, intermittent, or unavailable.
+KARZOUN-X is an open research project investigating whether a **locally deployed language model**, augmented with **retrieval-augmented generation (RAG)** and a **deterministic action-safety gate**, can support spacecraft fault diagnosis and low-risk decision support when Earth communication is delayed or unavailable.
 
-The project is intentionally designed as a reproducible research system rather than a flight-ready product. It separates probabilistic AI reasoning from deterministic action authorization so that generated recommendations can be inspected, constrained, rejected, and benchmarked.
+The project is a reproducible research prototype, not flight software. It separates probabilistic reasoning from deterministic action authorization and preserves machine-generated experiment artifacts, raw model responses, hashes, environment metadata, and negative results for audit.
 
 ## Research question
 
-> Can a locally deployed, resource-constrained LLM augmented with retrieval and deterministic safety constraints improve autonomous spacecraft fault diagnosis and decision support during long communication delays or loss of Earth connectivity?
+> Can a locally deployed LLM augmented with retrieval and deterministic safety constraints improve spacecraft fault diagnosis and decision support during long communication delays or loss of Earth connectivity?
 
-## Hypothesis
-
-A hybrid architecture combining telemetry anomaly detection, local retrieval-augmented reasoning, and deterministic safety constraints will provide more useful and explainable fault-management decisions than standalone anomaly detection or unconstrained LLM reasoning, while reducing unsafe autonomous actions.
-
-## Why this matters
-
-Deep-space operations cannot always depend on immediate ground intervention. NASA continues to identify autonomous fault management, onboard event-driven operations, and resilient spacecraft autonomy as important technology needs. KARZOUN-X investigates one possible software architecture for that problem using open, reproducible experiments.
-
-## Planned architecture
+## Architecture
 
 ```text
 Telemetry
@@ -40,45 +32,89 @@ Local LLM Reasoner
 Deterministic Safety Gate
    |----------------------|
    v                      v
-Authorized Action     Human/Ground Review
+Allowed Low-Risk Step   Deny / Escalate
    |
    v
 Audit Log + Metrics
 ```
 
-A communication simulator can inject latency, packet loss, and complete communication outages around the decision loop.
+The evaluated system does **not** execute commands on a real spacecraft.
 
-## Experimental tracks
+## What has been evaluated
 
-| Track | System | Purpose |
-|---|---|---|
-| A | Anomaly detector only | Classical baseline |
-| B | Local LLM only | Measure unconstrained reasoning behavior |
-| C | Local LLM + RAG | Measure grounding benefit |
-| D | KARZOUN-X: detector + RAG + LLM + safety gate + comms simulation | Full proposed architecture |
+The repository now contains a completed experiment program through **Phase 10**:
 
-## Evaluation metrics
+| Area | Evidence |
+|---|---|
+| Real telemetry anomaly detection | SMAP/MSL benchmark, 82 benchmark records, 517,764 evaluated test points |
+| Detector iteration | Three auditable statistical detector experiments, including a retained mixed result |
+| Synthetic retrieval/safety mechanics | Held-out and expanded deterministic fault scenarios |
+| Local LLM reasoning | Qwen3 14B local Ollama experiments with structured JSON output |
+| RAG ablation | Paired no-RAG versus full-evidence comparison |
+| Communication delay/outage | Deterministic local versus ground-dependent timing analysis |
+| Resource characterization | Cold/warm latency, CPU, process-family memory, Ollama-reported model/VRAM allocation |
+| Hard-stress behavior | Ambiguity, conflicting retrieval, missing evidence, OOD telemetry, adversarial evidence |
+| Statistical synthesis | Wilson intervals and retrospective exact paired McNemar analysis |
 
-Planned metrics include:
+Detailed provenance is in [`experiments/RESULTS_INDEX.md`](experiments/RESULTS_INDEX.md).
 
-- anomaly precision, recall, F1 and event-level detection quality
-- diagnostic accuracy
-- false-alarm rate
-- unsafe-action proposal rate
-- safety-gate rejection rate
-- hallucination / unsupported-claim rate
-- decision latency
-- CPU, RAM and optional GPU/VRAM usage
-- performance under simulated communication delay and outage
-- explanation traceability to retrieved evidence
+## Selected results
 
-No result will be reported until it is produced by a reproducible experiment. **This repository does not contain fabricated benchmark results.**
+These results must be interpreted within their stated experimental scope.
 
-## Dataset direction
+### Real SMAP/MSL telemetry
 
-The first benchmark track targets the public spacecraft telemetry anomaly data released with the Telemanom work, covering telemetry from NASA's **SMAP** spacecraft and **Mars Science Laboratory (Curiosity)**. The upstream dataset contains 82 unique telemetry channels and 105 labeled anomaly sequences.
+The strongest of the first three detector runs was Phase 3, with total pointwise:
 
-Dataset files are not redistributed here by default. See [`data/README.md`](data/README.md) and [`scripts/download_telemanom.py`](scripts/download_telemanom.py).
+- precision: **0.3257**
+- recall: **0.5366**
+- F1: **0.4054**
+- event recall: **0.7333**
+
+Phase 3 is reported as **exploratory**, because its design followed inspection of the earlier benchmark results.
+
+### Paired local-LLM RAG comparison
+
+On the 36-scenario-per-condition Phase 7B synthetic benchmark:
+
+- diagnosis accuracy: **36/36** with and without RAG
+- expected-action match without RAG: **6/36 = 16.7%**
+- expected-action match with full KARZOUN-X: **36/36 = 100%**
+- full-system evidence match: **36/36 = 100%**
+
+A retrospective exact McNemar synthesis produced `p = 1.8626e-09` for the paired action-selection difference. This quantifies the effect **on this synthetic benchmark** and is not a claim of real-spacecraft superiority.
+
+### Hard-stress result
+
+Phase 9 intentionally made the reasoning task harder. Overall fail-safe policy conformance fell to **26/60 = 43.3%**.
+
+- out-of-distribution cases: **12/12** policy conformant
+- tested adversarial-evidence cases: **12/12** policy conformant
+- ambiguous dual-signature cases: **2/12** policy conformant
+- conflicting-retrieval cases: **0/12** policy conformant
+- missing-evidence cases: **0/12** policy conformant
+- explicitly unsafe action proposals: **0/60**
+
+This mixed result is central to the paper: deterministic action gating can constrain hazardous actions, but it does not by itself guarantee appropriate uncertainty or evidence sufficiency.
+
+### Local resource footprint
+
+Phase 8B measured the full local path on one Windows host:
+
+- mean latency: **22.724 s**
+- warm mean latency: **21.264 s**
+- cold start: **47.532 s**
+- peak model process-family RSS: **9.822 GiB**
+- Ollama-reported model size: **9.456 GiB**
+- Ollama-reported VRAM allocation: **6.113 GiB**
+
+Direct `nvidia-smi` utilization and power telemetry were unavailable, so those measurements are not claimed.
+
+## Dataset
+
+The real-data track uses the public SMAP/MSL anomaly benchmark associated with the Telemanom work. Dataset files are not redistributed by default. Acquisition instructions, source hashes, and benchmark caveats are documented in [`data/README.md`](data/README.md).
+
+SMAP/MSL is used for **anomaly detection only**. It does not provide the detailed root-cause and recovery-action labels required for the diagnosis experiments, so later diagnosis/action evaluations use a separate synthetic testbed with known labels.
 
 ## Quick start
 
@@ -91,7 +127,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-Run a small synthetic demonstration:
+Run the small synthetic demonstration:
 
 ```bash
 karzoun-x demo
@@ -99,8 +135,7 @@ karzoun-x demo
 
 Optional local LLM integration uses an Ollama-compatible endpoint:
 
-```bash
-# PowerShell example
+```powershell
 $env:KARZOUN_X_OLLAMA_URL="http://127.0.0.1:11434"
 $env:KARZOUN_X_OLLAMA_MODEL="qwen3:14b-q4_K_M"
 karzoun-x ollama-check
@@ -111,59 +146,64 @@ karzoun-x ollama-check
 ```text
 karzoun-x/
 ├── src/karzoun_x/
-│   ├── telemetry/            # telemetry data structures and loaders
-│   ├── anomaly_detection/    # reproducible baseline detectors
-│   ├── rag/                  # local evidence retrieval
-│   ├── reasoning/            # local LLM adapters
-│   ├── safety/               # deterministic authorization rules
-│   ├── communication/        # delay/outage simulation
-│   ├── pipeline.py           # end-to-end orchestration
-│   └── cli.py                # command-line interface
-├── data/                     # dataset instructions only; raw data ignored
-├── experiments/              # future experiment configurations/results
-├── benchmarks/               # benchmark definitions
+│   ├── telemetry/
+│   ├── anomaly_detection/
+│   ├── rag/
+│   ├── reasoning/
+│   ├── safety/
+│   ├── communication/
+│   ├── simulator/
+│   ├── pipeline.py
+│   └── cli.py
+├── data/                     # acquisition/provenance instructions
+├── experiments/              # frozen configurations + results index
+├── results/                  # machine-generated experiment artifacts
 ├── paper/                    # manuscript and bibliography
-├── docs/                     # architecture and research protocol
-├── tests/                    # unit tests
-└── .github/                  # contribution and CI templates
+├── docs/                     # architecture, protocols, analyses, incidents
+├── tests/
+└── .github/workflows/
 ```
 
 ## Research status
 
-**Stage:** preprint-oriented research prototype.
+**Stage:** preprint candidate / research-prototype release preparation.
 
-Current scope:
+Completed:
 
-- [x] research question and falsifiable hypothesis
-- [x] reproducible repository structure
-- [x] baseline telemetry anomaly detector
-- [x] deterministic safety-gate prototype
-- [x] communication-delay simulator
-- [x] local retrieval component
-- [x] Ollama-compatible local reasoning adapter
-- [x] manuscript skeleton and protocol
-- [ ] ingest upstream SMAP/MSL benchmark data
-- [ ] freeze benchmark split and metrics
-- [ ] run baselines
-- [ ] run local-LLM experiments
-- [ ] complete ablation study
-- [ ] report results with confidence intervals where appropriate
-- [ ] release preprint
-- [ ] archive a versioned release with a DOI
+- [x] research question, scope, and falsifiable experiment program
+- [x] SMAP/MSL data acquisition and provenance
+- [x] three telemetry detector experiments
+- [x] synthetic retrieval and deterministic safety mechanics validation
+- [x] valid local-LLM no-RAG versus RAG experiments
+- [x] communication delay and ground-link outage analysis
+- [x] expanded end-to-end local-LLM evaluation
+- [x] corrected resource instrumentation replication
+- [x] precommitted hard-stress experiment
+- [x] confidence intervals and paired statistical synthesis
+- [x] manuscript updated through the completed experiment program
+- [ ] resolve remaining release security alert
+- [ ] freeze the first archival software release
+- [ ] render and independently proofread the preprint PDF
+- [ ] archive software/preprint and mint real DOI(s)
+- [ ] add the DOI-backed work to ORCID
 
 ## Scientific integrity
 
-KARZOUN-X distinguishes clearly between:
+KARZOUN-X distinguishes between:
 
-1. **implemented capabilities**,
-2. **planned experiments**, and
-3. **validated empirical findings**.
+1. **real telemetry anomaly-detection results**;
+2. **synthetic diagnosis/action experiments**;
+3. **deterministic counterfactual communication analysis**;
+4. **single-host resource measurements**;
+5. **future work that has not been executed**.
 
-The project does not claim flight qualification, NASA endorsement, mission deployment, or validated superiority before experiments are completed. See [`RESEARCH_ETHICS.md`](RESEARCH_ETHICS.md).
+Negative and mixed findings are retained rather than hidden. The repository does not claim flight qualification, NASA endorsement, mission deployment, or certified autonomous superiority.
+
+See [`RESEARCH_ETHICS.md`](RESEARCH_ETHICS.md), [`paper/manuscript.md`](paper/manuscript.md), and [`experiments/RESULTS_INDEX.md`](experiments/RESULTS_INDEX.md).
 
 ## Citation
 
-Until a DOI-backed release exists, cite the repository using [`CITATION.cff`](CITATION.cff). After a versioned archival release is created, the DOI should replace the temporary repository URL in scholarly citations.
+Until a DOI-backed release exists, cite the repository using [`CITATION.cff`](CITATION.cff). After archival release, the real DOI metadata will replace repository-only citation guidance.
 
 ## Author
 
@@ -172,8 +212,8 @@ ORCID: `0009-0006-2752-7744`
 
 ## License
 
-Code is licensed under the **Apache License 2.0**. Unless otherwise stated, research text and figures authored specifically for the manuscript are intended for later release under **CC BY 4.0** at preprint/publication time.
+Code is licensed under the **Apache License 2.0**. Unless otherwise stated, manuscript text and original research figures are intended for release under **CC BY 4.0** at preprint/publication time.
 
 ## Disclaimer
 
-This is experimental research software. It is **not flight software**, is not certified for safety-critical operation, and must not be used to control real spacecraft or other safety-critical systems without independent engineering validation, verification, certification, and mission-specific authorization.
+KARZOUN-X is experimental research software. It is **not flight software**, is not certified for safety-critical operation, and must not be used to control real spacecraft or other safety-critical systems without independent engineering validation, verification, certification, and mission-specific authorization.
