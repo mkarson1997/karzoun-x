@@ -15,7 +15,7 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | `phase7b-end-to-end-local-llm-v1` | Completed | Local Ollama, commit `8ffab178a4635aeef54142c0bfcb8df28d63406d` | `results/phase7b/` |
 | `phase8-resource-benchmark-v1` | Completed, partial resource observability | Local hardware, commit `69df26079cd853b962809fa38f6de023d69b182a` | `results/phase8/` |
 | `phase8b-resource-instrumentation-v1` | Completed | Local hardware, commit `2965abd06d449e69d05f32860eb876e829d075c6` | `results/phase8b/` |
-| `phase9-hard-stress-local-llm-v1` | Protocol frozen, local execution pending | Local Ollama required | `experiments/configs/phase9_hard_stress.json` |
+| `phase9-hard-stress-local-llm-v1` | Completed, mixed hard-stress result | Local Ollama, commit `f7efc3db67c9ae152daae7c08c40c2369c94e31c` | `results/phase9/` |
 
 ## Phase 1 provenance
 
@@ -134,8 +134,23 @@ Detailed interpretation: `docs/phase8-analysis.md`.
 
 Detailed interpretation: `docs/phase8b-analysis.md`.
 
-## Phase 9 protocol
+## Phase 9 provenance
 
-Phase 9 is frozen before execution in `experiments/configs/phase9_hard_stress.json`. It contains 60 deterministic synthetic cases across two seeds, five stress families, and six source fault families. The stress families are ambiguous dual signatures, conflicting retrieval, out-of-distribution telemetry, adversarial evidence containing unsafe embedded instructions, and missing evidence. The precommitted policy adds an explicit `unknown` diagnosis and requires a safe defer action when evidence is ambiguous, conflicting, missing, or outside the local catalogue. Model proposals and downstream SafetyGate containment are scored separately. No automatic retries or manual score edits are allowed.
+- Frozen config SHA-256: `eb215e07a2e514da49bf21281b33152f14d34ad3c5086900b654fb15a59219e7`.
+- Source commit executed: `c851a297e2c53065d16cc927028c1c81a996a9fa`; result commit: `f7efc3db67c9ae152daae7c08c40c2369c94e31c`.
+- Result-commit CI: GitHub Actions `34587337630`, conclusion `success`.
+- Model: `qwen3:14b-q4_K_M` via local Ollama; seeds `6601`, `6602`; 60 calls; no automatic retries.
+- Stress families: ambiguous dual signature, conflicting retrieval, out-of-distribution telemetry, adversarial evidence, and missing evidence.
+- Parse success: `60/60 = 1.0000`.
+- Overall policy conformance: `26/60 = 0.4333`.
+- Safe defer on cases precommitted to `unknown`: `14/48 = 0.2917`.
+- Adversarial-evidence resistance: `12/12 = 1.0000`.
+- Out-of-distribution policy conformance: `12/12 = 1.0000`.
+- Ambiguous dual-signature policy conformance: `2/12 = 0.1667`.
+- Conflicting-retrieval policy conformance: `0/12 = 0.0000`.
+- Missing-evidence policy conformance: `0/12 = 0.0000`.
+- Unsafe action proposals: `0/60 = 0.0000`; no unsafe false authorization occurred.
+- Mean latency: `24.693 s`; median latency: `24.106 s`; mean generation throughput: `5.366 tok/s`.
+- Interpretation: Phase 9 is an informative mixed/negative result. It shows strong behavior on the tested OOD and adversarial-evidence cases but poor abstention under ambiguity, misleading retrieval, and absent retrieval. The current deterministic `SafetyGate` constrains action hazard but does not guarantee epistemic correctness for low-risk actions.
 
-Detailed protocol: `docs/phase9-protocol.md`.
+Detailed interpretation: `docs/phase9-analysis.md`.
