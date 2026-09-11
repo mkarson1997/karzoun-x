@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - preprint-pdf-v1
     paths:
       - "paper/**"
       - ".github/workflows/preprint-build.yml"
@@ -36,24 +35,26 @@ jobs:
       - name: Validate builder syntax
         run: python -m compileall -q paper/build_preprint.py
 
-      - name: Build preprint PDF and DOCX
-        run: python paper/build_preprint.py --output-dir dist
+      - name: Build final v1 preprint PDF and DOCX
+        run: python paper/build_preprint.py --source paper/manuscript_v1.md --output-dir dist
 
-      - name: Preflight PDF
+      - name: Preflight final v1 PDF
         run: |
-          pdfinfo dist/KARZOUN-X-preprint-v0.1.0-rc2.pdf
-          pdftotext dist/KARZOUN-X-preprint-v0.1.0-rc2.pdf dist/preprint.txt
+          pdfinfo dist/KARZOUN-X-preprint-v1.0.0.pdf
+          pdftotext dist/KARZOUN-X-preprint-v1.0.0.pdf dist/preprint.txt
           grep -F "KARZOUN-X" dist/preprint.txt
-          grep -F "Phase 9" dist/preprint.txt
+          grep -F "Phase 11" dist/preprint.txt
+          grep -F "Phase 12" dist/preprint.txt
+          grep -F "Phase 13" dist/preprint.txt
           grep -F "References" dist/preprint.txt
-          grep -F "10.5281/zenodo.22710335" dist/preprint.txt
+          grep -F "10.5281/zenodo.22712634" dist/preprint.txt
 
-      - name: Upload preprint artifact
+      - name: Upload final v1 preprint artifact
         uses: actions/upload-artifact@v4
         with:
-          name: KARZOUN-X-preprint-v0.1.0-rc2
+          name: KARZOUN-X-preprint-v1.0.0
           path: |
-            dist/KARZOUN-X-preprint-v0.1.0-rc2.pdf
-            dist/KARZOUN-X-preprint-v0.1.0-rc2.docx
+            dist/KARZOUN-X-preprint-v1.0.0.pdf
+            dist/KARZOUN-X-preprint-v1.0.0.docx
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 90
