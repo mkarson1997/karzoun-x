@@ -1,6 +1,6 @@
 # KARZOUN-X preprint release metadata
 
-This file records the intended metadata for the first public KARZOUN-X preprint deposit. It deliberately separates the **paper/preprint record** from the **software release record** so that the paper DOI is not confused with the software DOI.
+This file records the metadata for the first public KARZOUN-X preprint deposit. It deliberately separates the **paper/preprint record** from the **software release record** so that the paper DOI is not confused with the software DOI.
 
 ## Preprint deposit
 
@@ -13,6 +13,7 @@ This file records the intended metadata for the first public KARZOUN-X preprint 
 - **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 - **Version:** v0.1.0-rc1
 - **Repository:** https://github.com/mkarson1997/karzoun-x
+- **Reserved preprint DOI:** 10.5281/zenodo.22708262
 
 ### Description
 
@@ -31,22 +32,30 @@ KARZOUN-X studies a local-first spacecraft fault-diagnosis and low-risk decision
 - uncertainty
 - autonomous systems
 
-### Recommended related identifier
+### Related identifiers
 
-Add the GitHub repository as a related identifier with a relation indicating that the repository is the software/source associated with the preprint.
+For the preprint deposit, add:
+
+1. Software DOI `10.5281/zenodo.22708005` as the software associated with this preprint.
+2. Repository URL `https://github.com/mkarson1997/karzoun-x` as the source-code repository.
 
 ## Software archival record
 
-The GitHub release `v0.1.0-rc1` is intended to be archived separately as **Software** through the Zenodo-GitHub integration. Zenodo should read `.zenodo.json` for that software record. Because `.zenodo.json` is present, Zenodo will use it instead of `CITATION.cff` for GitHub-release metadata.
+The GitHub release `v0.1.0-rc1` is archived separately as **Software** through the Zenodo-GitHub integration.
 
-The software DOI and the preprint DOI should remain distinct. After both are public, cross-link them as related identifiers and add the DOI-backed preprint to ORCID.
+- **Software version DOI:** 10.5281/zenodo.22708005
+- **Software concept DOI:** 10.5281/zenodo.22708004
+
+The software DOI and the preprint DOI remain distinct. After the preprint is published, cross-link the two Zenodo records, update repository citation guidance, and then add the DOI-backed preprint to ORCID.
 
 ## Publication order
 
-1. Enable the public `mkarson1997/karzoun-x` repository in Zenodo's GitHub integration before creating the GitHub release.
-2. Run the repository workflow **Publish v0.1.0-rc1** to create the tagged GitHub release with PDF/DOCX assets.
-3. Confirm that Zenodo has ingested the GitHub release and issued the software DOI.
-4. Create a separate Zenodo upload for the preprint PDF using the metadata above and publish it to mint the preprint DOI.
-5. Cross-link the two Zenodo records, update repository citation guidance, and then add the preprint work to ORCID.
+1. Zenodo GitHub integration enabled for `mkarson1997/karzoun-x`.
+2. GitHub release `v0.1.0-rc1` published and archived by Zenodo as Software.
+3. Software DOI issued: `10.5281/zenodo.22708005`.
+4. Preprint DOI reserved: `10.5281/zenodo.22708262`.
+5. Rebuild the preprint PDF with the reserved DOI embedded in the title-page metadata.
+6. Upload that PDF to the separate Zenodo Preprint draft, complete metadata, and publish.
+7. Cross-link software and preprint records, update repository citation guidance, and add the DOI-backed preprint to ORCID.
 
-Do not invent or pre-fill a DOI. Record only identifiers actually issued by the archive.
+Do not invent identifiers. Record only identifiers actually issued or reserved by Zenodo.
