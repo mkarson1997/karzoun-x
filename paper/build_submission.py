@@ -114,7 +114,7 @@ citecolor: blue
 ---
 
 **ORCID:** 0009-0006-2752-7744  
-**Prior public preprint:** DOI [10.5281/zenodo.22708262](https://doi.org/10.5281/zenodo.22708262)  
+**Prior public preprint:** DOI [10.5281/zenodo.22710335](https://doi.org/10.5281/zenodo.22710335)  
 **Research status:** prototype / journal-submission candidate; not flight-qualified or certified for autonomous control.
 
 '''
