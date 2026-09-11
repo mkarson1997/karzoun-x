@@ -1,0 +1,7 @@
+﻿KARZOUN-X Phase 9 local hard-stress environment
+timestamp_local=2026-09-11T12:38:57.4216985+03:00
+source_commit=c851a297e2c53065d16cc927028c1c81a996a9fa
+python=Python 3.11.9
+ollama=ollama version is 0.34.0
+model=qwen3:14b-q4_K_M
+ollama_base_url=http://127.0.0.1:11434
