@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use KARZOUN-X in research, cite the DOI-backed preprint and the archived software release as appropriate."
+message: "If you use KARZOUN-X in research, cite the DOI-backed v1 preprint and the archived software concept DOI as appropriate."
 title: "KARZOUN-X: Resource-Aware, Safety-Gated Local AI for Autonomous Spacecraft Fault Diagnosis"
 type: software
 authors:
@@ -8,9 +8,9 @@ authors:
     orcid: "https://orcid.org/0009-0006-2752-7744"
 repository-code: "https://github.com/mkarson1997/karzoun-x"
 license: Apache-2.0
-version: 0.1.0-rc1
+version: 1.0.0
 date-released: "2026-09-11"
-doi: "10.5281/zenodo.22708005"
+doi: "10.5281/zenodo.22708004"
 keywords:
   - spacecraft autonomy
   - local LLM
@@ -18,14 +18,16 @@ keywords:
   - fault diagnosis
   - telemetry
   - safety gate
+  - epistemic gate
   - deep-space systems
   - communication delay
 abstract: >-
   KARZOUN-X is an open research prototype investigating resource-aware local language-model reasoning,
-  retrieval augmentation, telemetry anomaly detection, deterministic action constraints, delayed or
-  unavailable ground communication, and auditable fault-diagnosis decision support. The repository
-  contains real SMAP/MSL anomaly-detection experiments and separately labeled synthetic diagnosis,
-  safety, hard-stress, communication, and resource experiments. It is not flight-qualified software.
+  retrieval augmentation, telemetry anomaly detection, deterministic epistemic evidence checks,
+  deterministic action constraints, delayed or unavailable ground communication, and auditable
+  fault-diagnosis decision support. The repository contains real SMAP/MSL anomaly-detection
+  experiments and separately labeled synthetic diagnosis, safety, hard-stress, communication,
+  resource, mitigation, and statistical-synthesis experiments. It is not flight-qualified software.
 preferred-citation:
   type: article
   authors:
@@ -35,4 +37,4 @@ preferred-citation:
   title: "KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay"
   year: 2026
   publisher: Zenodo
-  doi: "10.5281/zenodo.22710335"
+  doi: "10.5281/zenodo.22712634"
