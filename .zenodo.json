@@ -1,0 +1,30 @@
+{
+  "title": "KARZOUN-X: Resource-Aware, Safety-Gated Local AI for Autonomous Spacecraft Fault Diagnosis",
+  "upload_type": "software",
+  "description": "Open research prototype for local spacecraft fault-diagnosis decision support combining telemetry anomaly detection, retrieval-augmented local LLM reasoning, deterministic action gating, communication-delay analysis, hard-stress evaluation, and resource measurement. The software is not flight-qualified.",
+  "creators": [
+    {
+      "name": "Karzoun, Mahmoud",
+      "orcid": "0009-0006-2752-7744"
+    }
+  ],
+  "access_right": "open",
+  "license": "Apache-2.0",
+  "keywords": [
+    "spacecraft autonomy",
+    "fault diagnosis",
+    "local LLM",
+    "retrieval-augmented generation",
+    "telemetry anomaly detection",
+    "safety gating",
+    "deep-space communication",
+    "resource-aware AI"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/mkarson1997/karzoun-x",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
