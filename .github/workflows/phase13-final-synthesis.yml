@@ -1,0 +1,66 @@
+name: Phase 13 Final Statistical Synthesis
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "results/phase11/**"
+      - "results/phase12/**"
+      - "scripts/run_phase13_final_synthesis.py"
+      - ".github/workflows/phase13-final-synthesis.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: src
+
+concurrency:
+  group: phase13-final-synthesis
+  cancel-in-progress: false
+
+jobs:
+  synthesis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11.16"
+
+      - name: Check for Phase 11 and Phase 12 results
+        id: ready
+        shell: bash
+        run: |
+          if [[ -f results/phase11/summary.json && -f results/phase12/summary.json ]]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Phase 11/12 results are not both present yet; synthesis is intentionally deferred."
+          fi
+
+      - name: Run final statistical synthesis
+        if: steps.ready.outputs.ready == 'true'
+        run: |
+          python scripts/run_phase13_final_synthesis.py | tee results-phase13.log
+          cat results/phase13/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit machine-generated synthesis
+        if: steps.ready.outputs.ready == 'true'
+        run: |
+          git config user.name "Mahmoud Karzoun"
+          git config user.email "135722882+mkarson1997@users.noreply.github.com"
+          git add results/phase13 results-phase13.log
+          if git diff --cached --quiet; then
+            echo "No Phase 13 result changes to commit."
+            exit 0
+          fi
+          git commit -m "results: record Phase 13 final statistical synthesis"
+          git pull --rebase origin main
+          git push origin HEAD:main

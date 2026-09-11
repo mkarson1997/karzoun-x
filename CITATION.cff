@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use KARZOUN-X in research, cite the tagged software release and its archival DOI once available."
+message: "If you use KARZOUN-X in research, cite the DOI-backed preprint and the archived software release as appropriate."
 title: "KARZOUN-X: Resource-Aware, Safety-Gated Local AI for Autonomous Spacecraft Fault Diagnosis"
 type: software
 authors:
@@ -9,6 +9,8 @@ authors:
 repository-code: "https://github.com/mkarson1997/karzoun-x"
 license: Apache-2.0
 version: 0.1.0-rc1
+date-released: "2026-09-11"
+doi: "10.5281/zenodo.22708005"
 keywords:
   - spacecraft autonomy
   - local LLM
@@ -24,3 +26,13 @@ abstract: >-
   unavailable ground communication, and auditable fault-diagnosis decision support. The repository
   contains real SMAP/MSL anomaly-detection experiments and separately labeled synthetic diagnosis,
   safety, hard-stress, communication, and resource experiments. It is not flight-qualified software.
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Karzoun
+      given-names: Mahmoud
+      orcid: "https://orcid.org/0009-0006-2752-7744"
+  title: "KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay"
+  year: 2026
+  publisher: Zenodo
+  doi: "10.5281/zenodo.22710335"

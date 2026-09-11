@@ -13,7 +13,7 @@ TITLE = (
     "KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture "
     "for Autonomous Spacecraft Fault Diagnosis Under Communication Delay"
 )
-PREPRINT_DOI = "10.5281/zenodo.22708262"
+PREPRINT_DOI = "10.5281/zenodo.22710335"
 
 
 def _run(*args: str) -> None:
@@ -65,7 +65,7 @@ title: "{TITLE}"
 author:
   - "Mahmoud Karzoun"
 date: "11 September 2026"
-subtitle: "Open research preprint candidate · KARZOUN-X v0.1.0-rc1"
+subtitle: "Open research preprint · KARZOUN-X v0.1.0-rc2"
 lang: en
 papersize: a4
 fontsize: 10pt
@@ -78,7 +78,7 @@ citecolor: blue
 
 **ORCID:** 0009-0006-2752-7744  
 **DOI:** [{PREPRINT_DOI}](https://doi.org/{PREPRINT_DOI})  
-**Research status:** prototype / preprint candidate; not flight-qualified or certified for autonomous control.
+**Research status:** prototype / preprint; not flight-qualified or certified for autonomous control.
 
 '''
     BUILD.mkdir(parents=True, exist_ok=True)
@@ -99,8 +99,8 @@ def build(output_dir: Path) -> None:
     _render_figures()
     markdown = _prepare_markdown()
     output_dir.mkdir(parents=True, exist_ok=True)
-    pdf = output_dir / "KARZOUN-X-preprint-v0.1.0-rc1.pdf"
-    docx = output_dir / "KARZOUN-X-preprint-v0.1.0-rc1.docx"
+    pdf = output_dir / "KARZOUN-X-preprint-v0.1.0-rc2.pdf"
+    docx = output_dir / "KARZOUN-X-preprint-v0.1.0-rc2.docx"
 
     common = [
         "pandoc",

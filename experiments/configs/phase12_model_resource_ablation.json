@@ -1,0 +1,80 @@
+{
+  "experiment_id": "phase12-model-resource-ablation-v1",
+  "status": "protocol-frozen-before-execution",
+  "study_role": "precommitted resource-aware local-model size ablation using the Phase 11 epistemic gate",
+  "models": [
+    {
+      "label": "small",
+      "model_name": "qwen3:4b"
+    },
+    {
+      "label": "medium",
+      "model_name": "qwen3:8b"
+    },
+    {
+      "label": "large",
+      "model_name": "qwen3:14b-q4_K_M"
+    }
+  ],
+  "generation": {
+    "provider": "ollama-local",
+    "temperature": 0.0,
+    "num_predict": 220,
+    "timeout_seconds": 300,
+    "think": false,
+    "structured_output": "json-schema"
+  },
+  "testbed": {
+    "heldout_seed": 8801,
+    "families": [
+      "clean_known",
+      "ambiguous_dual_signature",
+      "conflicting_retrieval",
+      "out_of_distribution",
+      "adversarial_evidence",
+      "missing_evidence"
+    ],
+    "fault_catalogue_classes": 6,
+    "scenarios_per_model": 36,
+    "total_model_calls": 108,
+    "same_scenarios_for_all_models": true,
+    "explicit_source_fault_label_in_prompt": false
+  },
+  "epistemic_gate": {
+    "minimum_top_support": 0.24,
+    "minimum_top_margin": 0.14,
+    "require_provided_top_match": true,
+    "untrusted_document_prefixes": ["untrusted-note-"]
+  },
+  "resource_sampling": {
+    "interval_seconds": 0.5,
+    "process_name_tokens": ["ollama", "llama-server"],
+    "ollama_api_ps": true,
+    "nvidia_smi_optional": true,
+    "unload_between_models": true
+  },
+  "primary_metrics": [
+    "gated_policy_conformant_rate",
+    "known_case_preservation_rate",
+    "required_defer_capture_rate",
+    "mean_latency_seconds",
+    "p95_latency_seconds",
+    "mean_generation_tokens_per_second",
+    "peak_model_process_family_rss_bytes",
+    "peak_ollama_reported_model_size_bytes",
+    "peak_ollama_reported_vram_size_bytes"
+  ],
+  "integrity": {
+    "models_and_scenarios_frozen_before_execution": true,
+    "same_gate_thresholds_as_phase11": true,
+    "same_scenarios_across_models": true,
+    "results_must_be_machine_generated": true,
+    "raw_model_responses_preserved": true,
+    "raw_resource_samples_preserved": true,
+    "no_manual_score_editing": true,
+    "no_automatic_retries": true,
+    "single_machine_measurement": true,
+    "testbed_is_synthetic": true,
+    "not_evidence_of_flight_readiness": true
+  }
+}

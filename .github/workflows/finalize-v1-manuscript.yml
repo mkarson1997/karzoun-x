@@ -1,0 +1,105 @@
+name: Finalize v1 Manuscript
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "results/phase13/**"
+      - "scripts/finalize_followup_manuscript.py"
+      - "scripts/generate_submission_package.py"
+      - "paper/build_submission.py"
+      - ".github/workflows/finalize-v1-manuscript.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: src
+
+concurrency:
+  group: finalize-v1-manuscript
+  cancel-in-progress: false
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify completed follow-up result chain
+        run: |
+          test -f results/phase11/summary.json
+          test -f results/phase12/summary.json
+          test -f results/phase13/summary.json
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11.16"
+
+      - name: Install publication toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pandoc \
+            texlive-xetex \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            fonts-dejavu-core \
+            lmodern \
+            librsvg2-bin \
+            poppler-utils
+
+      - name: Generate final manuscript and journal package
+        run: |
+          python scripts/finalize_followup_manuscript.py
+          python scripts/generate_submission_package.py
+          python paper/build_submission.py --output-dir dist-v1
+
+      - name: Preflight final PDF
+        run: |
+          pdfinfo dist-v1/KARZOUN-X-journal-submission-v1.0.0.pdf
+          pdftotext dist-v1/KARZOUN-X-journal-submission-v1.0.0.pdf dist-v1/manuscript.txt
+          grep -F "Phase 11" dist-v1/manuscript.txt
+          grep -F "Phase 12" dist-v1/manuscript.txt
+          grep -F "Conclusion" dist-v1/manuscript.txt
+          grep -F "10.5281/zenodo.22708262" dist-v1/manuscript.txt
+
+      - name: Commit generated final research text and submission metadata
+        run: |
+          git config user.name "Mahmoud Karzoun"
+          git config user.email "135722882+mkarson1997@users.noreply.github.com"
+          git add \
+            paper/manuscript_v1.md \
+            paper/figures/phase11_epistemic_gate.svg \
+            paper/figures/phase12_model_tradeoff.svg \
+            paper/submission/cover_letter_v1.md \
+            paper/submission/highlights_v1.txt \
+            paper/submission/submission_metadata_v1.json \
+            paper/submission/submission_checklist.md
+          if git diff --cached --quiet; then
+            echo "No final-manuscript source changes to commit."
+          else
+            git commit -m "paper: finalize v1 manuscript after Phase 11-13"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Upload journal-submission artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: KARZOUN-X-journal-submission-v1.0.0
+          path: |
+            dist-v1/KARZOUN-X-journal-submission-v1.0.0.pdf
+            dist-v1/KARZOUN-X-journal-submission-v1.0.0.docx
+            paper/submission/cover_letter_v1.md
+            paper/submission/highlights_v1.txt
+            paper/submission/data_code_availability.md
+            paper/submission/author_declarations.md
+            paper/submission/submission_metadata_v1.json
+            paper/submission/submission_checklist.md
+          if-no-files-found: error
