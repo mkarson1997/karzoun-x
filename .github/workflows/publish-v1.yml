@@ -1,0 +1,141 @@
+name: Publish v1.0.0
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_results_reviewed:
+        description: "Confirm Phase 11-13 results and final manuscript were reviewed"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+      confirm_security_review:
+        description: "Confirm the remaining Dependabot alert was resolved or explicitly documented"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+      confirm_zenodo_enabled:
+        description: "Confirm Zenodo GitHub integration remains enabled for mkarson1997/karzoun-x"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+  push:
+    branches: [main]
+    paths:
+      - ".github/release-v1.0.0.confirmed"
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: src
+
+jobs:
+  release:
+    if: >-
+      ${{ github.event_name == 'push' ||
+          (github.event_name == 'workflow_dispatch' &&
+           inputs.confirm_results_reviewed == 'yes' &&
+           inputs.confirm_security_review == 'yes' &&
+           inputs.confirm_zenodo_enabled == 'yes') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: v1.0.0
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Refuse duplicate stable release
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG already exists; refusing to overwrite it."
+            exit 1
+          fi
+
+      - name: Verify completed research chain
+        run: |
+          test -f results/phase11/summary.json
+          test -f results/phase12/summary.json
+          test -f results/phase13/summary.json
+          test -f paper/manuscript_v1.md
+          test -f paper/submission/submission_metadata_v1.json
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11.16"
+
+      - name: Install hash-verified CI dependencies
+        run: python -m pip install --require-hashes --only-binary=:all: --no-deps -r requirements-ci.lock
+
+      - name: Promote metadata to stable v1.0.0
+        run: python scripts/promote_v1_release.py
+
+      - name: Quality checks after promotion
+        run: |
+          ruff check .
+          pytest
+
+      - name: Install publication toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pandoc \
+            texlive-xetex \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            fonts-dejavu-core \
+            lmodern \
+            librsvg2-bin \
+            poppler-utils
+
+      - name: Build stable journal manuscript artifact
+        run: python paper/build_submission.py --output-dir dist-v1
+
+      - name: Preflight stable manuscript
+        run: |
+          pdfinfo dist-v1/KARZOUN-X-journal-submission-v1.0.0.pdf
+          pdftotext dist-v1/KARZOUN-X-journal-submission-v1.0.0.pdf dist-v1/manuscript.txt
+          grep -F "Phase 11" dist-v1/manuscript.txt
+          grep -F "Phase 12" dist-v1/manuscript.txt
+          grep -F "10.5281/zenodo.22710335" dist-v1/manuscript.txt
+          grep -F "Conclusion" dist-v1/manuscript.txt
+
+      - name: Commit stable metadata
+        run: |
+          git config user.name "Mahmoud Karzoun"
+          git config user.email "135722882+mkarson1997@users.noreply.github.com"
+          git add pyproject.toml CITATION.cff .zenodo.json CHANGELOG.md ROADMAP.md README.md
+          if git diff --cached --quiet; then
+            echo "Stable metadata already promoted."
+          else
+            git commit -m "release: promote KARZOUN-X to v1.0.0"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+          echo "RELEASE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Create stable GitHub software release
+        run: |
+          gh release create "$RELEASE_TAG" \
+            --target "$RELEASE_SHA" \
+            --title "KARZOUN-X v1.0.0" \
+            --notes "Stable research software release after the held-out Phase 11 epistemic-gate study, Phase 12 three-model quality/resource ablation, and Phase 13 statistical synthesis. The research manuscript is archived separately as a Zenodo preprint; this software is not flight-qualified."
+
+      - name: Upload stable manuscript build artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: KARZOUN-X-v1.0.0-final-manuscript
+          path: |
+            dist-v1/KARZOUN-X-journal-submission-v1.0.0.pdf
+            dist-v1/KARZOUN-X-journal-submission-v1.0.0.docx
+          if-no-files-found: error
