@@ -13,6 +13,7 @@ TITLE = (
     "KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture "
     "for Autonomous Spacecraft Fault Diagnosis Under Communication Delay"
 )
+PREPRINT_DOI = "10.5281/zenodo.22708262"
 
 
 def _run(*args: str) -> None:
@@ -76,6 +77,7 @@ citecolor: blue
 ---
 
 **ORCID:** 0009-0006-2752-7744  
+**DOI:** [{PREPRINT_DOI}](https://doi.org/{PREPRINT_DOI})  
 **Research status:** prototype / preprint candidate; not flight-qualified or certified for autonomous control.
 
 '''
