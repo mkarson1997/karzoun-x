@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#222"/>
+    </marker>
+    <style>
+      .box{fill:#f7f7f7;stroke:#222;stroke-width:2;rx:12;ry:12}
+      .title{font:600 20px sans-serif;fill:#111;text-anchor:middle}
+      .sub{font:15px sans-serif;fill:#333;text-anchor:middle}
+      .arrow{stroke:#222;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+      .note{font:14px sans-serif;fill:#444;text-anchor:middle}
+    </style>
+  </defs>
+  <rect x="20" y="105" width="170" height="90" class="box"/>
+  <text x="105" y="140" class="title">Telemetry</text>
+  <text x="105" y="168" class="sub">real or synthetic</text>
+  <path d="M190 150 H235" class="arrow"/>
+  <rect x="235" y="105" width="180" height="90" class="box"/>
+  <text x="325" y="140" class="title">Anomaly</text>
+  <text x="325" y="168" class="sub">Detection</text>
+  <path d="M415 150 H460" class="arrow"/>
+  <rect x="460" y="105" width="180" height="90" class="box"/>
+  <text x="550" y="140" class="title">Local RAG</text>
+  <text x="550" y="168" class="sub">evidence retrieval</text>
+  <path d="M640 150 H685" class="arrow"/>
+  <rect x="685" y="105" width="180" height="90" class="box"/>
+  <text x="775" y="140" class="title">Local LLM</text>
+  <text x="775" y="168" class="sub">schema-constrained</text>
+  <path d="M865 150 H910" class="arrow"/>
+  <rect x="910" y="105" width="190" height="90" class="box"/>
+  <text x="1005" y="140" class="title">Safety Gate</text>
+  <text x="1005" y="168" class="sub">deterministic policy</text>
+  <path d="M1100 150 H1155" class="arrow"/>
+  <text x="600" y="42" class="title">KARZOUN-X local decision path</text>
+  <text x="600" y="320" class="note">Probabilistic reasoning proposes a diagnosis/action; deterministic policy authorizes, denies, or escalates the action.</text>
+  <text x="1170" y="135" class="sub" transform="rotate(90 1170 135)">Allowed / Deny / Escalate</text>
+</svg>
