@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 env:
   PYTHONPATH: src
@@ -59,8 +60,16 @@ jobs:
           git add results/phase13 results-phase13.log
           if git diff --cached --quiet; then
             echo "No Phase 13 result changes to commit."
-            exit 0
+          else
+            git commit -m "results: record Phase 13 final statistical synthesis"
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
-          git commit -m "results: record Phase 13 final statistical synthesis"
-          git pull --rebase origin main
-          git push origin HEAD:main
+
+      - name: Dispatch final v1 manuscript build
+        if: steps.ready.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run finalize-v1-manuscript.yml --ref main
+          echo "Dispatched Finalize v1 Manuscript after Phase 13 synthesis."
