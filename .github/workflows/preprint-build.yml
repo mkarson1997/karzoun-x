@@ -41,18 +41,19 @@ jobs:
 
       - name: Preflight PDF
         run: |
-          pdfinfo dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf
-          pdftotext dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf dist/preprint.txt
+          pdfinfo dist/KARZOUN-X-preprint-v0.1.0-rc2.pdf
+          pdftotext dist/KARZOUN-X-preprint-v0.1.0-rc2.pdf dist/preprint.txt
           grep -F "KARZOUN-X" dist/preprint.txt
           grep -F "Phase 9" dist/preprint.txt
           grep -F "References" dist/preprint.txt
+          grep -F "10.5281/zenodo.22710335" dist/preprint.txt
 
       - name: Upload preprint artifact
         uses: actions/upload-artifact@v4
         with:
-          name: KARZOUN-X-preprint-v0.1.0-rc1
+          name: KARZOUN-X-preprint-v0.1.0-rc2
           path: |
-            dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf
-            dist/KARZOUN-X-preprint-v0.1.0-rc1.docx
+            dist/KARZOUN-X-preprint-v0.1.0-rc2.pdf
+            dist/KARZOUN-X-preprint-v0.1.0-rc2.docx
           if-no-files-found: error
           retention-days: 30
