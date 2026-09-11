@@ -173,19 +173,66 @@ def _render(summary: dict[str, Any]) -> str:
     mcnemar = ablation["mcnemar_exact"]
     resources = summary["resource_replication"]
 
+    intro = (
+        "This is a retrospective statistical synthesis of already-frozen experiment "
+        "results. It does not create new model outputs and is not a preregistered "
+        "confirmatory trial."
+    )
+    no_rag_line = (
+        "- No-RAG expected-action match: "
+        f"{_interval(ablation['no_rag_expected_action'])}."
+    )
+    full_line = (
+        "- Full KARZOUN-X expected-action match: "
+        f"{_interval(ablation['full_karzoun_x_expected_action'])}."
+    )
+    diff_line = (
+        "- Absolute paired rate difference: "
+        f"{_pct(ablation['absolute_rate_difference'])}."
+    )
+    mcnemar_line = (
+        "- Exact two-sided McNemar p-value: "
+        f"`{float(mcnemar['two_sided_exact_p']):.3e}` with "
+        f"{int(mcnemar['discordant_a'])} no-RAG-only and "
+        f"{int(mcnemar['discordant_b'])} full-system-only correct pairs."
+    )
+    external_validity = (
+        "The paired test quantifies the action-selection difference on this synthetic "
+        "testbed; it does not establish external validity for real spacecraft operations."
+    )
+    phase8_line = (
+        "- Phase 8 mean latency: "
+        f"`{resources['phase8_mean_latency_seconds']:.3f} s`; Phase 8B: "
+        f"`{resources['phase8b_mean_latency_seconds']:.3f} s`."
+    )
+    warm_line = (
+        "- Phase 8 warm mean: "
+        f"`{resources['phase8_warm_mean_latency_seconds']:.3f} s`; Phase 8B: "
+        f"`{resources['phase8b_warm_mean_latency_seconds']:.3f} s`."
+    )
+    interpretation = (
+        "The combined evidence supports two simultaneous conclusions. First, retrieved "
+        "evidence strongly changed action selection on the clean/separable Phase 7B "
+        "benchmark. Second, Phase 9 shows that the same local model is not reliably "
+        "calibrated to abstain when evidence is ambiguous, conflicting, or missing. "
+        "Deterministic action gating prevented explicitly hazardous proposals in the "
+        "observed stress run, but it cannot by itself guarantee epistemic correctness "
+        "for low-risk diagnostic actions."
+    )
+
     lines = [
         "# KARZOUN-X Phase 10 Statistical Synthesis",
         "",
-        "This is a retrospective statistical synthesis of already-frozen experiment results. It does not create new model outputs and is not a preregistered confirmatory trial.",
+        intro,
         "",
         "## Phase 7B retrieval ablation",
         "",
-        f"- No-RAG expected-action match: {_interval(ablation['no_rag_expected_action'])}.",
-        f"- Full KARZOUN-X expected-action match: {_interval(ablation['full_karzoun_x_expected_action'])}.",
-        f"- Absolute paired rate difference: {_pct(ablation['absolute_rate_difference'])}.",
-        f"- Exact two-sided McNemar p-value: `{float(mcnemar['two_sided_exact_p']):.3e}` with {int(mcnemar['discordant_a'])} no-RAG-only and {int(mcnemar['discordant_b'])} full-system-only correct pairs.",
+        no_rag_line,
+        full_line,
+        diff_line,
+        mcnemar_line,
         "",
-        "The paired test quantifies the action-selection difference on this synthetic testbed; it does not establish external validity for real spacecraft operations.",
+        external_validity,
         "",
         "## Phase 9 hard-stress uncertainty",
         "",
@@ -203,13 +250,13 @@ def _render(summary: dict[str, Any]) -> str:
             "",
             "## Resource replication",
             "",
-            f"- Phase 8 mean latency: `{resources['phase8_mean_latency_seconds']:.3f} s`; Phase 8B: `{resources['phase8b_mean_latency_seconds']:.3f} s`.",
-            f"- Phase 8 warm mean: `{resources['phase8_warm_mean_latency_seconds']:.3f} s`; Phase 8B: `{resources['phase8b_warm_mean_latency_seconds']:.3f} s`.",
+            phase8_line,
+            warm_line,
             f"- {resources['interpretation']}",
             "",
             "## Interpretation",
             "",
-            "The combined evidence supports two simultaneous conclusions. First, retrieved evidence strongly changed action selection on the clean/separable Phase 7B benchmark. Second, Phase 9 shows that the same local model is not reliably calibrated to abstain when evidence is ambiguous, conflicting, or missing. Deterministic action gating prevented explicitly hazardous proposals in the observed stress run, but it cannot by itself guarantee epistemic correctness for low-risk diagnostic actions.",
+            interpretation,
             "",
         ]
     )
@@ -227,7 +274,9 @@ def main() -> int:
         "schema_version": 1,
         "generated_at_utc": datetime.now(UTC).isoformat(),
         "experiment_id": "phase10-statistical-synthesis-v1",
-        "study_role": "retrospective statistical synthesis of completed KARZOUN-X experiments",
+        "study_role": (
+            "retrospective statistical synthesis of completed KARZOUN-X experiments"
+        ),
         "phase7b_rag_ablation": _phase7b_ablation(phase7b_rows),
         "phase9_hard_stress": _phase9_stress(phase9_rows),
         "phase9_source_config_sha256": phase9_summary["config_sha256"],
@@ -248,7 +297,8 @@ def main() -> int:
         encoding="utf-8",
     )
     (OUTPUT_DIR / "summary.md").write_text(_render(summary), encoding="utf-8")
-    print("KARZOUN_X_PHASE10_RESULT=" + json.dumps(summary, separators=(",", ":")))
+    marker = json.dumps(summary, separators=(",", ":"))
+    print("KARZOUN_X_PHASE10_RESULT=" + marker)
     print((OUTPUT_DIR / "summary.md").read_text(encoding="utf-8"))
     return 0
 
