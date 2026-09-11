@@ -16,6 +16,7 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | `phase8-resource-benchmark-v1` | Completed, partial resource observability | Local hardware, commit `69df26079cd853b962809fa38f6de023d69b182a` | `results/phase8/` |
 | `phase8b-resource-instrumentation-v1` | Completed | Local hardware, commit `2965abd06d449e69d05f32860eb876e829d075c6` | `results/phase8b/` |
 | `phase9-hard-stress-local-llm-v1` | Completed, mixed hard-stress result | Local Ollama, commit `f7efc3db67c9ae152daae7c08c40c2369c94e31c` | `results/phase9/` |
+| `phase10-statistical-synthesis-v1` | Completed, retrospective synthesis | GitHub Actions `34588327705` | `results/phase10/` |
 
 ## Phase 1 provenance
 
@@ -154,3 +155,17 @@ Detailed interpretation: `docs/phase8b-analysis.md`.
 - Interpretation: Phase 9 is an informative mixed/negative result. It shows strong behavior on the tested OOD and adversarial-evidence cases but poor abstention under ambiguity, misleading retrieval, and absent retrieval. The current deterministic `SafetyGate` constrains action hazard but does not guarantee epistemic correctness for low-risk actions.
 
 Detailed interpretation: `docs/phase9-analysis.md`.
+
+## Phase 10 provenance
+
+- Study role: retrospective statistical synthesis of completed experiments; no new model calls.
+- Source merge commit: `fc8cb3ddc1015ca610e2554d93710d394fcb3fa9`.
+- GitHub Actions run: `34588327705`, conclusion `success`.
+- Result commit: `84a5798d612e502b2611ca25e74a4c3ecfbffc22`.
+- Phase 7B paired expected-action match: `6/36 = 0.1667` no-RAG versus `36/36 = 1.0000` full KARZOUN-X; absolute difference `0.8333`.
+- Exact two-sided McNemar result: 0 no-RAG-only versus 30 full-system-only correct discordant pairs; `p = 1.862645149230957e-09`.
+- Phase 9 overall policy conformance: `26/60 = 0.4333`, 95% Wilson interval `0.3157–0.5590`.
+- Phase 9 safe defer: `14/48 = 0.2917`, 95% Wilson interval `0.1824–0.4318`.
+- Phase 9 unsafe-action proposals: `0/60`, 95% Wilson upper bound `0.0602`.
+- Phase 8 versus Phase 8B mean-latency difference: `+1.148 s`; warm-mean difference: `+1.320 s`, descriptive only because the runs use different synthetic seeds.
+- Interpretation: this synthesis quantifies uncertainty and the paired RAG action-selection effect without reinterpreting the original protocols. It is retrospective and is not presented as preregistered confirmatory inference.
