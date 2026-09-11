@@ -29,6 +29,7 @@ jobs:
             texlive-latex-extra \
             texlive-fonts-recommended \
             fonts-dejavu-core \
+            lmodern \
             librsvg2-bin \
             poppler-utils
 
