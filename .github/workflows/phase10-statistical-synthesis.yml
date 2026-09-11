@@ -1,0 +1,51 @@
+name: Phase 10 Statistical Synthesis
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/phase10-statistical-synthesis.yml"
+      - "scripts/run_phase10_statistical_synthesis.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: src
+
+concurrency:
+  group: phase10-statistical-synthesis
+  cancel-in-progress: false
+
+jobs:
+  synthesis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.11.16"
+
+      - name: Run retrospective statistical synthesis
+        run: |
+          python scripts/run_phase10_statistical_synthesis.py | tee results-phase10.log
+          cat results/phase10/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit machine-generated synthesis
+        run: |
+          git config user.name "Mahmoud Karzoun"
+          git config user.email "135722882+mkarson1997@users.noreply.github.com"
+          git add results/phase10 results-phase10.log
+          if git diff --cached --quiet; then
+            echo "No Phase 10 result changes to commit."
+            exit 0
+          fi
+          git commit -m "results: record Phase 10 statistical synthesis"
+          git pull --rebase origin main
+          git push origin HEAD:main
