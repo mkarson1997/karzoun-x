@@ -2,13 +2,24 @@
 
 **Resource-Aware, Safety-Gated Local AI for Autonomous Spacecraft Fault Diagnosis**
 
-[![Research status: preprint candidate](https://img.shields.io/badge/research-preprint%20candidate-blueviolet)](#research-status)
+[![Research status: DOI-backed preprint](https://img.shields.io/badge/research-DOI--backed%20preprint-blueviolet)](https://doi.org/10.5281/zenodo.22708262)
+[![Preprint DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22708262.svg)](https://doi.org/10.5281/zenodo.22708262)
+[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22708005.svg)](https://doi.org/10.5281/zenodo.22708005)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
 [![License](https://img.shields.io/badge/code-Apache--2.0-green)](LICENSE)
 
-KARZOUN-X is an open research project investigating whether a **locally deployed language model**, augmented with **retrieval-augmented generation (RAG)** and a **deterministic action-safety gate**, can support spacecraft fault diagnosis and low-risk decision support when Earth communication is delayed or unavailable.
+KARZOUN-X is an open research project investigating whether a **locally deployed language model**, augmented with **retrieval-augmented generation (RAG)** and deterministic safety constraints, can support spacecraft fault diagnosis and low-risk decision support when Earth communication is delayed or unavailable.
 
-The project is a reproducible research prototype, not flight software. It separates probabilistic reasoning from deterministic action authorization and preserves machine-generated experiment artifacts, raw model responses, hashes, environment metadata, and negative results for audit.
+The first public manuscript is now a DOI-backed Zenodo **preprint**. The project remains a reproducible research prototype, not flight software. It separates probabilistic reasoning from deterministic action authorization and preserves machine-generated experiment artifacts, raw model responses, hashes, environment metadata, and negative results for audit.
+
+## Archival records
+
+- **Preprint:** https://doi.org/10.5281/zenodo.22708262
+- **Software release v0.1.0-rc1:** https://doi.org/10.5281/zenodo.22708005
+- **Software concept DOI:** https://doi.org/10.5281/zenodo.22708004
+- **ORCID:** https://orcid.org/0009-0006-2752-7744
+
+The preprint DOI and software DOI are intentionally distinct and cross-linked as related research outputs.
 
 ## Research question
 
@@ -29,10 +40,13 @@ Local Knowledge Retrieval (RAG)
 Local LLM Reasoner
    |
    v
-Deterministic Safety Gate
+Epistemic Evidence Gate   # Phase 11 mitigation under evaluation
+   |
+   v
+Deterministic Action Safety Gate
    |----------------------|
    v                      v
-Allowed Low-Risk Step   Deny / Escalate
+Allowed Low-Risk Step   Defer / Deny / Escalate
    |
    v
 Audit Log + Metrics
@@ -42,7 +56,7 @@ The evaluated system does **not** execute commands on a real spacecraft.
 
 ## What has been evaluated
 
-The repository now contains a completed experiment program through **Phase 10**:
+The DOI-backed preprint reports the completed experiment program through **Phase 10**:
 
 | Area | Evidence |
 |---|---|
@@ -56,9 +70,16 @@ The repository now contains a completed experiment program through **Phase 10**:
 | Hard-stress behavior | Ambiguity, conflicting retrieval, missing evidence, OOD telemetry, adversarial evidence |
 | Statistical synthesis | Wilson intervals and retrospective exact paired McNemar analysis |
 
+Two follow-up protocols are now frozen before execution:
+
+- **Phase 11:** held-out paired evaluation of a deterministic evidence-sufficiency / epistemic gate designed after the Phase 9 failure analysis.
+- **Phase 12:** three-model local resource/quality ablation (`qwen3:4b`, `qwen3:8b`, `qwen3:14b-q4_K_M`) using the same Phase 11 gate and identical held-out scenarios.
+
+A Phase 13 workflow will synthesize confidence intervals, paired tests, and resource/quality Pareto results after both follow-up experiments are complete.
+
 Detailed provenance is in [`experiments/RESULTS_INDEX.md`](experiments/RESULTS_INDEX.md).
 
-## Selected results
+## Selected published-preprint results
 
 These results must be interpreted within their stated experimental scope.
 
@@ -95,7 +116,7 @@ Phase 9 intentionally made the reasoning task harder. Overall fail-safe policy c
 - missing-evidence cases: **0/12** policy conformant
 - explicitly unsafe action proposals: **0/60**
 
-This mixed result is central to the paper: deterministic action gating can constrain hazardous actions, but it does not by itself guarantee appropriate uncertainty or evidence sufficiency.
+This mixed result is central to the paper: deterministic action gating can constrain hazardous actions, but it does not by itself guarantee appropriate uncertainty or evidence sufficiency. Phase 11 is explicitly designed to test a mitigation for this failure mode on newly held-out seeds.
 
 ### Local resource footprint
 
@@ -108,7 +129,7 @@ Phase 8B measured the full local path on one Windows host:
 - Ollama-reported model size: **9.456 GiB**
 - Ollama-reported VRAM allocation: **6.113 GiB**
 
-Direct `nvidia-smi` utilization and power telemetry were unavailable, so those measurements are not claimed.
+Direct `nvidia-smi` utilization and power telemetry were unavailable, so those measurements are not claimed. Phase 12 extends the resource study across three frozen local model sizes on the same host and scenarios.
 
 ## Dataset
 
@@ -166,7 +187,7 @@ karzoun-x/
 
 ## Research status
 
-**Stage:** preprint candidate / research-prototype release preparation.
+**Stage:** DOI-backed public preprint + archived software RC; follow-up safety/resource experiments frozen before execution.
 
 Completed:
 
@@ -180,12 +201,17 @@ Completed:
 - [x] corrected resource instrumentation replication
 - [x] precommitted hard-stress experiment
 - [x] confidence intervals and paired statistical synthesis
-- [x] manuscript updated through the completed experiment program
-- [ ] resolve remaining release security alert
-- [ ] freeze the first archival software release
-- [ ] render and independently proofread the preprint PDF
-- [ ] archive software/preprint and mint real DOI(s)
-- [ ] add the DOI-backed work to ORCID
+- [x] manuscript updated through Phase 10
+- [x] archived software release candidate with real DOI
+- [x] public preprint with real DOI
+- [x] Phase 11 protocol frozen before held-out execution
+- [x] Phase 12 multi-model resource-ablation protocol frozen before execution
+- [ ] execute Phase 11 and Phase 12 locally and archive machine-generated results
+- [ ] run Phase 13 final synthesis
+- [ ] resolve or document the remaining Dependabot moderate alert before stable v1.0.0
+- [ ] produce final v1.0.0 manuscript/release after follow-up results
+- [ ] add DOI-backed work to ORCID
+- [ ] submit the final manuscript to an appropriate peer-reviewed venue
 
 ## Scientific integrity
 
@@ -195,7 +221,8 @@ KARZOUN-X distinguishes between:
 2. **synthetic diagnosis/action experiments**;
 3. **deterministic counterfactual communication analysis**;
 4. **single-host resource measurements**;
-5. **future work that has not been executed**.
+5. **retrospective analyses**;
+6. **newly frozen follow-up experiments that have not yet been executed**.
 
 Negative and mixed findings are retained rather than hidden. The repository does not claim flight qualification, NASA endorsement, mission deployment, or certified autonomous superiority.
 
@@ -203,7 +230,11 @@ See [`RESEARCH_ETHICS.md`](RESEARCH_ETHICS.md), [`paper/manuscript.md`](paper/ma
 
 ## Citation
 
-Until a DOI-backed release exists, cite the repository using [`CITATION.cff`](CITATION.cff). After archival release, the real DOI metadata will replace repository-only citation guidance.
+For the research manuscript, cite:
+
+> Karzoun, Mahmoud. (2026). *KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay* (v0.1.0-rc1). Zenodo. https://doi.org/10.5281/zenodo.22708262
+
+For the archived software release, use DOI **10.5281/zenodo.22708005**. Machine-readable citation metadata is available in [`CITATION.cff`](CITATION.cff).
 
 ## Author
 
@@ -212,7 +243,7 @@ ORCID: `0009-0006-2752-7744`
 
 ## License
 
-Code is licensed under the **Apache License 2.0**. Unless otherwise stated, manuscript text and original research figures are intended for release under **CC BY 4.0** at preprint/publication time.
+Code is licensed under the **Apache License 2.0**. Unless otherwise stated, manuscript text and original research figures are released under **CC BY 4.0**.
 
 ## Disclaimer
 
