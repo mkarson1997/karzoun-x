@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="590" viewBox="0 0 1000 590">
+  <style>
+    .axis{stroke:#222;stroke-width:2}.grid{stroke:#d0d0d0;stroke-width:1}.bar1{fill:#888}.bar2{fill:#555}.label{font:16px sans-serif;fill:#111}.small{font:14px sans-serif;fill:#333}.value{font:600 15px sans-serif;fill:#111}.title{font:600 22px sans-serif;fill:#111;text-anchor:middle}
+  </style>
+  <text x="500" y="38" class="title">Phase 6: Local versus ground-dependent decision time</text>
+  <text x="500" y="64" class="small" text-anchor="middle">Bars use log10(seconds + 1) to show near-Earth and Mars-reference scales together</text>
+  <line x1="280" y1="100" x2="280" y2="520" class="axis"/>
+  <line x1="280" y1="520" x2="920" y2="520" class="axis"/>
+  <g class="grid"><line x1="440" y1="100" x2="440" y2="520"/><line x1="600" y1="100" x2="600" y2="520"/><line x1="760" y1="100" x2="760" y2="520"/><line x1="920" y1="100" x2="920" y2="520"/></g>
+  <text x="280" y="545" class="small" text-anchor="middle">1 s</text><text x="440" y="545" class="small" text-anchor="middle">10 s</text><text x="600" y="545" class="small" text-anchor="middle">100 s</text><text x="760" y="545" class="small" text-anchor="middle">1000 s</text><text x="920" y="545" class="small" text-anchor="middle">10000 s</text>
+  <text x="260" y="145" class="label" text-anchor="end">Zero-delay</text><rect x="280" y="118" width="232" height="22" class="bar1"/><rect x="280" y="145" width="232" height="22" class="bar2"/><text x="520" y="136" class="value">27.2 s local</text><text x="520" y="163" class="value">27.2 s ground</text>
+  <text x="260" y="245" class="label" text-anchor="end">Lunar reference</text><rect x="280" y="218" width="232" height="22" class="bar1"/><rect x="280" y="245" width="237" height="22" class="bar2"/><text x="525" y="236" class="value">27.2 s</text><text x="530" y="263" class="value">29.2 s</text>
+  <text x="260" y="345" class="label" text-anchor="end">Mars-near</text><rect x="280" y="318" width="232" height="22" class="bar1"/><rect x="280" y="345" width="433" height="22" class="bar2"/><text x="525" y="336" class="value">27.2 s</text><text x="725" y="363" class="value">507.2 s</text>
+  <text x="260" y="445" class="label" text-anchor="end">Mars-far</text><rect x="280" y="418" width="232" height="22" class="bar1"/><rect x="280" y="445" width="554" height="22" class="bar2"/><text x="525" y="436" class="value">27.2 s</text><text x="845" y="463" class="value">2907.2 s</text>
+  <text x="500" y="578" class="small" text-anchor="middle">Ground-link outage: local path remains available; ground-dependent completion = 0.</text>
+</svg>

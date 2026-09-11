@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+  <style>
+    .axis{stroke:#222;stroke-width:2}.grid{stroke:#d0d0d0;stroke-width:1}.bar{fill:#666}.label{font:18px sans-serif;fill:#111}.small{font:15px sans-serif;fill:#333}.value{font:600 20px sans-serif;fill:#111;text-anchor:middle}.title{font:600 22px sans-serif;fill:#111;text-anchor:middle}
+  </style>
+  <text x="450" y="38" class="title">Phase 7B: Expected-action match</text>
+  <text x="450" y="64" class="small" text-anchor="middle">Paired synthetic scenarios, n = 36 per condition</text>
+  <line x1="120" y1="430" x2="820" y2="430" class="axis"/>
+  <line x1="120" y1="100" x2="120" y2="430" class="axis"/>
+  <g class="grid">
+    <line x1="120" y1="364" x2="820" y2="364"/><line x1="120" y1="298" x2="820" y2="298"/><line x1="120" y1="232" x2="820" y2="232"/><line x1="120" y1="166" x2="820" y2="166"/><line x1="120" y1="100" x2="820" y2="100"/>
+  </g>
+  <text x="82" y="436" class="small">0%</text><text x="68" y="370" class="small">20%</text><text x="68" y="304" class="small">40%</text><text x="68" y="238" class="small">60%</text><text x="68" y="172" class="small">80%</text><text x="58" y="106" class="small">100%</text>
+  <rect x="240" y="375" width="160" height="55" class="bar"/>
+  <rect x="530" y="100" width="160" height="330" class="bar"/>
+  <text x="320" y="365" class="value">16.7%</text><text x="610" y="90" class="value">100%</text>
+  <text x="320" y="465" class="label" text-anchor="middle">No RAG</text><text x="610" y="465" class="label" text-anchor="middle">Full KARZOUN-X</text>
+  <text x="450" y="500" class="small" text-anchor="middle">Exact paired McNemar p = 1.86 × 10^-9; absolute difference = 83.3 percentage points</text>
+</svg>

@@ -39,6 +39,8 @@ Thumbs.db
 .cache/
 
 # Paper build artifacts
+paper/.build/
+paper/figures/*.png
 paper/*.aux
 paper/*.bbl
 paper/*.blg

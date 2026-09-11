@@ -1,0 +1,58 @@
+name: Preprint Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - preprint-pdf-v1
+    paths:
+      - "paper/**"
+      - ".github/workflows/preprint-build.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install publication toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pandoc \
+            texlive-xetex \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            fonts-dejavu-core \
+            lmodern \
+            librsvg2-bin \
+            poppler-utils
+
+      - name: Validate builder syntax
+        run: python -m compileall -q paper/build_preprint.py
+
+      - name: Build preprint PDF and DOCX
+        run: python paper/build_preprint.py --output-dir dist
+
+      - name: Preflight PDF
+        run: |
+          pdfinfo dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf
+          pdftotext dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf dist/preprint.txt
+          grep -F "KARZOUN-X" dist/preprint.txt
+          grep -F "Phase 9" dist/preprint.txt
+          grep -F "References" dist/preprint.txt
+
+      - name: Upload preprint artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KARZOUN-X-preprint-v0.1.0-rc1
+          path: |
+            dist/KARZOUN-X-preprint-v0.1.0-rc1.pdf
+            dist/KARZOUN-X-preprint-v0.1.0-rc1.docx
+          if-no-files-found: error
+          retention-days: 30
