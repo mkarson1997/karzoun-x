@@ -24,10 +24,6 @@ on:
         options:
           - "no"
           - "yes"
-  push:
-    branches: [main]
-    paths:
-      - ".github/release-v1.0.0.confirmed"
 
 permissions:
   contents: write
@@ -37,18 +33,22 @@ env:
 
 jobs:
   release:
-    if: >-
-      ${{ github.event_name == 'push' ||
-          (github.event_name == 'workflow_dispatch' &&
-           inputs.confirm_results_reviewed == 'yes' &&
-           inputs.confirm_security_review == 'yes' &&
-           inputs.confirm_zenodo_enabled == 'yes') }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
       GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: v1.0.0
     steps:
+      - name: Verify explicit release confirmations
+        env:
+          RESULTS_REVIEWED: ${{ inputs.confirm_results_reviewed }}
+          SECURITY_REVIEW: ${{ inputs.confirm_security_review }}
+          ZENODO_ENABLED: ${{ inputs.confirm_zenodo_enabled }}
+        run: |
+          test "$RESULTS_REVIEWED" = "yes"
+          test "$SECURITY_REVIEW" = "yes"
+          test "$ZENODO_ENABLED" = "yes"
+
       - name: Check out repository
         uses: actions/checkout@v7
         with:
