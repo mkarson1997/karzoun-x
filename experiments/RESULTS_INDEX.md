@@ -17,9 +17,9 @@ Frozen experiment configurations are treated as immutable after execution. Compl
 | `phase8b-resource-instrumentation-v1` | Completed | Local hardware, commit `2965abd06d449e69d05f32860eb876e829d075c6` | `results/phase8b/` |
 | `phase9-hard-stress-local-llm-v1` | Completed, mixed hard-stress result | Local Ollama, commit `f7efc3db67c9ae152daae7c08c40c2369c94e31c` | `results/phase9/` |
 | `phase10-statistical-synthesis-v1` | Completed, retrospective synthesis | GitHub Actions `34588327705` | `results/phase10/` |
-| `phase11-epistemic-sufficiency-gate-v1` | Protocol frozen, held-out execution pending | Local Ollama | `results/phase11/` after execution |
-| `phase12-model-resource-ablation-v1` | Protocol frozen, execution pending | Local Ollama + local hardware | `results/phase12/` after execution |
-| `phase13-final-statistical-synthesis` | Prepared; runs after Phase 11/12 | GitHub Actions | `results/phase13/` after synthesis |
+| `phase11-epistemic-sufficiency-gate-v1` | Completed, held-out paired mitigation | Local Ollama, commit `294fa7742057d026f4762d0dd4e042d8190edf3c` | `results/phase11/` |
+| `phase12-model-resource-ablation-v1` | Completed, three-model single-host ablation | Local Ollama + local hardware, commit `294fa7742057d026f4762d0dd4e042d8190edf3c` | `results/phase12/` |
+| `phase13-final-statistical-synthesis` | Completed, retrospective synthesis | GitHub Actions `34623132400` | `results/phase13/` |
 
 ## Phase 1 provenance
 
@@ -173,35 +173,46 @@ Detailed interpretation: `docs/phase9-analysis.md`.
 - Phase 8 versus Phase 8B mean-latency difference: `+1.148 s`; warm-mean difference: `+1.320 s`, descriptive only because the runs use different synthetic seeds.
 - Interpretation: this synthesis quantifies uncertainty and the paired RAG action-selection effect without reinterpreting the original protocols. It is retrospective and is not presented as preregistered confirmatory inference.
 
-## Phase 11 frozen protocol
+## Phase 11 provenance
 
-Phase 11 is a **new held-out mitigation experiment**, explicitly designed after inspecting the Phase 9 failure modes. It does not retroactively modify Phase 9.
+- Study role: held-out paired mitigation study designed after Phase 9 failure analysis.
+- Frozen config SHA-256: `67256169ceac0fa2cb51376c58e5088d4f7661a543fbcaff60df0c70450cd837`.
+- Model: `qwen3:14b-q4_K_M` via local Ollama; temperature `0`; `think=false`; JSON-schema output.
+- Held-out seeds: `7701`, `7702`, `7703`; total scenarios: `108`; no automatic retries.
+- The same raw model response was scored both before and after the deterministic epistemic gate.
+- Gate thresholds were frozen before held-out execution and use observable telemetry/evidence agreement only, not ground-truth labels.
+- Baseline policy conformance: `57/108 = 0.5278`.
+- Gated policy conformance: `108/108 = 1.0000`; absolute delta `+0.4722`.
+- Known-case preservation: `36/36 = 1.0000`.
+- Required-defer capture: `72/72 = 1.0000`.
+- Paired exact McNemar: 0 baseline-only versus 51 gated-only correct discordant pairs; `p = 8.881784197e-16`.
+- Unsafe false authorizations: `0`.
+- Mean model-call latency: `24.889 s`; median `25.315 s`; mean generation throughput `5.122 tok/s`.
+- Result commit: `294fa7742057d026f4762d0dd4e042d8190edf3c`.
+- Interpretation: on this newly held-out synthetic benchmark, the frozen evidence-sufficiency gate corrected the Phase 9-style abstention failures without sacrificing the tested known/adversarial cases. This does not establish flight readiness.
 
-- Config: `experiments/configs/phase11_epistemic_gate.json`.
-- Held-out seeds: `7701`, `7702`, `7703`; total scenarios: `108`.
-- Families: clean known, ambiguous dual signature, conflicting retrieval, out of distribution, adversarial evidence, and missing evidence.
-- One Qwen3 14B model call is made per scenario; the same raw response is scored both before and after the deterministic epistemic gate.
-- Frozen gate checks observable evidence properties only: minimum lexical support `0.24`, minimum top-two margin `0.14`, and agreement between provided trusted evidence and an independent local-catalogue top match.
-- Ground-truth fault labels are not inputs to the gate.
-- Primary comparison: baseline versus gated fail-safe policy conformance with paired exact McNemar analysis.
-- Required-defer cases and known/adversarial cases are both included so a trivial defer-everything policy cannot score perfectly.
+## Phase 12 provenance
 
-## Phase 12 frozen protocol
-
-Phase 12 extends the resource claim from one model size to a precommitted three-model local ablation.
-
-- Config: `experiments/configs/phase12_model_resource_ablation.json`.
+- Study role: precommitted three-model local resource/quality ablation using the unchanged Phase 11 epistemic gate.
+- Frozen config SHA-256: `2abb33231d014bb5922c5938435cd209aff3aed7631488da14f12821d7376516`.
+- Held-out seed: `8801`; 36 identical scenarios per model; 108 total model calls.
 - Models: `qwen3:4b`, `qwen3:8b`, `qwen3:14b-q4_K_M`.
-- Held-out seed: `8801`; `36` identical scenarios per model; `108` total model calls.
-- The Phase 11 epistemic gate thresholds are reused unchanged.
-- Resource sampling uses the corrected Phase 8B process-family sampler plus Ollama `/api/ps` model/VRAM allocation, with optional `nvidia-smi` telemetry when available.
-- Primary trade-off: gated policy conformance versus warm latency, generation throughput, model-process RSS, model size, and VRAM allocation.
-- Measurements remain single-host synthetic research measurements.
+- Small / 4B: gated policy `35/36 = 0.9722`; known preserve `11/12 = 0.9167`; required defer `24/24 = 1.0000`; warm mean `8.227 s`; throughput `18.602 tok/s`; peak process-family RSS `4.184 GiB`; Ollama-reported VRAM `2.960 GiB`.
+- Medium / 8B: gated policy `36/36 = 1.0000`; known preserve `12/12 = 1.0000`; required defer `24/24 = 1.0000`; warm mean `9.051 s`; throughput `14.864 tok/s`; peak process-family RSS `6.423 GiB`; Ollama-reported VRAM `5.187 GiB`.
+- Large / 14B: gated policy `36/36 = 1.0000`; known preserve `12/12 = 1.0000`; required defer `24/24 = 1.0000`; warm mean `26.380 s`; throughput `4.730 tok/s`; peak process-family RSS `10.656 GiB`; Ollama-reported VRAM `6.113 GiB`.
+- Direct `nvidia-smi` telemetry remained unavailable; Ollama VRAM is reported allocation, not independent hardware-sensor validation.
+- Result commit: `294fa7742057d026f4762d0dd4e042d8190edf3c`.
+- Interpretation: medium and small are Pareto-efficient under the stated quality/latency/RSS objective. The benchmark is synthetic and the resource study is single-host.
 
-## Phase 13 prepared synthesis
+## Phase 13 provenance
 
-- Script: `scripts/run_phase13_final_synthesis.py`.
-- Workflow: `.github/workflows/phase13-final-synthesis.yml`.
-- Runs only when both Phase 11 and Phase 12 result files are present.
-- Produces Wilson 95% intervals, paired exact McNemar comparisons, and a resource/quality Pareto analysis.
-- Phase 13 is retrospective synthesis of the completed new experiments and does not make new model calls.
+- Study role: retrospective statistical synthesis of completed Phase 11 and Phase 12 results; no new model calls.
+- GitHub Actions run: `34623132400`.
+- Result commit: `02acaf86e5da86141543c1e29e7d281486dad0e6`.
+- Phase 11 baseline policy conformance: `57/108 = 0.5278`, 95% Wilson interval `0.4343-0.6194`.
+- Phase 11 gated policy conformance: `108/108 = 1.0000`, 95% Wilson interval `0.9657-1.0000`.
+- Small-model gated conformance: `35/36 = 0.9722`, 95% Wilson interval `0.8583-0.9951`.
+- Medium- and large-model gated conformance: `36/36 = 1.0000`, 95% Wilson interval `0.9036-1.0000` each.
+- Pairwise model McNemar tests are non-significant on the 36 paired cases (`p=1` for all three pairings).
+- Pareto-efficient labels: `small`, `medium`.
+- Interpretation: Phase 13 quantifies uncertainty around the follow-up results without promoting the synthetic/single-host evidence into operational spacecraft-safety claims.
