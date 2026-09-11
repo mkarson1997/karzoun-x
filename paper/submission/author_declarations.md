@@ -27,8 +27,11 @@ Local language models are part of the evaluated research method. The manuscript 
 
 ## Preprint disclosure
 
-A prior version of the manuscript is publicly available as a Zenodo preprint:
-https://doi.org/10.5281/zenodo.22708262
+The canonical public manuscript version is available as a Zenodo preprint:
+https://doi.org/10.5281/zenodo.22710335
+
+The preprint concept DOI covering all Zenodo versions is:
+https://doi.org/10.5281/zenodo.22708261
 
 The associated research software has a separate Zenodo record:
 https://doi.org/10.5281/zenodo.22708005
