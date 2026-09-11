@@ -1,0 +1,174 @@
+{
+  "caveats": [
+    "Phase 11 and Phase 12 remain synthetic benchmarks.",
+    "Phase 12 resource measurements are single-host measurements.",
+    "Pairwise model tests are exploratory unless separately multiplicity-adjusted.",
+    "The Phase 11 gate was designed after Phase 9 failure analysis, then evaluated on held-out seeds."
+  ],
+  "phase11": {
+    "baseline": {
+      "rate": 0.5277777777777778,
+      "successes": 57,
+      "total": 108,
+      "wilson95": [
+        0.43429667413386164,
+        0.6193506947691074
+      ]
+    },
+    "gated": {
+      "rate": 1.0,
+      "successes": 108,
+      "total": 108,
+      "wilson95": [
+        0.9656526402534428,
+        0.9999999999999999
+      ]
+    },
+    "known_preservation": {
+      "rate": 1.0,
+      "successes": 36,
+      "total": 36,
+      "wilson95": [
+        0.9035813714055363,
+        1.0
+      ]
+    },
+    "paired": {
+      "baseline_only_correct": 0,
+      "both_correct": 57,
+      "both_wrong": 0,
+      "exact_mcnemar_p": 8.881784197001252e-16,
+      "gated_only_correct": 51
+    },
+    "required_defer": {
+      "rate": 1.0,
+      "successes": 72,
+      "total": 72,
+      "wilson95": [
+        0.9493488274035422,
+        1.0
+      ]
+    }
+  },
+  "phase12_pairwise_exact_mcnemar": {
+    "medium_vs_large": {
+      "both_correct": 36,
+      "both_wrong": 0,
+      "exact_mcnemar_p": 1.0,
+      "left_only_correct": 0,
+      "n": 36,
+      "right_only_correct": 0
+    },
+    "small_vs_large": {
+      "both_correct": 35,
+      "both_wrong": 0,
+      "exact_mcnemar_p": 1.0,
+      "left_only_correct": 0,
+      "n": 36,
+      "right_only_correct": 1
+    },
+    "small_vs_medium": {
+      "both_correct": 35,
+      "both_wrong": 0,
+      "exact_mcnemar_p": 1.0,
+      "left_only_correct": 0,
+      "n": 36,
+      "right_only_correct": 1
+    }
+  },
+  "phase12_pareto_efficient_models": [
+    "medium",
+    "small"
+  ],
+  "phase12_rates": {
+    "large": {
+      "gated": {
+        "rate": 1.0,
+        "successes": 36,
+        "total": 36,
+        "wilson95": [
+          0.9035813714055363,
+          1.0
+        ]
+      },
+      "known_preservation": {
+        "rate": 1.0,
+        "successes": 12,
+        "total": 12,
+        "wilson95": [
+          0.7575059933447592,
+          1.0
+        ]
+      },
+      "required_defer": {
+        "rate": 1.0,
+        "successes": 24,
+        "total": 24,
+        "wilson95": [
+          0.8620237953250198,
+          1.0
+        ]
+      }
+    },
+    "medium": {
+      "gated": {
+        "rate": 1.0,
+        "successes": 36,
+        "total": 36,
+        "wilson95": [
+          0.9035813714055363,
+          1.0
+        ]
+      },
+      "known_preservation": {
+        "rate": 1.0,
+        "successes": 12,
+        "total": 12,
+        "wilson95": [
+          0.7575059933447592,
+          1.0
+        ]
+      },
+      "required_defer": {
+        "rate": 1.0,
+        "successes": 24,
+        "total": 24,
+        "wilson95": [
+          0.8620237953250198,
+          1.0
+        ]
+      }
+    },
+    "small": {
+      "gated": {
+        "rate": 0.9722222222222222,
+        "successes": 35,
+        "total": 36,
+        "wilson95": [
+          0.8583028134672614,
+          0.9950795928601897
+        ]
+      },
+      "known_preservation": {
+        "rate": 0.9166666666666666,
+        "successes": 11,
+        "total": 12,
+        "wilson95": [
+          0.646120088858883,
+          0.9851349055950829
+        ]
+      },
+      "required_defer": {
+        "rate": 1.0,
+        "successes": 24,
+        "total": 24,
+        "wilson95": [
+          0.8620237953250198,
+          1.0
+        ]
+      }
+    }
+  },
+  "schema_version": 1,
+  "study_role": "final retrospective statistical synthesis after completed Phase 11 and Phase 12 experiments"
+}
