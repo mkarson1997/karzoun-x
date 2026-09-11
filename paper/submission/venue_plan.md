@@ -49,10 +49,13 @@ Do **not** position the work as flight-ready, NASA-endorsed, the first LLM in sp
 
 ## Preprint disclosure
 
-Prior public preprint:
-https://doi.org/10.5281/zenodo.22708262
+Canonical public preprint version:
+https://doi.org/10.5281/zenodo.22710335
+
+Preprint concept DOI for all versions:
+https://doi.org/10.5281/zenodo.22708261
 
 Archived research software:
 https://doi.org/10.5281/zenodo.22708005
 
-Both should be disclosed in submission metadata/cover letter. The software and preprint are distinct DOI-backed research outputs.
+These should be disclosed in submission metadata/cover letter. The software and preprint are distinct DOI-backed research outputs.
