@@ -10,7 +10,7 @@ The manuscript makes three points that we believe are relevant to spacecraft aut
 
 The real-data track is kept methodologically separate: public SMAP/MSL telemetry is used for anomaly-detection evaluation only, because that benchmark does not provide detailed recovery-action labels for each anomaly. Diagnosis, retrieval, and action-policy claims come from separately labeled synthetic experiments. Negative and mixed results, raw model responses, frozen configurations, hashes, and environment metadata are preserved in the public repository.
 
-A prior version is publicly available as a Zenodo preprint (DOI **10.5281/zenodo.22710335**). The associated research software is archived separately (DOI **10.5281/zenodo.22708005**). The preprint is disclosed here for transparency and is not under consideration by another peer-reviewed journal.
+The canonical v1 manuscript is publicly available as a Zenodo preprint (DOI **10.5281/zenodo.22712634**). The associated research software is archived under a separate Zenodo software DOI family (concept DOI **10.5281/zenodo.22708004**). The preprint is disclosed here for transparency and is not under consideration by another peer-reviewed journal.
 
 The manuscript has one author, Mahmoud Karzoun (ORCID 0009-0006-2752-7744). The author declares no competing interests and no specific external research funding. The study involves no human or animal subjects.
 

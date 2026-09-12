@@ -29,8 +29,8 @@
       "small"
     ]
   },
-  "prior_preprint_doi": "10.5281/zenodo.22710335",
-  "software_doi": "10.5281/zenodo.22708005",
+  "preprint_doi": "10.5281/zenodo.22712634",
+  "software_concept_doi": "10.5281/zenodo.22708004",
   "target_journal": "Acta Astronautica",
   "title": "KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture for Autonomous Spacecraft Fault Diagnosis Under Communication Delay"
 }
