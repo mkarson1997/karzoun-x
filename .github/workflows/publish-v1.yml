@@ -1,0 +1,87 @@
+name: Publish v1.0.0
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_publish:
+        description: "Confirm publication of stable KARZOUN-X v1.0.0"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/release-v1.0.0.confirmed"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.confirm_publish == 'yes') }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: v1.0.0
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Refuse duplicate stable release
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG already exists; refusing to overwrite it."
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install and test research package
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          pytest
+          ruff check .
+
+      - name: Install publication toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pandoc \
+            texlive-xetex \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            fonts-dejavu-core \
+            lmodern \
+            librsvg2-bin \
+            poppler-utils
+
+      - name: Build stable v1 preprint assets
+        run: python paper/build_preprint.py --source paper/manuscript_v1.md --output-dir dist
+
+      - name: Preflight stable v1 PDF
+        run: |
+          pdfinfo dist/KARZOUN-X-preprint-v1.0.0.pdf
+          pdftotext dist/KARZOUN-X-preprint-v1.0.0.pdf dist/preprint.txt
+          grep -F "KARZOUN-X" dist/preprint.txt
+          grep -F "10.5281/zenodo.22712634" dist/preprint.txt
+          grep -F "Phase 11" dist/preprint.txt
+          grep -F "Phase 12" dist/preprint.txt
+          grep -F "Phase 13" dist/preprint.txt
+          grep -F "References" dist/preprint.txt
+
+      - name: Create stable GitHub release
+        run: |
+          gh release create "$RELEASE_TAG" \
+            dist/KARZOUN-X-preprint-v1.0.0.pdf \
+            dist/KARZOUN-X-preprint-v1.0.0.docx \
+            --target "$GITHUB_SHA" \
+            --title "KARZOUN-X v1.0.0" \
+            --notes-file docs/releases/v1.0.0.md \
+            --latest
