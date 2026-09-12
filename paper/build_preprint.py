@@ -88,7 +88,6 @@ def _prepare_markdown(source_path: Path) -> Path:
             raise RuntimeError(f"Expected manuscript insertion marker not found: {needle[:80]}")
         body = body.replace(needle, replacement, 1)
 
-    # Keep the Phase 11 section and its large figure together on a fresh PDF page.
     phase11_heading = "### 7.11 Phase 11: held-out epistemic-gate mitigation"
     if phase11_heading not in body:
         raise RuntimeError("Expected Phase 11 heading not found for preprint pagination.")
@@ -115,9 +114,6 @@ papersize: a4
 fontsize: 10pt
 geometry: "left=20mm,right=20mm,top=19mm,bottom=20mm"
 colorlinks: true
-linkcolor: KXNavy
-urlcolor: KXTeal
-citecolor: KXTeal
 ---
 
 **ORCID:** 0009-0006-2752-7744  
