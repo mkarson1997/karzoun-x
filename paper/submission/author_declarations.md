@@ -25,6 +25,10 @@ KARZOUN-X is research software. It is not flight-qualified, not a certified faul
 
 Local language models are part of the evaluated research method. The manuscript and frozen experiment configurations document model names, serving stack, generation settings, response contracts, and preserved raw responses. The human author remains responsible for the manuscript and all scientific claims.
 
+## Declaration of generative AI and AI-assisted technologies in the manuscript preparation process
+
+During the preparation of this work, the author used OpenAI ChatGPT to assist with manuscript organization, language refinement, and preparation of submission materials. After using this tool, the author reviewed and edited the content as needed, verified reported scientific results against the preserved experiment artifacts, and takes full responsibility for the content of the publication.
+
 ## Preprint disclosure
 
 The canonical public manuscript version is available as a Zenodo preprint:
