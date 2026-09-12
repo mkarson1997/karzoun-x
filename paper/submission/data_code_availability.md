@@ -4,13 +4,17 @@ All KARZOUN-X source code, frozen experiment configurations, machine-generated r
 
 https://github.com/mkarson1997/karzoun-x
 
-The archived software release is available through Zenodo:
+The stable software family is archived through Zenodo under concept DOI:
 
-https://doi.org/10.5281/zenodo.22708005
+https://doi.org/10.5281/zenodo.22708004
+
+The stable GitHub software release is:
+
+https://github.com/mkarson1997/karzoun-x/releases/tag/v1.0.0
 
 The canonical public preprint version is available through Zenodo:
 
-https://doi.org/10.5281/zenodo.22710335
+https://doi.org/10.5281/zenodo.22712634
 
 The preprint concept DOI for all versions is:
 
