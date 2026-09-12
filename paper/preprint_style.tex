@@ -1,0 +1,108 @@
+% KARZOUN-X publication styling for the Zenodo v1 preprint.
+% Intentionally conservative: academic, readable, and printer-friendly.
+
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{etoolbox}
+\usepackage{needspace}
+\usepackage{setspace}
+\usepackage{array}
+
+\definecolor{KXNavy}{HTML}{17324D}
+\definecolor{KXTeal}{HTML}{167A7A}
+\definecolor{KXGray}{HTML}{5F6B73}
+\definecolor{KXRule}{HTML}{D7DEE3}
+
+% Comfortable page density without the cramped look of the release-candidate PDF.
+\setstretch{1.055}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4.5pt plus 1.2pt minus 0.8pt}
+\emergencystretch=2.2em
+
+% Professional title block while keeping the abstract on page 1.
+\setlength{\droptitle}{-2.2em}
+\pretitle{%
+  \begin{center}
+  \sffamily\bfseries\color{KXNavy}\fontsize{18.5}{21.5}\selectfont
+}
+\posttitle{%
+  \par\vspace{8pt}
+  {\color{KXTeal}\rule{0.88\linewidth}{1.15pt}}
+  \end{center}
+  \vspace{2pt}
+}
+\preauthor{\begin{center}\sffamily\bfseries\color{KXNavy}\large}
+\postauthor{\par\end{center}\vspace{-2pt}}
+\predate{\begin{center}\sffamily\small\color{KXGray}}
+\postdate{\par\end{center}\vspace{3pt}}
+
+% Running identity. Keep it quiet so the research remains visually primary.
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\scriptsize\color{KXGray} KARZOUN-X \textbar{} Open Research Preprint v1.0.0}
+\fancyhead[R]{\sffamily\scriptsize\color{KXGray} 10.5281/zenodo.22712634}
+\fancyfoot[C]{\sffamily\scriptsize\color{KXGray}\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{KXRule}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{14pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\sffamily\scriptsize\color{KXGray}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% Clear hierarchy with restrained color.
+\titleformat{\section}
+  {\needspace{4\baselineskip}\sffamily\bfseries\color{KXNavy}\large}
+  {\thesection}{0.55em}{}
+  [\vspace{1pt}{\color{KXRule}\titlerule}]
+\titlespacing*{\section}{0pt}{12pt plus 3pt minus 2pt}{6pt plus 1pt}
+
+\titleformat{\subsection}
+  {\needspace{3\baselineskip}\sffamily\bfseries\color{KXTeal}\normalsize}
+  {\thesubsection}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{9pt plus 2pt minus 1pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\needspace{2.5\baselineskip}\sffamily\bfseries\color{KXNavy}\normalsize}
+  {\thesubsubsection}{0.45em}{}
+\titlespacing*{\subsubsection}{0pt}{7pt plus 2pt minus 1pt}{3pt}
+
+% Lists and tables.
+\setlist[itemize]{leftmargin=1.35em,itemsep=1.5pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=1.55em,itemsep=1.5pt,topsep=3pt}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.14}
+\AtBeginEnvironment{longtable}{\small}
+\AtBeginEnvironment{table}{\small}
+
+% Figures and captions.
+\captionsetup{%
+  font=small,
+  labelfont={bf,sf,color=KXNavy},
+  textfont={it,color=KXGray},
+  justification=centering,
+  singlelinecheck=false,
+  skip=5pt
+}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+
+% Hyperlinks: visible on screen but calm on paper.
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=KXNavy,
+  citecolor=KXTeal,
+  urlcolor=KXTeal,
+  pdfborder={0 0 0}
+}
+
+% Slightly smaller bibliography for a cleaner final page.
+\AtBeginEnvironment{CSLReferences}{\small\setlength{\parskip}{2.5pt}}
