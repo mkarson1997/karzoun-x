@@ -95,14 +95,13 @@
 \setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
 \setlength{\floatsep}{8pt plus 2pt minus 2pt}
 
-% Hyperlinks: visible on screen but calm on paper.
-\hypersetup{%
-  colorlinks=true,
-  linkcolor=KXNavy,
-  citecolor=KXTeal,
-  urlcolor=KXTeal,
-  pdfborder={0 0 0}
+% Hyperref is loaded by Pandoc after header includes on this toolchain.
+\AtBeginDocument{%
+  \hypersetup{%
+    colorlinks=true,
+    linkcolor=KXNavy,
+    citecolor=KXTeal,
+    urlcolor=KXTeal,
+    pdfborder={0 0 0}
+  }%
 }
-
-% Slightly smaller bibliography for a cleaner final page.
-\AtBeginEnvironment{CSLReferences}{\small\setlength{\parskip}{2.5pt}}
