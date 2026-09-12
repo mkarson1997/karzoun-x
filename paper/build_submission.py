@@ -95,6 +95,12 @@ def _prepare_markdown(source_path: Path) -> Path:
         "## Declaration of Competing Interest\n\n"
         "The author declares no known competing financial interests or personal relationships "
         "that could have appeared to influence the work reported in this paper.\n\n"
+        "## Declaration of generative AI and AI-assisted technologies in the manuscript preparation process\n\n"
+        "During the preparation of this work, the author used OpenAI ChatGPT to assist with "
+        "manuscript organization, language refinement, and preparation of submission materials. "
+        "After using this tool, the author reviewed and edited the content as needed, verified "
+        "reported scientific results against the preserved experiment artifacts, and takes full "
+        "responsibility for the content of the publication.\n\n"
         "\\newpage\n"
     )
 
