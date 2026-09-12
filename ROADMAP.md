@@ -1,10 +1,10 @@
 # Research Roadmap
 
-KARZOUN-X has completed the first experiment program through Phase 10. Historical experiment provenance is recorded in `experiments/RESULTS_INDEX.md`; this roadmap now tracks the remaining work toward the first archival software release and public preprint.
+KARZOUN-X has completed the original Phase 1–10 experiment program and the held-out Phase 11–13 follow-up program. The canonical v1.0.0 research preprint is now published on Zenodo at DOI `10.5281/zenodo.22712634`.
 
-## Completed experiment program
+## Completed research program
 
-- [x] Repository foundation, research scope, ethics, and reproducibility rules
+- [x] repository foundation, research scope, ethics, and reproducibility rules
 - [x] SMAP/MSL acquisition, hashes, and anomaly-evaluation definitions
 - [x] Phase 1 transparent robust-z-score baseline
 - [x] Phase 2 adaptive temporal detector, retained as a mixed result
@@ -17,24 +17,25 @@ KARZOUN-X has completed the first experiment program through Phase 10. Historica
 - [x] Phase 8 and Phase 8B resource instrumentation
 - [x] Phase 9 precommitted hard-stress benchmark
 - [x] Phase 10 retrospective confidence intervals and paired statistical synthesis
-- [x] Manuscript integrated through the completed experiment program
+- [x] Phase 11 newly held-out epistemic-gate mitigation
+- [x] Phase 12 frozen three-model quality/resource ablation
+- [x] Phase 13 final statistical synthesis
+- [x] final v1.0.0 manuscript built and visually proofread
+- [x] canonical v1.0.0 preprint published on Zenodo
+- [x] citation and stable-software metadata promoted to v1.0.0
+- [x] journal cover letter, highlights, declarations, and data/code statement prepared
 
-## First release / preprint gate
+## Remaining publication actions
 
-Before calling the first research package archived and citable:
+- [ ] publish GitHub stable software release `v1.0.0`
+- [ ] confirm the resulting Zenodo software-version archive under software concept DOI `10.5281/zenodo.22708004`
+- [ ] confirm or document the private Dependabot moderate alert state
+- [ ] add the DOI-backed preprint and software output to ORCID
+- [ ] submit the manuscript to Acta Astronautica as a Research Article
+- [ ] respond to editorial and peer-review feedback
 
-- [ ] Resolve the remaining moderate Dependabot alert or document a justified exception
-- [ ] Freeze software version `0.1.0`
-- [ ] Run final clean CI from the release candidate
-- [ ] Produce publication figures directly from machine-readable results
-- [ ] Render and proofread the manuscript PDF
-- [ ] Perform a final citation/reference audit
-- [ ] Archive the software release and obtain a real DOI
-- [ ] Archive or submit the preprint and obtain its persistent identifier
-- [ ] Add the DOI-backed work to ORCID
+## Scientific next steps beyond the first paper
 
-## Post-preprint research
+Independent replication should move beyond the current small synthetic catalogue toward larger physics-based or mission-representative fault benchmarks, cross-family local models, hybrid/dense retrieval, stale or contradictory procedure versions, independent detector validation, and flight-like compute constraints.
 
-The primary scientific follow-up is a new, frozen evaluation of evidence sufficiency and epistemic abstention motivated by Phase 9. Other follow-ups include cross-model/model-size replication, hybrid or dense retrieval, larger independent simulators, cascading faults, stale/version-conflicted procedures, independent detector validation, and testing on more flight-like compute.
-
-These post-preprint experiments must remain clearly separated from the frozen Phase 1–10 evidence used in the first manuscript.
+The repository must continue to separate real telemetry anomaly-detection evidence, synthetic diagnosis/action evidence, deterministic communication counterfactuals, and single-host resource measurements.
