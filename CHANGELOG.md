@@ -2,7 +2,7 @@
 
 All notable project changes are documented here.
 
-## 1.0.0 - 2026-09-11
+## 1.0.0 - 2026-09-12
 
 ### Follow-up research
 - added a deterministic epistemic evidence-sufficiency gate motivated by the Phase 9 failure analysis
@@ -17,7 +17,7 @@ All notable project changes are documented here.
 
 ### Publication
 - finalized a v1 journal-submission manuscript generated from machine-readable Phase 11-13 results
-- prepared a canonical v1.0.0 Zenodo preprint build using reserved DOI `10.5281/zenodo.22712634`
+- published the canonical v1.0.0 Zenodo preprint at DOI `10.5281/zenodo.22712634`
 - added cover letter, highlights, declarations, data/code statement, and stable release notes
 - preserved the earlier Zenodo preprint versions as immutable prior records
 
