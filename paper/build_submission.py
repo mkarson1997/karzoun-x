@@ -13,6 +13,7 @@ TITLE = (
     "KARZOUN-X: A Resource-Aware, Safety-Gated Local LLM and RAG Architecture "
     "for Autonomous Spacecraft Fault Diagnosis Under Communication Delay"
 )
+PREPRINT_DOI = "10.5281/zenodo.22712634"
 
 
 def _run(*args: str) -> None:
@@ -101,8 +102,8 @@ def _prepare_markdown(source_path: Path) -> Path:
 title: "{TITLE}"
 author:
   - "Mahmoud Karzoun"
-date: "11 September 2026"
-subtitle: "Journal-submission manuscript · KARZOUN-X v1.0.0 candidate"
+date: "12 September 2026"
+subtitle: "Journal-submission manuscript · KARZOUN-X v1.0.0"
 lang: en
 papersize: a4
 fontsize: 10pt
@@ -114,8 +115,8 @@ citecolor: blue
 ---
 
 **ORCID:** 0009-0006-2752-7744  
-**Prior public preprint:** DOI [10.5281/zenodo.22710335](https://doi.org/10.5281/zenodo.22710335)  
-**Research status:** prototype / journal-submission candidate; not flight-qualified or certified for autonomous control.
+**Published preprint:** DOI [{PREPRINT_DOI}](https://doi.org/{PREPRINT_DOI})  
+**Research status:** prototype / journal-submission manuscript; not flight-qualified or certified for autonomous control.
 
 '''
     BUILD.mkdir(parents=True, exist_ok=True)
