@@ -1,6 +1,6 @@
 # KARZOUN-X peer-reviewed submission plan
 
-Verified: 11 September 2026.
+Updated: 12 September 2026.
 
 ## Primary target: Acta Astronautica
 
@@ -8,22 +8,18 @@ Verified: 11 September 2026.
 
 Rationale:
 
-- The journal explicitly covers original contributions in space engineering and the conception, design, development, and operation of space-borne and Earth-based systems.
-- Recent Acta Astronautica papers include AI-powered space systems, autonomous orbital maintenance, deep-space fault-management considerations, and machine-learning anomaly-response research, making the topic fit materially better than a generic AI journal.
-- The work's strongest framing is a spacecraft-autonomy systems paper with explicit engineering safety and resource boundaries, not a general-purpose LLM benchmark.
+- The journal covers original contributions in space engineering and the conception, design, development, and operation of space-borne and Earth-based systems.
+- KARZOUN-X is best positioned as a spacecraft-autonomy systems paper with explicit engineering safety, uncertainty, communication, and resource boundaries rather than as a generic LLM benchmark.
+- The manuscript preserves negative and mixed results and clearly separates real telemetry anomaly detection from synthetic diagnosis/action evidence.
 
 Official journal scope:
-https://shop.elsevier.com/journals/acta-astronautica/0094-5765
+https://www.sciencedirect.com/journal/acta-astronautica
 
-Elsevier preprint policy:
-https://www.elsevier.com/about/policies-and-standards/sharing
+The public Zenodo preprint must be disclosed transparently in the cover letter and submission metadata. Do not submit the manuscript concurrently to another peer-reviewed journal.
 
-Elsevier states that author preprints may be shared anywhere at any time and that preprint sharing does not count as prior publication under its general author guidance. The Zenodo preprint should therefore be disclosed transparently in the cover letter and submission metadata rather than hidden.
+## Backup target
 
-## Backup targets
-
-1. **Advances in Space Research** — broad COSPAR space-research journal. Suitable if the editor views KARZOUN-X primarily as space-research methodology rather than spacecraft engineering.
-2. A suitable aerospace/autonomous-systems journal can be evaluated after any editorial feedback from Acta Astronautica; do not submit concurrently.
+**Advances in Space Research** is the first backup if Acta Astronautica declines the paper or judges it outside scope. A different aerospace/autonomous-systems venue can be evaluated after editorial feedback.
 
 ## Submission positioning
 
@@ -41,21 +37,26 @@ Do **not** position the work as flight-ready, NASA-endorsed, the first LLM in sp
 
 - `KARZOUN-X-journal-submission-v1.0.0.pdf`
 - `KARZOUN-X-journal-submission-v1.0.0.docx`
-- `cover_letter_v1.md` (paste into submission system or convert to PDF if requested)
+- `cover_letter_v1.md`
 - `highlights_v1.txt`
 - `graphical_abstract.svg` / rendered PNG if the journal requests or accepts one
 - `data_code_availability.md`
 - `author_declarations.md`
+- `submission_metadata_v1.json`
+- `submission_checklist.md`
 
 ## Preprint disclosure
 
-Canonical public preprint version:
-https://doi.org/10.5281/zenodo.22710335
+Canonical public preprint v1.0.0:
+https://doi.org/10.5281/zenodo.22712634
 
 Preprint concept DOI for all versions:
 https://doi.org/10.5281/zenodo.22708261
 
-Archived research software:
-https://doi.org/10.5281/zenodo.22708005
+Stable software DOI family:
+https://doi.org/10.5281/zenodo.22708004
 
-These should be disclosed in submission metadata/cover letter. The software and preprint are distinct DOI-backed research outputs.
+Stable GitHub release:
+https://github.com/mkarson1997/karzoun-x/releases/tag/v1.0.0
+
+The software and preprint are distinct DOI-backed research outputs.
