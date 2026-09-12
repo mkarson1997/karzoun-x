@@ -89,7 +89,6 @@ def _prepare_markdown(source_path: Path) -> Path:
         body = body.replace(needle, replacement, 1)
 
     # Keep the Phase 11 section and its large figure together on a fresh PDF page.
-    # Without this explicit break XeLaTeX can place the figure below the printable area.
     phase11_heading = "### 7.11 Phase 11: held-out epistemic-gate mitigation"
     if phase11_heading not in body:
         raise RuntimeError("Expected Phase 11 heading not found for preprint pagination.")
@@ -110,20 +109,22 @@ title: "{TITLE}"
 author:
   - "Mahmoud Karzoun"
 date: "11 September 2026"
-subtitle: "Open research preprint · KARZOUN-X v1.0.0"
+subtitle: "Open Research Preprint | KARZOUN-X v1.0.0"
 lang: en
 papersize: a4
 fontsize: 10pt
-geometry: margin=22mm
+geometry: "left=20mm,right=20mm,top=19mm,bottom=20mm"
 colorlinks: true
-linkcolor: blue
-urlcolor: blue
-citecolor: blue
+linkcolor: KXNavy
+urlcolor: KXTeal
+citecolor: KXTeal
 ---
 
 **ORCID:** 0009-0006-2752-7744  
 **DOI:** [{PREPRINT_DOI}](https://doi.org/{PREPRINT_DOI})  
-**Research status:** prototype / preprint; not flight-qualified or certified for autonomous control.
+**Repository:** [github.com/mkarson1997/karzoun-x](https://github.com/mkarson1997/karzoun-x)  
+**License:** CC BY 4.0  
+**Research status:** Prototype / preprint; not flight-qualified or certified for autonomous control.
 
 '''
     BUILD.mkdir(parents=True, exist_ok=True)
@@ -152,6 +153,7 @@ def build(source: Path, output_dir: Path) -> None:
     _run(
         *common,
         "--pdf-engine=xelatex",
+        f"--include-in-header={PAPER / 'preprint_style.tex'}",
         "--variable=mainfont:DejaVu Serif",
         "--variable=sansfont:DejaVu Sans",
         "--variable=monofont:DejaVu Sans Mono",
