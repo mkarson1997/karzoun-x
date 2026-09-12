@@ -20,10 +20,21 @@ def _run(*args: str) -> None:
     subprocess.run(args, cwd=ROOT, check=True)
 
 
+def _normalize_phase12_figure(svg: Path) -> None:
+    """Expand the Phase 12 canvas so right-hand metric labels are not clipped."""
+    if svg.name != "phase12_model_tradeoff.svg":
+        return
+    text = svg.read_text(encoding="utf-8")
+    text = text.replace('width="1328" height="531"', 'width="1480" height="531"', 1)
+    text = text.replace('viewBox="0 0 1328 531"', 'viewBox="0 0 1480 531"', 1)
+    svg.write_text(text, encoding="utf-8")
+
+
 def _render_figures() -> None:
     if shutil.which("rsvg-convert") is None:
         raise RuntimeError("rsvg-convert is required to render publication figures.")
     for svg in sorted((PAPER / "figures").glob("*.svg")):
+        _normalize_phase12_figure(svg)
         png = svg.with_suffix(".png")
         _run("rsvg-convert", "-w", "1800", "-o", str(png), str(svg))
 
