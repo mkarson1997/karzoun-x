@@ -50,7 +50,7 @@ jobs:
           grep -F "10.5281/zenodo.22712634" dist/preprint.txt
 
       - name: Upload final v1 preprint artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: KARZOUN-X-preprint-v1.0.0
           path: |

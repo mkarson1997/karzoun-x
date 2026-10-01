@@ -91,7 +91,7 @@ jobs:
           fi
 
       - name: Upload journal-submission artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: KARZOUN-X-journal-submission-v1.0.0
           path: |
